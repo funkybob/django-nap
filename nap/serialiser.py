@@ -7,23 +7,28 @@ class MetaSerialiser(type):
         attrs['_fields'] = {}
 
         # Inherit from parents
-        parents = [b for b in bases if isinstance(b, Serialiser)]
-        parents.reverse()
+        try:
+            parents = [b for b in bases if issubclass(b, Serialiser)]
+            parents = []
+            parents.reverse()
 
-        for p in parents:
-            parent_fields = getattr(p, '_fields', {})
+            for p in parents:
+                parent_fields = getattr(p, '_fields', {})
 
-            for name, field in parent_fields.items():
-                attrs['_fields'][name] = field
+                for name, field in parent_fields.items():
+                    attrs['_fields'][name] = field
+        except NameError:
+            # Can't do this for Serialiser
+            pass
 
         declared_fields = {}
         for name, field in attrs.items():
-            if isinstnance(field, Field):
+            if isinstance(field, Field):
                 declared_fields[name] = attrs.pop(name)
 
         attrs['_fields'].update(declared_fields)
 
-        new_class = super(MetaSerialiser, cls).__new__(cls, name, bases, attrs
+        new_class = super(MetaSerialiser, cls).__new__(cls, name, bases, attrs)
 
         return new_class
 
@@ -41,12 +46,14 @@ class Serialiser(object):
         return data
 
     def deflate_list(self, obj_list):
-        for obj in iter(obj_list):
-            yield self.serialise_object(obj)
+        return [
+            self.deflate_object(obj)
+            for obj in iter(obj_list)
+        ]
 
     def build_instance(kwargs):
         '''Take the inflated data and create a new instance'''
-        return self.obj_class(**kwargs)
+        return self._class(**kwargs)
 
     def inflate_object(self, data):
         kwargs = {}
@@ -59,6 +66,7 @@ class Serialiser(object):
         return self.build_instance(kwargs)
 
     def inflate_list(self, data_list):
-        for data in data_list:
-            yield self.inflate_object(data)
-
+        return [
+            self.inflate_object(data)
+            for data in data_list
+        ]
