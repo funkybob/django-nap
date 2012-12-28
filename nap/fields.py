@@ -1,4 +1,6 @@
 
+from .utils import digattr
+
 class Field(object):
     def __init__(self, attribute=None, default=None, *args, **kwargs):
         self.attribute = attribute
@@ -10,7 +12,7 @@ class Field(object):
         src = self.attribute
         if src is None:
             src = name
-        data[name] = getattr(obj, src, self.default)
+        data[name] = digattr(obj, src, self.default)
 
     def inflate(self, name, data, kwargs):
         dest = self.attribute
