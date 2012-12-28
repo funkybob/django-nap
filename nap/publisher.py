@@ -1,4 +1,5 @@
 
+from django.conf.urls import url
 from django.views.generic.base import View
 from django.http import HttpResponse
 
@@ -6,6 +7,16 @@ import json
 
 
 class Publisher(View):
+    @classmethod
+    def patterns(cls, **kwargs):
+        view = cls.as_view(**kwargs)
+        return [
+            url(r'^(?P<object_id>\d+)/(?P<action>\w+)/?$', view, ),
+            url(r'^(?P<object_id>\d+)/?$',                 view, ),
+            url(r'^(?P<action>\w+)/(?P<arg>\w+)/?$',       view, ),
+            url(r'^(?P<action>\w+)/?$',                    view, ),
+            url(r'^$',                                     view, ),
+        ]
 
     def dispatch(self, request, action='default', object_id=None, **kwargs):
         '''View dispatcher called by Django
@@ -28,24 +39,38 @@ class Publisher(View):
             handler = getattr( self, '%s_%s_object' % (method, action), None )
         if handler is None:
             raise Http404
-        return handler(request, object_id=object_id, **kw)
+        return handler(request, object_id=object_id, **kwargs)
 
     def get_serialiser(self, request, **kwargs):
         return self.serialiser
 
+    def get_object_list(self):
+        raise NotImplementedError
+
+    def get_object(self, object_id):
+        raise NotImplementedError
+
     def get_default_list(self, request, **kwargs):
-        queryset = self.get_queryset()
-        serialiser = self.get_serialiser()
-        return self.render_to_response(serializer.deflate_list(queryset))
+        object_list = self.get_object_list()
+        serialiser = self.get_serialiser(request, **kwargs)
+        return self.render_to_response(serialiser.deflate_list(object_list))
 
     def get_default_object(self, request, object_id, **kwargs):
         # XXX Make 'pk' configurable?
         obj = self.get_queryset().get(pk=object_id)
-        serialiser = self.get_serialiser()
+        serialiser = self.get_serialiser(request, **kwargs)
         return self.render_to_response(serialiser.deflate_object(obj))
 
     def render_to_response(self, context, **response_kwargs):
         return HttpResponse(json.dumps(context),
             content_type='application/json',
         )
+
+class ModelPublisher(Publisher):
+
+    def get_object_list(self):
+        return self.model.objects.all()
+
+    def get_object(self, object_id):
+        return self.get_object_list().get(pk=object_id)
 
