@@ -1,4 +1,8 @@
 
+import json
+from decimal import Decimal
+import datetime
+
 def digattr(obj, attr, default=None):
     '''Perform template-style dotted lookup'''
     steps = attr.split('.')
@@ -36,3 +40,20 @@ def undigattr(obj, attr, value):
             obj = obj()
     setattr(obj, last, value)
 
+class JSONEncoder(json.JSONEncoder):
+    '''
+    Same features as JSONEncoder, but not as a generator.
+    '''
+    def default(self, obj):
+        if isinstance(obj, Decimal):
+            return str(obj)
+        if isinstance(obj, datetime.datetime):
+            return '"' + obj.replace(microsecond=0).isoformat(' ') + '"'
+        if isinstance(obj, datetime.date):
+            return '"' + obj.isoformat() + '"'
+        if hasattr(obj, '__iter__'):
+            return list(obj)
+        return super(JSONEncoder, self).default(obj)
+
+    def dumps(self, obj):
+        return self.encode(obj)
