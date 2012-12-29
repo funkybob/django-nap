@@ -2,7 +2,7 @@
 from django.conf.urls import url
 from django.core.paginator import Paginator
 from django.views.generic.base import View
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 
 import json
 
@@ -35,10 +35,10 @@ class Publisher(View):
         method = request.method.lower()
         if object_id is None:
             # Look for list handler
-            handler = getattr(self, '%s_%s_list' % (method, action), None)
+            handler = getattr(self, 'do_%s_%s_list' % (method, action), None)
         else:
             # Look for object handler
-            handler = getattr( self, '%s_%s_object' % (method, action), None )
+            handler = getattr( self, 'do_%s_%s_object' % (method, action), None )
         if handler is None:
             raise Http404
         return handler(request, object_id=object_id, **kwargs)
@@ -72,16 +72,16 @@ class Publisher(View):
             'objects': page.object_list,
         }
 
-    def get_default_list(self, request, **kwargs):
+    def do_get_default_list(self, request, **kwargs):
         object_list = self.get_object_list()
         serialiser = self.get_serialiser(request, **kwargs)
         data = self.get_page(object_list)
         data['objects'] = serialiser.deflate_list(data['objects'])
         return self.render_to_response(data)
 
-    def get_default_object(self, request, object_id, **kwargs):
+    def do_get_default_object(self, request, object_id, **kwargs):
         # XXX Make 'pk' configurable?
-        obj = self.get_queryset().get(pk=object_id)
+        obj = self.get_object(object_id)
         serialiser = self.get_serialiser(request, **kwargs)
         return self.render_to_response(serialiser.deflate_object(obj))
 
