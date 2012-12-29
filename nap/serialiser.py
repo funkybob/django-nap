@@ -51,19 +51,22 @@ class Serialiser(object):
             for obj in iter(obj_list)
         ]
 
-    def build_instance(kwargs):
+    def build_instance(self, kwargs):
         '''Take the inflated data and create a new instance'''
         return self._class(**kwargs)
 
-    def inflate_object(self, data):
-        kwargs = {}
+    def inflate_object(self, data, obj=None, extra=None):
+        if obj is None:
+            # XXX Still not sure about this
+            if not extra:
+                extra = {}
+            obj = self.build_instance(extra)
         for name, field in self._fields.items():
-            field.inflate(name, data, kwargs)
+            field.inflate(name, data, obj)
             method = getattr(self, 'inflate_%s' % name, None)
             if method is not None:
-                method(data, kwargs)
-
-        return self.build_instance(kwargs)
+                method(data, obj)
+        return obj
 
     def inflate_list(self, data_list):
         return [
