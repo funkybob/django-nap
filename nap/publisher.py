@@ -4,7 +4,9 @@ from django.core.paginator import Paginator
 from django.views.generic.base import View
 from django.http import HttpResponse, Http404
 
-import json
+from utils import JSONEncoder
+
+json = JSONEncoder()
 
 class JsonResponse(HttpResponse):
     '''Handy shortcut for dumping JSON data'''
