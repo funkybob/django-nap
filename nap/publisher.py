@@ -6,6 +6,11 @@ from django.http import HttpResponse, Http404
 
 import json
 
+class JsonResponse(HttpResponse):
+    '''Handy shortcut for dumping JSON data'''
+    def __init__(self, content, *args, **kwargs):
+        kwargs.setdefault('content_type', 'application/json')
+        super(JsonResponse, self).__init__(json.dumps(content), *args, **kwargs)
 
 class Publisher(View):
     @classmethod
@@ -43,7 +48,7 @@ class Publisher(View):
             raise Http404
         return handler(request, object_id=object_id, **kwargs)
 
-    def get_serialiser(self, request, **kwargs):
+    def get_serialiser(self):
         return self.serialiser
 
     def get_object_list(self):
@@ -74,21 +79,35 @@ class Publisher(View):
 
     def do_get_default_list(self, request, **kwargs):
         object_list = self.get_object_list()
-        serialiser = self.get_serialiser(request, **kwargs)
+        serialiser = self.get_serialiser()
         data = self.get_page(object_list)
         data['objects'] = serialiser.deflate_list(data['objects'])
         return self.render_to_response(data)
 
+    def do_post_default_list(self, request, object_id=None, **kwargs):
+        '''Default list POST handler -- create object'''
+
     def do_get_default_object(self, request, object_id, **kwargs):
-        # XXX Make 'pk' configurable?
+        '''Default object GET handler -- get object'''
         obj = self.get_object(object_id)
-        serialiser = self.get_serialiser(request, **kwargs)
-        return self.render_to_response(serialiser.deflate_object(obj))
+        serialiser = self.get_serialiser()
+        return self.render_single_object(obj, serialiser)
+
+    def do_put_default_object(self, request, object_id, **kwargs):
+        '''Default object PUT handler -- update object'''
+        obj = self.get_object(object_id)
+        serialiser = self.get_serialiser()
+        obj = serialiser.inflate_object(request.POST, obj)
+        return self.render_single_object(obj, serialiser)
+
+    def render_single_object(self, obj, serialiser=None):
+        if serialiser is None:
+            serialiser = self.get_serialiser()
+        data = serialiser.deflate_object(obj)
+        return JsonResponse(data)
 
     def render_to_response(self, context, **response_kwargs):
-        return HttpResponse(json.dumps(context),
-            content_type='application/json',
-        )
+        return JsonResponse(context)
 
 class ModelPublisher(Publisher):
 
