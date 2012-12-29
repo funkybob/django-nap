@@ -42,7 +42,7 @@ class Serialiser(object):
             field.deflate(name, obj, data)
             method = getattr(self, 'deflate_%s' % name, None)
             if method is not None:
-                method(obj, data)
+                data[name] = method(obj, data)
         return data
 
     def deflate_list(self, obj_list):
