@@ -2,6 +2,7 @@
 from .utils import digattr, undigattr
 
 class Field(object):
+
     def __init__(self, attribute=None, default=None, readonly=False,
         *args, **kwargs):
         self.attribute = attribute
@@ -22,5 +23,7 @@ class Field(object):
         dest = self.attribute
         if dest is None:
             dest = name
-        setattr(obj, dest, data[name])
-
+        try:
+            setattr(obj, dest, data[name])
+        except KeyError:
+            pass
