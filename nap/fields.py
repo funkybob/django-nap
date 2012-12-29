@@ -1,10 +1,12 @@
 
-from .utils import digattr
+from .utils import digattr, undigattr
 
 class Field(object):
-    def __init__(self, attribute=None, default=None, *args, **kwargs):
+    def __init__(self, attribute=None, default=None, readonly=False,
+        *args, **kwargs):
         self.attribute = attribute
         self.default = default
+        self.readonly = readonly
         self.args = args
         self.kwargs = kwargs
 
@@ -14,12 +16,11 @@ class Field(object):
             src = name
         data[name] = digattr(obj, src, self.default)
 
-    def inflate(self, name, data, kwargs):
+    def inflate(self, name, data, obj):
+        if self.readonly:
+            return
         dest = self.attribute
         if dest is None:
             dest = name
-        try:
-            kwargs[dest] = data[name]
-        except KeyError:
-            pass
+        setattr(obj, dest, data[name])
 
