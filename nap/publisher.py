@@ -2,13 +2,14 @@
 from django.conf.urls import url
 from django.core.paginator import Paginator
 from django.views.generic.base import View
-from django.http import HttpResponse, Http404
+
+from . import http
 
 from utils import JSONEncoder
 
 json = JSONEncoder()
 
-class JsonResponse(HttpResponse):
+class JsonResponse(http.HttpResponse):
     '''Handy shortcut for dumping JSON data'''
     def __init__(self, content, *args, **kwargs):
         kwargs.setdefault('content_type', 'application/json')
@@ -47,7 +48,7 @@ class Publisher(View):
             # Look for object handler
             handler = getattr( self, 'do_%s_%s_object' % (method, action), None )
         if handler is None:
-            raise Http404
+            raise http.Http404
         return handler(request, object_id=object_id, **kwargs)
 
     def get_serialiser(self):
@@ -79,6 +80,14 @@ class Publisher(View):
             'objects': page.object_list,
         }
 
+    def get_data(self):
+        '''Retrieve data from request'''
+        if request.META['CONTENT_TYPE'] in ['application/json',]:
+            return json.decode(request.body)
+        if requset.method == 'GET':
+            return requset.GET
+        return request.POST
+
     def do_get_default_list(self, request, **kwargs):
         object_list = self.get_object_list()
         serialiser = self.get_serialiser()
@@ -99,7 +108,7 @@ class Publisher(View):
         '''Default object PUT handler -- update object'''
         obj = self.get_object(object_id)
         serialiser = self.get_serialiser()
-        obj = serialiser.inflate_object(request.POST, obj)
+        obj = serialiser.inflate_object(self.get_data(), obj)
         return self.render_single_object(obj, serialiser)
 
     def render_single_object(self, obj, serialiser=None):
