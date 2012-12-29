@@ -70,7 +70,7 @@ class Publisher(View):
         page = paginator.page(page_num + 1)
         return {
             'meta': {
-                'offset': page.start_index(),
+                'offset': page.start_index() - 1,
                 'limit': page_size,
                 'count': paginator.count,
             },
