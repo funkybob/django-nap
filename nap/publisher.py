@@ -41,15 +41,11 @@ class Publisher(View):
         self.action = action
         self.request = request  # Shouldn't the as_view wrapper do this?
         method = request.method.lower()
-        if object_id is None:
-            # Look for list handler
-            handler = getattr(self, 'do_%s_%s_list' % (method, action), None)
-        else:
-            # Look for object handler
-            handler = getattr( self, 'do_%s_%s_object' % (method, action), None )
+        prefix = 'object' if object_id else 'list'
+        handler = getattr(self, '_'.join([prefix, method, action]), None)
         if handler is None:
             raise http.Http404
-        return handler(request, object_id=object_id, **kwargs)
+        return handler(request, action=action, object_id=object_id, **kwargs)
 
     def get_serialiser(self):
         return self.serialiser
@@ -88,23 +84,23 @@ class Publisher(View):
             return requset.GET
         return request.POST
 
-    def do_get_default_list(self, request, **kwargs):
+    def list_get_default(self, request, **kwargs):
         object_list = self.get_object_list()
         serialiser = self.get_serialiser()
         data = self.get_page(object_list)
         data['objects'] = serialiser.deflate_list(data['objects'])
         return self.render_to_response(data)
 
-    def do_post_default_list(self, request, object_id=None, **kwargs):
+    def list_post_default(self, request, object_id=None, **kwargs):
         '''Default list POST handler -- create object'''
 
-    def do_get_default_object(self, request, object_id, **kwargs):
+    def object_get_default(self, request, object_id, **kwargs):
         '''Default object GET handler -- get object'''
         obj = self.get_object(object_id)
         serialiser = self.get_serialiser()
         return self.render_single_object(obj, serialiser)
 
-    def do_put_default_object(self, request, object_id, **kwargs):
+    def object_put_default(self, request, object_id, **kwargs):
         '''Default object PUT handler -- update object'''
         obj = self.get_object(object_id)
         serialiser = self.get_serialiser()
