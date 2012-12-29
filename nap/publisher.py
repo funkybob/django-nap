@@ -59,7 +59,7 @@ class Publisher(View):
 
     def get_page(self, object_list):
         page_size = getattr(self, 'page_size', None)
-        if page_size is None:
+        if not page_size:
             return {
                 'meta': {},
                 'objects': object_list,
@@ -67,7 +67,7 @@ class Publisher(View):
         paginator = Paginator(object_list, page_size)
         offset = int(self.request.GET.get('offset', 0))
         page_num = offset // page_size
-        page = paginator.page(page_num or 1)
+        page = paginator.page(page_num + 1)
         return {
             'meta': {
                 'offset': page.start_index(),
