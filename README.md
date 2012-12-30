@@ -58,12 +58,12 @@ A serialiser defines how to convert an object to/from a JSON encodable format.
 
 Serialisers are defined declaratively, using nap.field.Field instances
 
-class MySerialiser(Serialiser):
-    _class = MyClass
-    foo = fields.Field()
-    bar = fields.Field(readonly=True)
-    baz = fields.Field('quux')
-    fred = fields.Field('some.dotted.path')
+    class MySerialiser(Serialiser):
+        _class = MyClass
+        foo = fields.Field()
+        bar = fields.Field(readonly=True)
+        baz = fields.Field('quux')
+        fred = fields.Field('some.dotted.path')
 
 With an instance of this class, you can deflate/inflate an instance of MyClass easily:
 
