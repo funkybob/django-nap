@@ -62,10 +62,13 @@ class Serialiser(object):
                 extra = {}
             obj = self.build_instance(extra)
         for name, field in self._fields.items():
-            field.inflate(name, data, obj)
+            if field.readonly:
+                continue
             method = getattr(self, 'inflate_%s' % name, None)
             if method is not None:
                 method(data, obj)
+            else:
+                field.inflate(name, data, obj)
         return obj
 
     def inflate_list(self, data_list):
