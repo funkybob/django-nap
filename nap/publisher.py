@@ -10,25 +10,25 @@ class Publisher(View):
     # XXX Need some names/labels to build url pattern names?
     @classmethod
     def patterns(cls, **kwargs):
+        '''
+        Add this to your url patterns like:
+            ( '^foo/', include(mypublisher.patterns()), ),
+        /                   default object list
+        /(action)/          
+        /(action)/(arg)/    custom action with argument (eg: /distinct/attr_name/)
+        /object/(id)/              instance view
+        /object/(id)/(action)/     custom action on instance
+        '''
         view = cls.as_view(**kwargs)
         return [
-            url(r'^do/(?P<action>\w+)/?$',                 view),
-            url(r'^(?P<object_id>\w+)/(?P<action>\w+)/?$', view),
-            url(r'^(?P<object_id>\w+)/?$',                 view),
-            url(r'^$',                                     view),
+            url(r'^object/(?P<object_id>\w+)/(?P<action>\w+)/?$', view),
+            url(r'^object/(?P<object_id>\w+)/?$',                 view),
+            url(r'^(?P<action>\w+)/?$',                           view),
+            url(r'^$',                                            view),
         ]
 
     def dispatch(self, request, action='default', object_id=None, **kwargs):
-        '''View dispatcher called by Django
-        Add this to your url patterns like:
-            ( '^foo/', include(mypublisher.urlpatterns), ),
-        /                   GET: column config, POST: filtered list
-        /add/               GET: form config, POST: create new instance
-        /(action)/          custom action
-        /(action)/(arg)/    custom action with argument (eg: /distinct/attr_name/)
-        /(id)/              instance view
-        /(id)/(action)/     custom action on instance
-        '''
+        '''View dispatcher called by Django'''
         self.action = action
         self.request = request  # Shouldn't the as_view wrapper do this?
         method = request.method.lower()
