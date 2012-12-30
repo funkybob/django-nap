@@ -16,6 +16,41 @@ Modular::
 Simple::
     If you want an API that provides every feature ever, go look at TastyPie.  But if you want something simple and fast, this is your tool.
 
+Overview
+========
+
+Publisher
+=========
+
+A publisher gives you access to the resource.  Firstly, it uses the url patterns as follows:
+
+    r'^object/(?P<object_id>\w+)/(?P<action>\w+)/?$'
+    r'^object/(?P<object_id>\w+)/?$'
+    r'^(?P<action>\w+)/?$'
+    r'^$'
+
+Requests are mapped to 'handlers', either list or object handlers.  A handler name is formed:
+
+    {list|object}_{method}_{action}
+
+
+Internal methods:
+
+    get_serialiser():
+        Return a Serialiser instance to use for this request.
+
+    get_object_list():
+        Return the full object list for this request.
+
+    get_object(object_id):
+        Return the instance with this ID.
+
+    get_page(object_list):
+        Returns the page of objects for this request.
+
+    def get_data():
+        Returns the client-supplied data.
+
 Serialiser
 ==========
 
