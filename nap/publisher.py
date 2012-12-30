@@ -103,7 +103,7 @@ class Publisher(View):
         if serialiser is None:
             serialiser = self.get_serialiser()
         data = serialiser.deflate_object(obj)
-        return JsonResponse(data)
+        return http.JsonResponse(data)
 
     # XXX Render list helper?
     def render_to_response(self, context, **response_kwargs):
