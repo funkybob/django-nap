@@ -13,11 +13,10 @@ class Publisher(View):
         '''
         Add this to your url patterns like:
             ( '^foo/', include(mypublisher.patterns()), ),
-        /                   default object list
-        /(action)/          
-        /(action)/(arg)/    custom action with argument (eg: /distinct/attr_name/)
-        /object/(id)/              instance view
-        /object/(id)/(action)/     custom action on instance
+        /                       default object list
+        /(action)/              list operation
+        /object/(id)/           instance view
+        /object/(id)/(action)/  custom action on instance
         '''
         view = cls.as_view(**kwargs)
         return [
