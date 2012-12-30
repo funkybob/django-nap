@@ -4,27 +4,18 @@ from django.core.paginator import Paginator
 from django.views.generic.base import View
 
 from . import http
-
-from utils import JSONEncoder
-
-json = JSONEncoder()
-
-class JsonResponse(http.HttpResponse):
-    '''Handy shortcut for dumping JSON data'''
-    def __init__(self, content, *args, **kwargs):
-        kwargs.setdefault('content_type', 'application/json')
-        super(JsonResponse, self).__init__(json.dumps(content), *args, **kwargs)
+from .http import json
 
 class Publisher(View):
+    # XXX Need some names/labels to build url pattern names?
     @classmethod
     def patterns(cls, **kwargs):
         view = cls.as_view(**kwargs)
         return [
-            url(r'^(?P<object_id>\d+)/(?P<action>\w+)/?$', view, ),
-            url(r'^(?P<object_id>\d+)/?$',                 view, ),
-            url(r'^(?P<action>\w+)/(?P<arg>\w+)/?$',       view, ),
-            url(r'^(?P<action>\w+)/?$',                    view, ),
-            url(r'^$',                                     view, ),
+            url(r'^do/(?P<action>\w+)/?$',                 view),
+            url(r'^(?P<object_id>\w+)/(?P<action>\w+)/?$', view),
+            url(r'^(?P<object_id>\w+)/?$',                 view),
+            url(r'^$',                                     view),
         ]
 
     def dispatch(self, request, action='default', object_id=None, **kwargs):
@@ -45,6 +36,7 @@ class Publisher(View):
         handler = getattr(self, '_'.join([prefix, method, action]), None)
         if handler is None:
             raise http.Http404
+        # Do we need to pass any of this?
         return handler(request, action=action, object_id=object_id, **kwargs)
 
     def get_serialiser(self):
@@ -113,10 +105,13 @@ class Publisher(View):
         data = serialiser.deflate_object(obj)
         return JsonResponse(data)
 
+    # XXX Render list helper?
     def render_to_response(self, context, **response_kwargs):
-        return JsonResponse(context)
+        return http.JsonResponse(context)
 
 class ModelPublisher(Publisher):
+
+    # Auto-build serialiser from model class?
 
     def get_object_list(self):
         return self.model.objects.all()
