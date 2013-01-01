@@ -1,5 +1,6 @@
 
 from .fields import Field
+from .meta import Meta
 
 class MetaSerialiser(type):
     def __new__(cls, name, bases, attrs):
@@ -29,6 +30,8 @@ class MetaSerialiser(type):
         attrs['_fields'].update(declared_fields)
 
         new_class = super(MetaSerialiser, cls).__new__(cls, name, bases, attrs)
+        meta = getattr(new_class, 'Meta', None)
+        new_class._meta = Meta(meta)
 
         return new_class
 
@@ -75,15 +78,16 @@ class Serialiser(object):
 class MetaModelSerialiser(MetaSerialiser):
     def __new__(cls, name, bases, attrs):
 
-        include = attrs.pop('_fields', [])
-        exclude = attrs.pop('_exclude', [])
-
         new_class = super(MetaModelSerialiser, cls).__new__(cls, name, bases, attrs)
+
+        include = getattr(new_class._meta, 'fields', [])
+        exclude = getattr(new_class._meta, 'exclude', [])
 
         current_fields = new_class._fields.keys()
 
         try:
-            for f in new_class._class._meta.fields:
+            model = new_class._meta.model
+            for f in model._meta.fields:
                 # If we've got one, skip...
                 if f.name in current_fields:
                     continue
