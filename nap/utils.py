@@ -40,6 +40,8 @@ def undigattr(obj, attr, value):
             obj = obj()
     setattr(obj, last, value)
 
+from django.db.models import Model
+
 class JSONEncoder(json.JSONEncoder):
     '''
     Same features as JSONEncoder, but not as a generator.
@@ -53,4 +55,6 @@ class JSONEncoder(json.JSONEncoder):
             return '"' + obj.isoformat() + '"'
         if hasattr(obj, '__iter__'):
             return list(obj)
+        if isinstance(obj, Model):
+            return unicode(obj)
         return super(JSONEncoder, self).default(obj)
