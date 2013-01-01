@@ -1,15 +1,19 @@
 
 from django.conf.urls import url
 from django.core.paginator import Paginator
-from django.views.generic.base import View
 
 from . import http
 from .http import json
 
-class Publisher(View):
+class Publisher(object):
+    def __init__(self, request, *args, **kwargs):
+        self.request = request
+        self.args = args
+        self.kwargs = kwargs
+
     # XXX Need some names/labels to build url pattern names?
     @classmethod
-    def patterns(cls, **kwargs):
+    def patterns(cls):
         '''
         Add this to your url patterns like:
             ( '^foo/', include(mypublisher.patterns()), ),
@@ -18,7 +22,11 @@ class Publisher(View):
         /object/(id)/           instance view
         /object/(id)/(action)/  custom action on instance
         '''
-        view = cls.as_view(**kwargs)
+        def view(request, *args, **kwargs):
+            '''A wrapper view to instanciate and dispatch'''
+            self = cls(request, *args, **kwargs)
+            return self.dispatch(request, *args, **kwargs)
+
         return [
             url(r'^object/(?P<object_id>\w+)/(?P<action>\w+)/?$', view),
             url(r'^object/(?P<object_id>\w+)/?$',                 view),
@@ -29,7 +37,6 @@ class Publisher(View):
     def dispatch(self, request, action='default', object_id=None, **kwargs):
         '''View dispatcher called by Django'''
         self.action = action
-        self.request = request  # Shouldn't the as_view wrapper do this?
         method = request.method.lower()
         prefix = 'object' if object_id else 'list'
         handler = getattr(self, '_'.join([prefix, method, action]), None)
