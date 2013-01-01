@@ -54,6 +54,3 @@ class JSONEncoder(json.JSONEncoder):
         if hasattr(obj, '__iter__'):
             return list(obj)
         return super(JSONEncoder, self).default(obj)
-
-    def dumps(self, obj):
-        return self.encode(obj)
