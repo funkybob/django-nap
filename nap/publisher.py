@@ -3,7 +3,6 @@ from django.conf.urls import url
 from django.core.paginator import Paginator
 
 from . import http
-from .http import json
 
 class Publisher(object):
     def __init__(self, request, *args, **kwargs):
@@ -79,11 +78,11 @@ class Publisher(object):
 
     def get_data(self):
         '''Retrieve data from request'''
-        if request.META['CONTENT_TYPE'] in ['application/json',]:
-            return json.decode(request.body)
-        if requset.method == 'GET':
-            return requset.GET
-        return request.POST
+        if self.request.META['CONTENT_TYPE'] in ['application/json',]:
+            return http.loads(self.request.body)
+        if self.request.method == 'GET':
+            return self.request.GET
+        return self.request.POST
 
     def list_get_default(self, request, **kwargs):
         object_list = self.get_object_list()
