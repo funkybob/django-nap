@@ -32,6 +32,7 @@ class MetaSerialiser(type):
 
         return new_class
 
+
 class Serialiser(object):
     __metaclass__ = MetaSerialiser
 
@@ -51,16 +52,10 @@ class Serialiser(object):
             for obj in iter(obj_list)
         ]
 
-    def build_instance(self, kwargs):
-        '''Take the inflated data and create a new instance'''
-        return self._class(**kwargs)
-
-    def inflate_object(self, data, obj=None, extra=None):
+    def inflate_object(self, data, obj=None):
         if obj is None:
-            # XXX Still not sure about this
-            if not extra:
-                extra = {}
-            obj = self.build_instance(extra)
+            # For now, we create a dummy object to hold the values
+            obj = object()
         for name, field in self._fields.items():
             if field.readonly:
                 continue
@@ -76,3 +71,42 @@ class Serialiser(object):
             self.inflate_object(data)
             for data in data_list
         ]
+
+class MetaModelSerialiser(MetaSerialiser):
+    def __new__(cls, name, bases, attrs):
+
+        include = attrs.pop('_fields', [])
+        exclude = attrs.pop('_exclude', [])
+
+        new_class = super(MetaModelSerialiser, cls).__new__(cls, name, bases, attrs)
+
+        current_fields = new_class._fields.keys()
+
+        try:
+            for f in new_class._class._meta.fields:
+                # If we've got one, skip...
+                if f.name in current_fields:
+                    continue
+
+                # If we have a whitelist, and it's not in it, skip
+                if include and not f.name in include:
+                    continue
+
+                # If it's blacklisted, skip
+                if f.name in exclude:
+                    continue
+
+                kwargs = {
+                    'default': f.default,
+                }
+
+                new_class._fields[f.name] = Field(**kwargs)
+        except AttributeError:
+            pass
+
+        return new_class
+
+class ModelSerialiser(Serialiser):
+    __metaclass__ = MetaModelSerialiser
+
+    # XXX How to create a new instance?
