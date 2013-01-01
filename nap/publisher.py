@@ -34,6 +34,9 @@ class Publisher(View):
         prefix = 'object' if object_id else 'list'
         handler = getattr(self, '_'.join([prefix, method, action]), None)
         if handler is None:
+            handler = getattr(self, '_'.join([prefix, action]), None)
+        # See if there's a method agnostic handler
+        if handler is None:
             raise http.Http404
         # Do we need to pass any of this?
         return handler(request, action=action, object_id=object_id, **kwargs)
@@ -80,7 +83,7 @@ class Publisher(View):
         serialiser = self.get_serialiser()
         data = self.get_page(object_list)
         data['objects'] = serialiser.deflate_list(data['objects'])
-        return self.render_to_response(data)
+        return self.create_response(data)
 
     def list_post_default(self, request, object_id=None, **kwargs):
         '''Default list POST handler -- create object'''
@@ -104,8 +107,7 @@ class Publisher(View):
         data = serialiser.deflate_object(obj)
         return http.JsonResponse(data)
 
-    # XXX Render list helper?
-    def render_to_response(self, context, **response_kwargs):
+    def create_response(self, context, **response_kwargs):
         return http.JsonResponse(context)
 
 class ModelPublisher(Publisher):
