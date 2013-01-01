@@ -11,12 +11,14 @@ HttpResetContent = partial(HttpResponse, status_code=205)
 HttpPartialContent = partial(HttpResponse, status_code=206)
 
 from utils import JSONEncoder
+import json
 
-json = JSONEncoder()
+loads = json.loads
+dumps = partial(json.dumps, cls=JSONEncoder)
 
 class JsonResponse(HttpResponse):
     '''Handy shortcut for dumping JSON data'''
     def __init__(self, content, *args, **kwargs):
         kwargs.setdefault('content_type', 'application/json')
-        super(JsonResponse, self).__init__(json.dumps(content), *args, **kwargs)
+        super(JsonResponse, self).__init__(dumps(content), *args, **kwargs)
 
