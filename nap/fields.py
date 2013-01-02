@@ -48,3 +48,24 @@ class SerialiserField(Field):
         else:
            setattr(obj, dest, val)
 
+class ManySerialiserField(Field):
+    def __init__(self, *args, **kwargs):
+        super(ManySerialiserField, self).__init__(*args, **kwargs)
+        self.serialiser = self.kwargs.pop('serialiser')
+
+    def deflate(self, name, obj, data):
+        src = self._get_attrname(name)
+        val = digattr(obj, src, self.default)
+        data[name] = self.serialiser.deflate_list(iter(val))
+
+    def inflate(self, name, obj, data):
+        if self.readonly:
+            return
+        dest = self._get_attrname(name)
+        try:
+            val = self.serialiser.inflate_list(data[name])
+        except KeyError:
+            pass
+        else:
+            setattr(obj, dest, val)
+
