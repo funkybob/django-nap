@@ -11,19 +11,40 @@ class Field(object):
         self.args = args
         self.kwargs = kwargs
 
+    def _get_attrname(self, name):
+        return self.attribute if self.attribute else name
+
     def deflate(self, name, obj, data):
-        src = self.attribute
-        if src is None:
-            src = name
+        src = self._get_attrname(name)
         data[name] = digattr(obj, src, self.default)
 
     def inflate(self, name, data, obj):
         if self.readonly:
             return
-        dest = self.attribute
-        if dest is None:
-            dest = name
+        dest = self._get_attrname(name)
         try:
             setattr(obj, dest, data[name])
         except KeyError:
             pass
+
+class SerialiserField(Field):
+    def __init__(self, *args, **kwargs):
+        super(SerialiserField, self).__init__(*args, **kwargs)
+        self.serialiser = self.kwargs.pop('serialiser')
+
+    def deflate(self, name, obj, data):
+        src = self._get_attrname(name)
+        val = digattr(obj, src, self.default)
+        data[name] = self.serialiser.deflate_object(val)
+
+    def inflate(self, name, obj, data):
+        if self.readonly:
+            return
+        dest = self._get_attrname(name)
+        try:
+            val = self.serialiser.inflate_object(data[name])
+        except KeyError:
+            pass
+        else:
+           setattr(obj, dest, val)
+
