@@ -16,16 +16,16 @@ class MetaSerialiser(type):
             for p in parents:
                 parent_fields = getattr(p, '_fields', {})
 
-                for name, field in parent_fields.items():
-                    attrs['_fields'][name] = field
+                for field_name, field in parent_fields.items():
+                    attrs['_fields'][field_name] = field
         except NameError:
             # Can't do this for Serialiser
             pass
 
         declared_fields = {}
-        for name, field in attrs.items():
+        for field_name, field in attrs.items():
             if isinstance(field, Field):
-                declared_fields[name] = attrs.pop(name)
+                declared_fields[field_name] = attrs.pop(field_name)
 
         attrs['_fields'].update(declared_fields)
 
