@@ -88,7 +88,7 @@ class Publisher(object):
         object_list = self.get_object_list()
         serialiser = self.get_serialiser()
         data = self.get_page(object_list)
-        data['objects'] = serialiser.deflate_list(data['objects'])
+        data['objects'] = serialiser.deflate_list(data['objects'], publisher=self)
         return self.create_response(data)
 
     def list_post_default(self, request, object_id=None, **kwargs):
@@ -110,7 +110,7 @@ class Publisher(object):
     def render_single_object(self, obj, serialiser=None):
         if serialiser is None:
             serialiser = self.get_serialiser()
-        data = serialiser.deflate_object(obj)
+        data = serialiser.deflate_object(obj, publisher=self)
         return http.JsonResponse(data)
 
     def create_response(self, context, **response_kwargs):

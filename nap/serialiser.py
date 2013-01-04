@@ -40,22 +40,22 @@ class Serialiser(object):
     __metaclass__ = MetaSerialiser
 
 
-    def deflate_object(self, obj):
+    def deflate_object(self, obj, publisher=None):
         data = {}
         for name, field in self._fields.items():
-            field.deflate(name, obj, data)
+            field.deflate(name, obj, data, publisher=publisher)
             method = getattr(self, 'deflate_%s' % name, None)
             if method is not None:
-                data[name] = method(obj, data)
+                data[name] = method(obj, data, publisher=publisher)
         return data
 
-    def deflate_list(self, obj_list):
+    def deflate_list(self, obj_list, publisher=None):
         return [
-            self.deflate_object(obj)
+            self.deflate_object(obj, publisher=publisher)
             for obj in iter(obj_list)
         ]
 
-    def inflate_object(self, data, obj=None):
+    def inflate_object(self, data, obj=None, publisher=None):
         if obj is None:
             # For now, we create a dummy object to hold the values
             obj = object()
@@ -64,9 +64,9 @@ class Serialiser(object):
                 continue
             method = getattr(self, 'inflate_%s' % name, None)
             if method is not None:
-                method(data, obj)
+                method(data, obj, publisher=publisher)
             else:
-                field.inflate(name, data, obj)
+                field.inflate(name, data, obj, publisher=publisher)
         return obj
 
     def inflate_list(self, data_list):
