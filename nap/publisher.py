@@ -27,8 +27,8 @@ class Publisher(object):
             return self.dispatch(request, *args, **kwargs)
 
         return [
-            url(r'^object/(?P<object_id>\w+)/(?P<action>\w+)/?$', view),
-            url(r'^object/(?P<object_id>\w+)/?$',                 view),
+            url(r'^object/(?P<object_id>[-\w]+)/(?P<action>\w+)/?$', view),
+            url(r'^object/(?P<object_id>[-\w]+)/?$',                 view),
             url(r'^(?P<action>\w+)/?$',                           view),
             url(r'^$',                                            view),
         ]
