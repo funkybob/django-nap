@@ -79,6 +79,8 @@ class Publisher(object):
     def get_data(self):
         '''Retrieve data from request'''
         if self.request.META['CONTENT_TYPE'] in ['application/json',]:
+            if not self.request.body:
+                return None
             return http.loads(self.request.body)
         if self.request.method == 'GET':
             return self.request.GET
