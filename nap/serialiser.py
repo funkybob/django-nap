@@ -10,14 +10,12 @@ class MetaSerialiser(type):
         # Inherit from parents
         try:
             parents = [b for b in bases if issubclass(b, Serialiser)]
-            parents = []
             parents.reverse()
 
             for p in parents:
                 parent_fields = getattr(p, '_fields', {})
 
-                for field_name, field in parent_fields.items():
-                    attrs['_fields'][field_name] = field
+                attrs['_fields'].update(parent_fields)
         except NameError:
             # Can't do this for Serialiser
             pass
