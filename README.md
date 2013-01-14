@@ -82,21 +82,21 @@ A field marked 'readonly' will not set its value on the object.
 
 You can customise how a field is inflated by either sublcassing the Field class, or adding a ``deflate_FOO`` or ``inflate_FOO`` method.
 
-class BSerialiser(Serialiser):
+    class BSerialiser(Serialiser):
 
-    foo = fields.Field()
+        foo = fields.Field()
 
-    def deflate_foo(self, obj, data, publisher=None):
-        return obj.get_foo()
+        def deflate_foo(self, obj, data, publisher=None):
+            return obj.get_foo()
 
-    def inflate_foo(self, data, obj, publisher=None):
-        obj.set_foo(data['foo'])
+        def inflate_foo(self, data, obj, publisher=None):
+            obj.set_foo(data['foo'])
 
 There's also a ModelSerialiser, which will introspect for fields.
 
-class MySerialiser(ModelSerialiser):
-    class Meta:
-        model = MyModel
+    class MySerialiser(ModelSerialiser):
+        class Meta:
+            model = MyModel
 
 You can define extra fields on a ModelSerialiser, or override fields from the model.
 
