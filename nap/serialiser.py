@@ -67,9 +67,9 @@ class Serialiser(object):
                 field.inflate(name, data, obj, publisher=publisher)
         return obj
 
-    def inflate_list(self, data_list):
+    def inflate_list(self, data_list, publisher=None):
         return [
-            self.inflate_object(data)
+            self.inflate_object(data, publisher=publisher)
             for data in data_list
         ]
 
