@@ -1,4 +1,5 @@
 
+
 class Meta(object):
     '''Generic container for Meta classes'''
 
@@ -10,4 +11,3 @@ class Meta(object):
             if not name[0] == '_'
         )
         return object.__new__(type('Meta', (cls,), attrs))
-

@@ -1,6 +1,7 @@
 
 from .utils import digattr, undigattr
 
+
 class Field(object):
 
     def __init__(self, attribute=None, default=None, readonly=False,
@@ -27,6 +28,7 @@ class Field(object):
         except KeyError:
             pass
 
+
 class SerialiserField(Field):
     def __init__(self, *args, **kwargs):
         super(SerialiserField, self).__init__(*args, **kwargs)
@@ -46,7 +48,8 @@ class SerialiserField(Field):
         except KeyError:
             pass
         else:
-           setattr(obj, dest, val)
+            setattr(obj, dest, val)
+
 
 class ManySerialiserField(Field):
     def __init__(self, *args, **kwargs):
@@ -68,4 +71,3 @@ class ManySerialiserField(Field):
             pass
         else:
             setattr(obj, dest, val)
-
