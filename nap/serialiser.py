@@ -2,6 +2,7 @@
 from .fields import Field
 from .meta import Meta
 
+
 class MetaSerialiser(type):
     def __new__(cls, name, bases, attrs):
         # Inherited fields
@@ -36,7 +37,6 @@ class MetaSerialiser(type):
 
 class Serialiser(object):
     __metaclass__ = MetaSerialiser
-
 
     def deflate_object(self, obj, publisher=None):
         data = {}
@@ -73,6 +73,7 @@ class Serialiser(object):
             for data in data_list
         ]
 
+
 class MetaModelSerialiser(MetaSerialiser):
     def __new__(cls, name, bases, attrs):
 
@@ -107,6 +108,7 @@ class MetaModelSerialiser(MetaSerialiser):
             pass
 
         return new_class
+
 
 class ModelSerialiser(Serialiser):
     __metaclass__ = MetaModelSerialiser
