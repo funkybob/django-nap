@@ -15,11 +15,11 @@ class Field(object):
     def _get_attrname(self, name):
         return self.attribute if self.attribute else name
 
-    def deflate(self, name, obj, data, **kwargsNone):
+    def deflate(self, name, obj, data, **kwargs):
         src = self._get_attrname(name)
         data[name] = digattr(obj, src, self.default)
 
-    def inflate(self, name, data, obj, **kwargsNone):
+    def inflate(self, name, data, obj, **kwargs):
         if self.readonly:
             return
         dest = self._get_attrname(name)
@@ -34,12 +34,12 @@ class SerialiserField(Field):
         super(SerialiserField, self).__init__(*args, **kwargs)
         self.serialiser = self.kwargs.pop('serialiser')
 
-    def deflate(self, name, obj, data, **kwargsNone):
+    def deflate(self, name, obj, data, **kwargs):
         src = self._get_attrname(name)
         val = digattr(obj, src, self.default)
         data[name] = self.serialiser.deflate_object(val)
 
-    def inflate(self, name, obj, data, **kwargsNone):
+    def inflate(self, name, obj, data, **kwargs):
         if self.readonly:
             return
         dest = self._get_attrname(name)
@@ -56,12 +56,12 @@ class ManySerialiserField(Field):
         super(ManySerialiserField, self).__init__(*args, **kwargs)
         self.serialiser = self.kwargs.pop('serialiser')
 
-    def deflate(self, name, obj, data, **kwargsNone):
+    def deflate(self, name, obj, data, **kwargs):
         src = self._get_attrname(name)
         val = digattr(obj, src, self.default)
         data[name] = self.serialiser.deflate_list(iter(val), **kwargs)
 
-    def inflate(self, name, obj, data, **kwargsNone):
+    def inflate(self, name, obj, data, **kwargs):
         if self.readonly:
             return
         dest = self._get_attrname(name)
