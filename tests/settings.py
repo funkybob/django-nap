@@ -2,7 +2,6 @@ import os.path
 
 INSTALLED_APPS = [
     'nap',
-
     'polls',
 ]
 
