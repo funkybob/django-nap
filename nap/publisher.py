@@ -4,6 +4,7 @@ from django.core.paginator import Paginator
 
 from . import http
 
+
 class Publisher(object):
     def __init__(self, request, *args, **kwargs):
         self.request = request
@@ -78,7 +79,7 @@ class Publisher(object):
 
     def get_data(self):
         '''Retrieve data from request'''
-        if self.request.META['CONTENT_TYPE'] in ['application/json',]:
+        if self.request.META['CONTENT_TYPE'] in ['application/json', ]:
             if not self.request.body:
                 return None
             return http.loads(self.request.body)
@@ -118,6 +119,7 @@ class Publisher(object):
     def create_response(self, context, **response_kwargs):
         return http.JsonResponse(context)
 
+
 class ModelPublisher(Publisher):
 
     # Auto-build serialiser from model class?
@@ -127,4 +129,3 @@ class ModelPublisher(Publisher):
 
     def get_object(self, object_id):
         return self.get_object_list().get(pk=object_id)
-

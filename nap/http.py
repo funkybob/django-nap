@@ -16,9 +16,9 @@ import json
 loads = json.loads
 dumps = partial(json.dumps, cls=JSONEncoder)
 
+
 class JsonResponse(HttpResponse):
     '''Handy shortcut for dumping JSON data'''
     def __init__(self, content, *args, **kwargs):
         kwargs.setdefault('content_type', 'application/json')
         super(JsonResponse, self).__init__(dumps(content), *args, **kwargs)
-
