@@ -1,5 +1,6 @@
 django-nap
 ==========
+[![Build Status](https://secure.travis-ci.org/funkybob/django-nap.png?branch=master)](http://travis-ci.org/funkybob/django-nap)
 
 A light REST library for Django.
 
