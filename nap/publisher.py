@@ -73,6 +73,8 @@ class Publisher(object):
                 'offset': page.start_index() - 1,
                 'limit': page_size,
                 'count': paginator.count,
+                'has_next': page.has_next(),
+                'has_prev': page.has_previous(),
             },
             'objects': page.object_list,
         }
