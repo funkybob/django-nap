@@ -1,6 +1,7 @@
 
 from .utils import digattr, undigattr
 
+
 class Field(object):
 
     def __init__(self, attribute=None, default=None, readonly=False,
@@ -14,11 +15,11 @@ class Field(object):
     def _get_attrname(self, name):
         return self.attribute if self.attribute else name
 
-    def deflate(self, name, obj, data, publisher=None):
+    def deflate(self, name, obj, data, **kwargs):
         src = self._get_attrname(name)
         data[name] = digattr(obj, src, self.default)
 
-    def inflate(self, name, data, obj, publisher=None):
+    def inflate(self, name, data, obj, **kwargs):
         if self.readonly:
             return
         dest = self._get_attrname(name)
@@ -27,17 +28,18 @@ class Field(object):
         except KeyError:
             pass
 
+
 class SerialiserField(Field):
     def __init__(self, *args, **kwargs):
         super(SerialiserField, self).__init__(*args, **kwargs)
         self.serialiser = self.kwargs.pop('serialiser')
 
-    def deflate(self, name, obj, data, publisher=None):
+    def deflate(self, name, obj, data, **kwargs):
         src = self._get_attrname(name)
         val = digattr(obj, src, self.default)
         data[name] = self.serialiser.deflate_object(val)
 
-    def inflate(self, name, obj, data, publisher=None):
+    def inflate(self, name, obj, data, **kwargs):
         if self.readonly:
             return
         dest = self._get_attrname(name)
@@ -46,26 +48,26 @@ class SerialiserField(Field):
         except KeyError:
             pass
         else:
-           setattr(obj, dest, val)
+            setattr(obj, dest, val)
+
 
 class ManySerialiserField(Field):
     def __init__(self, *args, **kwargs):
         super(ManySerialiserField, self).__init__(*args, **kwargs)
         self.serialiser = self.kwargs.pop('serialiser')
 
-    def deflate(self, name, obj, data, publisher=None):
+    def deflate(self, name, obj, data, **kwargs):
         src = self._get_attrname(name)
         val = digattr(obj, src, self.default)
-        data[name] = self.serialiser.deflate_list(iter(val), publisher=publisher)
+        data[name] = self.serialiser.deflate_list(iter(val), **kwargs)
 
-    def inflate(self, name, obj, data, publisher=None):
+    def inflate(self, name, obj, data, **kwargs):
         if self.readonly:
             return
         dest = self._get_attrname(name)
         try:
-            val = self.serialiser.inflate_list(data[name], publisher=publisher)
+            val = self.serialiser.inflate_list(data[name], **kwargs)
         except KeyError:
             pass
         else:
             setattr(obj, dest, val)
-

@@ -3,6 +3,7 @@ from django.conf.urls import url, include
 
 # TODO: Add other patterns to allow introspection?
 
+
 class Api(object):
     '''Helper class for registering many Publishers in one URL namespace'''
     def __init__(self, name):
@@ -31,6 +32,7 @@ class Api(object):
 
 APIS = {}
 
+
 def register(name, *args):
     try:
         api = APIS[name]
@@ -39,6 +41,7 @@ def register(name, *args):
     for resource in args:
         api.register(resource)
     return api
+
 
 def autodiscover():
     from django.conf import settings
@@ -58,9 +61,9 @@ def autodiscover():
             if module_has_submodule(mod, 'serialiser'):
                 raise
 
+
 def patterns(flat=False):
     patterns = []
     for api in APIS.values():
         patterns.extend(api.patterns(flat=flat))
     return patterns
-

@@ -3,6 +3,7 @@ import json
 from decimal import Decimal
 import datetime
 
+
 def digattr(obj, attr, default=None):
     '''Perform template-style dotted lookup'''
     steps = attr.split('.')
@@ -21,7 +22,8 @@ def digattr(obj, attr, default=None):
             obj = obj()
     return obj
 
-def undigattr(obj, attr, value):
+
+def undigattr(obj, attr, value, default=None):
     steps = attr.split('.')
     steps.reverse()
     last = steps.pop(0)
@@ -41,6 +43,7 @@ def undigattr(obj, attr, value):
     setattr(obj, last, value)
 
 from django.db.models import Model
+
 
 class JSONEncoder(json.JSONEncoder):
     '''
