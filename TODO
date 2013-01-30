@@ -1,4 +1,6 @@
 
+- Add different field types, mostly for inflating to non-trivially supported types
+
 - Add hooks to serialiser and publisher to set default **kwargs
 - Create mixin classes for ModelPublisher to provide read/update/delete patterns
     - one version that calls affects model-level validation

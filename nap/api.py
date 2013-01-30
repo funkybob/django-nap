@@ -12,7 +12,7 @@ class Api(object):
 
     def patterns(self, flat=False):
         urlpatterns = [
-            url(r'^%s/' % name, include(child.patterns()))
+            url(r'^%s/' % name, include(child.patterns(self.name)))
             for name, child in self.children.items()
         ]
         if flat:

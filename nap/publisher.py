@@ -13,12 +13,13 @@ class Publisher(object):
 
     # XXX Need some names/labels to build url pattern names?
     @classmethod
-    def patterns(cls):
+    def patterns(cls, api_name=None):
         '''
         Add this to your url patterns like:
             ( '^foo/', include(mypublisher.patterns()), ),
         /                       default object list
         /(action)/              list operation
+        /(action)/(option)/     list operation with extra argument
         /object/(id)/           instance view
         /object/(id)/(action)/  custom action on instance
         '''
@@ -27,11 +28,36 @@ class Publisher(object):
             self = cls(request, *args, **kwargs)
             return self.dispatch(request, *args, **kwargs)
 
+        if api_name:
+            name = '_'.join([api_name, cls.api_name])
+        else:
+            name = self.api_name
+
         return [
-            url(r'^object/(?P<object_id>[-\w]+)/(?P<action>\w+)/?$', view),
-            url(r'^object/(?P<object_id>[-\w]+)/?$',                 view),
-            url(r'^(?P<action>\w+)/?$',                           view),
-            url(r'^$',                                            view),
+            url(r'^object/(?P<object_id>[-\w]+)/(?P<action>\w+)/(?P<argument>.+)/?$',
+                view,
+                name='%s_object_action_arg' % name,
+            ),
+            url(r'^object/(?P<object_id>[-\w]+)/(?P<action>\w+)/?$',
+                view,
+                name='%s_object_action' % name,
+            ),
+            url(r'^object/(?P<object_id>[-\w]+)/?$',
+                view,
+                name='%s_object_default' % name,
+            ),
+            url(r'^(?P<action>\w+)/(?P<argument>.+)/$',
+                view,
+                name='%s_list_action_arg' % name,
+            ),
+            url(r'^(?P<action>\w+)/?$',
+                view,
+                name='%s_list_action' % name,
+            ),
+            url(r'^$',
+                view,
+                name='%s_list_default' % name,
+            ),
         ]
 
     def dispatch(self, request, action='default', object_id=None, **kwargs):
