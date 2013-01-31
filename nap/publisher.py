@@ -1,6 +1,7 @@
 
 from django.conf.urls import url
 from django.core.paginator import Paginator
+from django.shortcuts import get_object_or_404
 
 from . import http
 
@@ -138,17 +139,22 @@ class Publisher(object):
         obj = serialiser.inflate_object(self.get_data(), obj)
         return self.render_single_object(obj, serialiser)
 
-    def render_single_object(self, obj, serialiser=None):
+    def render_single_object(self, obj, serialiser=None, **response_kwargs):
         if serialiser is None:
             serialiser = self.get_serialiser()
         data = serialiser.deflate_object(obj, publisher=self)
-        return http.JsonResponse(data)
+        return self.create_response(data, **response_kwargs)
 
     def create_response(self, context, **response_kwargs):
-        return http.JsonResponse(context)
+        response_class = response_kwargs.pop('response_class', http.JsonResponse)
+        return response_class(context, **response_kwargs)
 
 
 class ModelPublisher(Publisher):
+    @property
+    def model(self):
+        '''By default, we try to get the model from out serialiser'''
+        return self.serialiser._meta.model
 
     # Auto-build serialiser from model class?
 
@@ -156,4 +162,5 @@ class ModelPublisher(Publisher):
         return self.model.objects.all()
 
     def get_object(self, object_id):
-        return self.get_object_list().get(pk=object_id)
+        return get_object_or_404(self.get_object_list(), pk=object_id)
+

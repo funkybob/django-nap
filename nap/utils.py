@@ -53,9 +53,9 @@ class JSONEncoder(json.JSONEncoder):
         if isinstance(obj, Decimal):
             return str(obj)
         if isinstance(obj, datetime.datetime):
-            return '"' + obj.replace(microsecond=0).isoformat(' ') + '"'
+            return obj.replace(microsecond=0).isoformat(' ')
         if isinstance(obj, datetime.date):
-            return '"' + obj.isoformat() + '"'
+            return obj.isoformat()
         if hasattr(obj, '__iter__'):
             return list(obj)
         if isinstance(obj, Model):
