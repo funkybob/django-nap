@@ -37,6 +37,7 @@ class ModelSerializerTest(TestCase):
         serializer = PollSerialiser()
         for f in ('question', 'pub_date'):
             self.assertIn(f, serializer._fields.keys())
+        self.assertNotIn('id', serializer._fields.keys())
 
     def test_model_fields_exclude(self):
 
@@ -48,3 +49,4 @@ class ModelSerializerTest(TestCase):
         serializer = PollSerialiser()
         for f in ('question', 'pub_date'):
             self.assertIn(f, serializer._fields.keys())
+        self.assertNotIn('id', serializer._fields.keys())
