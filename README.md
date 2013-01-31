@@ -101,3 +101,12 @@ There's also a ModelSerialiser, which will introspect for fields.
 
 You can define extra fields on a ModelSerialiser, or override fields from the model.
 
+Field Types
+-----------
+
+Besides Field, there are some special case fields also:
+
+SerialiserField will accept a serialiser class to apply to the value retrieved.  Primarily, this is useful for providing values through a "ToOne" relation (OneToOne or ForeignKey), but can be used on any value, no matter how it's retrieved.
+
+The ManySerialiserField will perform similarly, but will treat its value as an iterable.
+
