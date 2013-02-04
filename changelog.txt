@@ -1,25 +1,30 @@
+v0.6:
++ Added index view to API
++ Make render_single_object use create_response
++ Allow create_response to use a supplied response class
+- Fixed JSON serialising of date/datetime objects
 
 v0.5:
-- Added names to URL patterns
-- Added "argument" URL patterns
++ Added names to URL patterns
++ Added "argument" URL patterns
 
 v0.4:
-- Added next/prev flags to list meta-data
-- Added tests
++ Added next/prev flags to list meta-data
++ Added tests
 
 v0.3:
-- Changed to more generic extra arguments in Serialiser
++ Changed to more generic extra arguments in Serialiser
 
 v0.2:
-- Pass the Publisher down into the Serialiser for more flexibility
-- Allow object IDs to be slugs
++ Pass the Publisher down into the Serialiser for more flexibility
++ Allow object IDs to be slugs
 - Fixed bug in serialiser meta-class that broke inheritance
-- Handle case of empty request body with JSON content type
++ Handle case of empty request body with JSON content type
 - Fixed variable names
-- Added SerialiserField and ManySerialiserField
-- Added Api machinery
-- Changed Serialiser to use internal Meta class
-- Added ModelSerialiser class
++ Added SerialiserField and ManySerialiserField
++ Added Api machinery
++ Changed Serialiser to use internal Meta class
++ Added ModelSerialiser class
 
 v0.1:
-- Initial release, fraught with bugs :)
++ Initial release, fraught with bugs :)
