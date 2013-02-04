@@ -1,5 +1,8 @@
 
 from django.conf.urls import url, include
+from django.core.urlresolvers import reverse
+
+from . import http
 
 # TODO: Add other patterns to allow introspection?
 
@@ -12,6 +15,8 @@ class Api(object):
 
     def patterns(self, flat=False):
         urlpatterns = [
+            url(r'^$', self.index),
+        ] + [
             url(r'^%s/' % name, include(child.patterns(self.name)))
             for name, child in self.children.items()
         ]
@@ -20,6 +25,13 @@ class Api(object):
         return [
             url(r'^%s/' % self.name, include(urlpatterns)),
         ]
+
+    def index(self, request, *args, **kwargs):
+        '''Return a dict of publisher name: url'''
+        return http.JsonResponse({
+            name: reverse('%s_%s_list_default' % (self.name, name), kwargs=kwargs) 
+            for name, child in self.children.items()
+        })
 
     def register(self, child, name=None):
         if name is None:
