@@ -28,10 +28,10 @@ class Api(object):
 
     def index(self, request, *args, **kwargs):
         '''Return a dict of publisher name: url'''
-        return http.JsonResponse({
-            name: reverse('%s_%s_list_default' % (self.name, name), kwargs=kwargs) 
+        return http.JsonResponse(dict(
+            (name, reverse('%s_%s_list_default' % (self.name, name), kwargs=kwargs))
             for name, child in self.children.items()
-        })
+        ))
 
     def register(self, child, name=None):
         if name is None:
