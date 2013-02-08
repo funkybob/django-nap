@@ -25,16 +25,24 @@ Publisher
 
 A publisher gives you access to the resource.  Firstly, it uses the url patterns as follows:
 
-    r'^object/(?P<object_id>\w+)/(?P<action>\w+)/?$'
-    r'^object/(?P<object_id>\w+)/?$'
+    r'^object/(?P<object_id>[-\w]+)/(?P<action>\w+)/(?P<argument>.+)/?$'
+    r'^object/(?P<object_id>[-\w]+)/(?P<action>\w+)/?$'
+    r'^object/(?P<object_id>[-\w]+)/?$'
+    r'^(?P<action>\w+)/(?P<argument>.+)/?$'
     r'^(?P<action>\w+)/?$'
     r'^$'
 
 Requests are mapped to 'handlers', either list or object handlers.  A handler name is formed:
 
-    {list|object}_{method}_{action}
+    {list|object}_{verb}_{action}
 
-In lieu of any action, 'default' is used.
+In lieu of any action, 'default' is used.  If a handler for the specific verb (GET, POST, PUT, DELETE, etc) isn't found, then a handler without it is looked for:
+
+    {list|object}_{action}
+
+Failing this, a 404 is raised.
+
+The 'argument' parameter is only ever passed in kwargs.
 
 Configuration properties:
 
