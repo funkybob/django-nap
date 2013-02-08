@@ -4,8 +4,6 @@ from django.core.urlresolvers import reverse
 
 from . import http
 
-# TODO: Add other patterns to allow introspection?
-
 
 class Api(object):
     '''Helper class for registering many Publishers in one URL namespace'''
@@ -37,9 +35,11 @@ class Api(object):
         if name is None:
             name = getattr(child, 'api_name', child.__class__.__name__.lower())
         if name in self.children:
-            raise Warning('Publisher with name %s already registered: %r -> %r' % (
-                name, self.children[name], child
-            ))
+            raise Warning(
+                'Publisher with name %s already registered: %r -> %r' % (
+                    name, self.children[name], child
+                )
+            )
         self.children[name] = child
 
 APIS = {}
@@ -75,7 +75,7 @@ def autodiscover():
 
 
 def patterns(flat=False):
-    patterns = []
+    urlpatterns = []
     for api in APIS.values():
-        patterns.extend(api.patterns(flat=flat))
-    return patterns
+        urlpatterns.extend(api.patterns(flat=flat))
+    return urlpatterns
