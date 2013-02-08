@@ -7,7 +7,6 @@ from django import http
 from . import engine
 
 class Publisher(engine.JsonEngine):
-    __metaclass__ = PublisherMetaclass
 
     def __init__(self, request, *args, **kwargs):
         self.request = request
