@@ -1,5 +1,5 @@
 
-from .utils import digattr, undigattr
+from .utils import digattr
 
 
 class Field(object):
