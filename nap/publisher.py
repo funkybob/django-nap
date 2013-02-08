@@ -2,11 +2,13 @@
 from django.conf.urls import url
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404
+from django import http
 
-from . import http
+from . import engine
 
+class Publisher(engine.JsonEngine):
+    __metaclass__ = PublisherMetaclass
 
-class Publisher(object):
     def __init__(self, request, *args, **kwargs):
         self.request = request
         self.args = args
@@ -108,10 +110,10 @@ class Publisher(object):
 
     def get_data(self):
         '''Retrieve data from request'''
-        if self.request.META['CONTENT_TYPE'] in ['application/json', ]:
+        if self.request.META['CONTENT_TYPE'] in self.CONTENT_TYPES:
             if not self.request.body:
                 return None
-            return http.loads(self.request.body)
+            return self.loads(self.request.body)
         if self.request.method == 'GET':
             return self.request.GET
         return self.request.POST
@@ -145,9 +147,9 @@ class Publisher(object):
         data = serialiser.deflate_object(obj, publisher=self)
         return self.create_response(data, **response_kwargs)
 
-    def create_response(self, context, **response_kwargs):
-        response_class = response_kwargs.pop('response_class', http.JsonResponse)
-        return response_class(context, **response_kwargs)
+    def create_response(self, content, **response_kwargs):
+        response_class = response_kwargs.pop('response_class', http.HttpResponse)
+        return response_class(self.dumps(content), **response_kwargs)
 
 
 class ModelPublisher(Publisher):
