@@ -60,10 +60,9 @@ class Serialiser(object):
                 continue
             method = getattr(self, 'inflate_%s' % name, None)
             if method is not None:
-                value = method(data=data, obj=obj, instance=instance, **kwargs)
+                obj[name] = method(data=data, obj=obj, instance=instance, **kwargs)
             else:
                 field.inflate(name, data, obj, **kwargs)
-            obj[name] = value
         return self.restore_object(obj, instance=instance, **kwargs)
 
     def inflate_list(self, data_list, **kwargs):
