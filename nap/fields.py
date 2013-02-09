@@ -24,7 +24,7 @@ class Field(object):
             return
         dest = self._get_attrname(name)
         try:
-            setattr(obj, dest, data[name])
+            obj[dest] = value
         except KeyError:
             pass
 
@@ -39,16 +39,14 @@ class SerialiserField(Field):
         val = digattr(obj, src, self.default)
         data[name] = self.serialiser.deflate_object(val)
 
-    def inflate(self, name, obj, data, **kwargs):
+    def inflate(self, name, data, obj, **kwargs):
         if self.readonly:
             return
         dest = self._get_attrname(name)
         try:
-            val = self.serialiser.inflate_object(data[name])
+            obj[dest] = self.serialiser.inflate_object(data[name])
         except KeyError:
             pass
-        else:
-            setattr(obj, dest, val)
 
 
 class ManySerialiserField(Field):
@@ -61,13 +59,11 @@ class ManySerialiserField(Field):
         val = digattr(obj, src, self.default)
         data[name] = self.serialiser.deflate_list(iter(val), **kwargs)
 
-    def inflate(self, name, obj, data, **kwargs):
+    def inflate(self, name, data, obj, **kwargs):
         if self.readonly:
             return
         dest = self._get_attrname(name)
         try:
-            val = self.serialiser.inflate_list(data[name], **kwargs)
+            obj[dest] = self.serialiser.inflate_list(data[name], **kwargs)
         except KeyError:
             pass
-        else:
-            setattr(obj, dest, val)
