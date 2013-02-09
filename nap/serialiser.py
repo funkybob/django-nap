@@ -53,18 +53,18 @@ class Serialiser(object):
             for obj in iter(obj_list)
         ]
 
-    def inflate_object(self, data, obj=None, **kwargs):
-        dest = {}
+    def inflate_object(self, data, instance=None, **kwargs):
+        obj = {}
         for name, field in self._fields.items():
             if field.readonly:
                 continue
             method = getattr(self, 'inflate_%s' % name, None)
             if method is not None:
-                value = method(data=data, **kwargs)
+                value = method(data=data, obj=obj, instance=instance, **kwargs)
             else:
-                field.inflate(name, data, dest, **kwargs)
-            dest[name] = value
-        return self.restore_object(obj, dest, **kwargs)
+                field.inflate(name, data, obj, **kwargs)
+            obj[name] = value
+        return self.restore_object(obj, instance=instance, **kwargs)
 
     def inflate_list(self, data_list, **kwargs):
         # XXX target object list?
@@ -117,9 +117,12 @@ class ModelSerialiser(Serialiser):
 
     # XXX How to create a new instance?
 
-    def restore_object(self, obj, data, **kwargs):
-        if obj:
+    def restore_object(self, obj, instance, **kwargs):
+        if instance:
             for k, v in data.items():
-                setattr(obj, k, v)
-            return obj
-        return self._meta.model(**data)
+                setattr(instance, k, v)
+        else:
+            instance = self._meta.model(**data)
+        if kwargs.get('commit', True):
+            instance.save()
+        return instance
