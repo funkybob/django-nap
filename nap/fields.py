@@ -24,7 +24,7 @@ class Field(object):
             return
         dest = self._get_attrname(name)
         try:
-            obj[dest] = value
+            obj[dest] = data[name]
         except KeyError:
             pass
 
