@@ -54,25 +54,27 @@ class Serialiser(object):
         ]
 
     def inflate_object(self, data, obj=None, **kwargs):
-        if obj is None:
-            # For now, we create a dummy object to hold the values
-            obj = object()
+        dest = {}
         for name, field in self._fields.items():
             if field.readonly:
                 continue
             method = getattr(self, 'inflate_%s' % name, None)
             if method is not None:
-                method(data=data, obj=obj, **kwargs)
+                value = method(data=data, **kwargs)
             else:
-                field.inflate(name, data, obj, **kwargs)
-        return obj
+                field.inflate(name, data, dest, **kwargs)
+            dest[name] = value
+        return self.restore_object(obj, dest, **kwargs)
 
     def inflate_list(self, data_list, **kwargs):
+        # XXX target object list?
         return [
             self.inflate_object(data, **kwargs)
             for data in data_list
         ]
 
+    def restore_object(self, obj, data, **kwargs):
+        raise NotImplementedError
 
 class MetaModelSerialiser(MetaSerialiser):
     def __new__(cls, name, bases, attrs):
@@ -114,3 +116,10 @@ class ModelSerialiser(Serialiser):
     __metaclass__ = MetaModelSerialiser
 
     # XXX How to create a new instance?
+
+    def restore_object(self, obj, data, **kwargs):
+        if obj:
+            for k, v in data.items():
+                setattr(obj, k, v)
+            return obj
+        return self._meta.model(**data)
