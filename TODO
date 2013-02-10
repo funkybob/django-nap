@@ -8,3 +8,5 @@
 
 - Provide an internal API layer that's devoid of de/serialising, and an outer layer.
 This should promote re-use of the facilities.
+
+- Shortcut syntax for nested lists/records
