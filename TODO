@@ -1,12 +1,17 @@
 
-- Add different field types, mostly for inflating to non-trivially supported types
-
 - Add hooks to serialiser and publisher to set default **kwargs
+
 - Create mixin classes for ModelPublisher to provide read/update/delete patterns
     - one version that calls affects model-level validation
     - one version that uses form validation
 
 - Provide an internal API layer that's devoid of de/serialising, and an outer layer.
-This should promote re-use of the facilities.
+    This should promote re-use of the facilities.
 
 - Shortcut syntax for nested lists/records
+
+- Enforce not null?
+
+- Have ModelSerialiser auto-create ModelSerialisers for ForeignKeys?
+
+- Add more typed fields for default fields, to support POSTed data
