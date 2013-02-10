@@ -1,5 +1,5 @@
 
-from .fields import Field
+from . import fields
 from .meta import Meta
 
 
@@ -23,7 +23,7 @@ class MetaSerialiser(type):
 
         declared_fields = {}
         for field_name, field in attrs.items():
-            if isinstance(field, Field):
+            if isinstance(field, fields.Field):
                 declared_fields[field_name] = attrs.pop(field_name)
 
         attrs['_fields'].update(declared_fields)
@@ -75,6 +75,16 @@ class Serialiser(object):
     def restore_object(self, obj, data, **kwargs):
         raise NotImplementedError
 
+FIELD_MAP = {}
+# Auto-construct the field map
+for f in dir(fields):
+    cls = getattr(fields, f)
+    try:
+        if issubclass(cls, fields.Field):
+            FIELD_MAP[f] = cls
+    except TypeError:
+        pass
+
 class MetaModelSerialiser(MetaSerialiser):
     def __new__(cls, name, bases, attrs):
 
@@ -104,7 +114,8 @@ class MetaModelSerialiser(MetaSerialiser):
                     'default': f.default,
                 }
 
-                new_class._fields[f.name] = Field(**kwargs)
+                field_class = FIELD_MAP.get(f.__class__.__name__, fields.Field)
+                new_class._fields[f.name] = field_class(**kwargs)
         except AttributeError:
             pass
 
@@ -113,8 +124,6 @@ class MetaModelSerialiser(MetaSerialiser):
 
 class ModelSerialiser(Serialiser):
     __metaclass__ = MetaModelSerialiser
-
-    # XXX How to create a new instance?
 
     def restore_object(self, obj, instance, **kwargs):
         if instance:
