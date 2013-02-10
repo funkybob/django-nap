@@ -1,6 +1,7 @@
 v0.7:
 + Added Engine mixin classes
 + Added MsgPack support
++ Added type-casting fields
 - Removed custom JSON class
 
 v0.6:
