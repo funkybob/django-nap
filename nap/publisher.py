@@ -148,6 +148,7 @@ class Publisher(engine.JsonEngine):
 
     def create_response(self, content, **response_kwargs):
         response_class = response_kwargs.pop('response_class', http.HttpResponse)
+        response_kwargs.setdefault('content_type', self.CONTENT_TYPES[0])
         return response_class(self.dumps(content), **response_kwargs)
 
 
