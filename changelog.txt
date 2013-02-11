@@ -1,3 +1,6 @@
+v0.7.1:
++ Use first engine.CONTENT_TYPES as default content type for responses
+
 v0.7:
 + Added Engine mixin classes
 + Added MsgPack support
