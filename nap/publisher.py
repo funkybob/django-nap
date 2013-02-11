@@ -109,7 +109,7 @@ class Publisher(engine.JsonEngine):
 
     def get_data(self):
         '''Retrieve data from request'''
-        if self.request.META['CONTENT_TYPE'] in self.CONTENT_TYPES:
+        if self.request.META.get('CONTENT_TYPE', '') in self.CONTENT_TYPES:
             if not self.request.body:
                 return None
             return self.loads(self.request.body)
