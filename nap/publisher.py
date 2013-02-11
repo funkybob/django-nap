@@ -130,15 +130,12 @@ class Publisher(engine.JsonEngine):
     def object_get_default(self, request, object_id, **kwargs):
         '''Default object GET handler -- get object'''
         obj = self.get_object(object_id)
-        serialiser = self.get_serialiser()
-        return self.render_single_object(obj, serialiser)
+        return self.render_single_object(obj)
 
     def object_put_default(self, request, object_id, **kwargs):
         '''Default object PUT handler -- update object'''
         obj = self.get_object(object_id)
-        serialiser = self.get_serialiser()
-        obj = serialiser.inflate_object(self.get_data(), obj)
-        return self.render_single_object(obj, serialiser)
+        return self.render_single_object(obj)
 
     def render_single_object(self, obj, serialiser=None, **response_kwargs):
         if serialiser is None:
