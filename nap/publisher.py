@@ -2,8 +2,8 @@
 from django.conf.urls import url
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404
-from django import http
 
+from . import http
 from . import engine
 
 class Publisher(engine.JsonEngine):
@@ -73,8 +73,15 @@ class Publisher(engine.JsonEngine):
         # See if there's a method agnostic handler
         if handler is None:
             raise http.Http404
+        # Permission check
+        if not self.may(request, action, object_id, **kwargs):
+            return http.HttpResponseUnauthorized()
         # Do we need to pass any of this?
         return handler(request, action=action, object_id=object_id, **kwargs)
+
+    def may(self, request, action, object_id=None, **kwargs):
+        '''General permissions check hook'''
+        return True
 
     def get_serialiser(self):
         return self.serialiser
@@ -216,3 +223,10 @@ class ModelFormMixin(object):
             return self.render_single_object(obj)
 
         # return errors
+
+    def object_delete_default(self, request, object_id, *args, **kwargs):
+        obj = self.get_object(object_id)
+        # XXX Some sort of verification?
+        obj.delete()
+        return http.HttpResponseNoContent()
+
