@@ -20,16 +20,16 @@ class DjangoAuthorise(object):
                 return request.user.has_perm('.'.join([
                     opts.app_label,
                     opts.get_add_permission()
-                ])
+                ]))
             elif request.method == 'PUT' and object_id:
                 return request.user.has_perm('.'.join([
                     opts.app_label,
                     opts.get_change_permission()
-                ])
+                ]))
             elif request.method == 'DELETE' and object_id:
                 return request.user.has_perm('.'.join([
                     opts.app_label,
                     opts.get_delete_permission()
-                ])
+                ]))
         return False
 
