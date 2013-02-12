@@ -3,10 +3,11 @@ from django.conf.urls import url
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404
 
+from . import aaa
 from . import http
 from . import engine
 
-class Publisher(engine.JsonEngine):
+class Publisher(aaa.NullAuthorise, engine.JsonEngine):
 
     def __init__(self, request, *args, **kwargs):
         self.request = request
@@ -78,10 +79,6 @@ class Publisher(engine.JsonEngine):
             return http.HttpResponseUnauthorized()
         # Do we need to pass any of this?
         return handler(request, action=action, object_id=object_id, **kwargs)
-
-    def may(self, request, action, object_id=None, **kwargs):
-        '''General permissions check hook'''
-        return True
 
     def get_serialiser(self):
         return self.serialiser

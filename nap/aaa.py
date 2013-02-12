@@ -1,7 +1,7 @@
 
 # Authentication and Authorisation
 
-class Authorise(object):
+class NullAuthorise(object):
 
     def may(self, request, action, object_id=None, **kwargs):
         return True
