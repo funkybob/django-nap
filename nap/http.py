@@ -4,10 +4,12 @@ from django.http import *
 
 from functools import partial
 
+from collections import OrderedDict
+
 import json
 import re
 
-RESPONSE_CODES = (
+STATUS_CODES = (
     (100, 'Continue'),
     (101, 'Switching Protocols'),
 
@@ -55,26 +57,19 @@ RESPONSE_CODES = (
     (505, 'HTTP Version Not Supported'),
 )
 
-class ResponseTypes(object):
+class ResponseTypes(OrderedDict):
     def __init__(self, choices):
-        self.choices = choices
-        self._choices = dict(choices)
+        super(ResponseTypes, self).__init__(choices)
         for code, label in choices:
             setattr(self, re.sub('\W', '_', label.upper()), code)
 
-    def __iter__(self):
-        return iter(self.choices)
+STATUS = ResponseTypes(STATUS_CODES)
 
-    def __getitem__(self, key):
-        return self._choices[key]
-
-RESPONSE = ResponseTypes(RESPONSE_CODES)
-
-HttpResponseCreated = partial(HttpResponse, status=RESPONSE.CREATED)
-HttpResponseAccepted = partial(HttpResponse, status=RESPONSE.ACCEPTED)
-HttpResponseNoContent = partial(HttpResponse, status=RESPONSE.NO_CONTENT)
-HttpResponseResetContent = partial(HttpResponse, status=RESPONSE.RESET_CONTENT)
-HttpResponsePartialContent = partial(HttpResponse, status=RESPONSE.PARTIAL_CONTENT)
+HttpResponseCreated = partial(HttpResponse, status=STATUS.CREATED)
+HttpResponseAccepted = partial(HttpResponse, status=STATUS.ACCEPTED)
+HttpResponseNoContent = partial(HttpResponse, status=STATUS.NO_CONTENT)
+HttpResponseResetContent = partial(HttpResponse, status=STATUS.RESET_CONTENT)
+HttpResponsePartialContent = partial(HttpResponse, status=STATUS.PARTIAL_CONTENT)
 
 class JsonResponse(HttpResponse):
     '''Handy shortcut for dumping JSON data'''
