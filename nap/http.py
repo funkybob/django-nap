@@ -4,11 +4,11 @@ from django.http import *
 
 from functools import partial
 
-HttpCreated = partial(HttpResponse, status=201)
-HttpAccepted = partial(HttpResponse, status=202)
-HttpNoContent = partial(HttpResponse, status=204)
-HttpResetContent = partial(HttpResponse, status=205)
-HttpPartialContent = partial(HttpResponse, status=206)
+HttpResponseCreated = partial(HttpResponse, status=201)
+HttpResponseAccepted = partial(HttpResponse, status=202)
+HttpResponseNoContent = partial(HttpResponse, status=204)
+HttpResponseResetContent = partial(HttpResponse, status=205)
+HttpResponsePartialContent = partial(HttpResponse, status=206)
 
 import json
 
