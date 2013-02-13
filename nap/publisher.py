@@ -7,7 +7,7 @@ from . import aaa
 from . import http
 from . import engine
 
-class Publisher(aaa.NullAuthorise, engine.JsonEngine):
+class BasePublisher(object):
 
     def __init__(self, request, *args, **kwargs):
         self.request = request
@@ -79,6 +79,8 @@ class Publisher(aaa.NullAuthorise, engine.JsonEngine):
             return http.HttpResponseUnauthorized()
         # Do we need to pass any of this?
         return handler(request, action=action, object_id=object_id, **kwargs)
+
+class Publisher(aaa.NullAuthorise, engine.JsonEngine, BasePublisher):
 
     def get_serialiser(self):
         return self.serialiser
