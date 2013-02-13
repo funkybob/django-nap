@@ -1,3 +1,9 @@
+v0.8:
++ Added create/delete methods to ModelPublisher
++ Added http.RESPONSE dict/list utility class
+# NOTE:  Because this uses OrderedDict nap is no longer python2.6 compatible
++ Split out BasePublisher class
+
 v0.7.1:
 + Use first engine.CONTENT_TYPES as default content type for responses
 

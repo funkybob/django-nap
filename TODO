@@ -15,3 +15,5 @@
 - Have ModelSerialiser auto-create ModelSerialisers for ForeignKeys?
 
 - Add more typed fields for default fields, to support POSTed data
+
+- Permission checks
