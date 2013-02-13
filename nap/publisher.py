@@ -3,11 +3,11 @@ from django.conf.urls import url
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404
 
-from . import aaa
+from . import auth
 from . import http
 from . import engine
 
-class BasePublisher(object):
+class BasePublisher(auth.NullAuthorise):
 
     def __init__(self, request, *args, **kwargs):
         self.request = request
@@ -80,18 +80,23 @@ class BasePublisher(object):
         # Do we need to pass any of this?
         return handler(request, action=action, object_id=object_id, **kwargs)
 
-class Publisher(aaa.NullAuthorise, engine.JsonEngine, BasePublisher):
+class Publisher(engine.JsonEngine, BasePublisher):
+    '''Default API-style publisher'''
 
     def get_serialiser(self):
+        '''Return the serialiser instance to use for this request'''
         return self.serialiser
 
     def get_object_list(self):
+        '''Return the object list appropriate for this request'''
         raise NotImplementedError
 
     def get_object(self, object_id):
+        '''Return the object for the given id'''
         raise NotImplementedError
 
     def get_page(self, object_list):
+        '''Return a paginated object list, along with some metadata'''
         page_size = getattr(self, 'page_size', None)
         if not page_size:
             return {
@@ -123,6 +128,19 @@ class Publisher(aaa.NullAuthorise, engine.JsonEngine, BasePublisher):
             return self.request.GET
         return self.request.POST
 
+    def render_single_object(self, obj, serialiser=None, **response_kwargs):
+        '''Helper to return a single object instance serialised.'''
+        if serialiser is None:
+            serialiser = self.get_serialiser()
+        data = serialiser.deflate_object(obj, publisher=self)
+        return self.create_response(data, **response_kwargs)
+
+    def create_response(self, content, **response_kwargs):
+        '''Return a response, serialising the content'''
+        response_class = response_kwargs.pop('response_class', http.HttpResponse)
+        response_kwargs.setdefault('content_type', self.CONTENT_TYPES[0])
+        return response_class(self.dumps(content), **response_kwargs)
+
     def list_get_default(self, request, **kwargs):
         object_list = self.get_object_list()
         data = self.get_page(object_list)
@@ -136,23 +154,14 @@ class Publisher(aaa.NullAuthorise, engine.JsonEngine, BasePublisher):
         obj = self.get_object(object_id)
         return self.render_single_object(obj)
 
-    def render_single_object(self, obj, serialiser=None, **response_kwargs):
-        '''Helper to return a single object instance serialised.'''
-        if serialiser is None:
-            serialiser = self.get_serialiser()
-        data = serialiser.deflate_object(obj, publisher=self)
-        return self.create_response(data, **response_kwargs)
-
-    def create_response(self, content, **response_kwargs):
-        response_class = response_kwargs.pop('response_class', http.HttpResponse)
-        response_kwargs.setdefault('content_type', self.CONTENT_TYPES[0])
-        return response_class(self.dumps(content), **response_kwargs)
-
 
 class ModelPublisher(Publisher):
+    '''A Publisher with useful methods to publish Models'''
+
     @property
     def model(self):
-        '''By default, we try to get the model from out serialiser'''
+        '''By default, we try to get the model from our serialiser'''
+        # XXX Should this call get_serialiser?
         return self.serialiser._meta.model
 
     # Auto-build serialiser from model class?
