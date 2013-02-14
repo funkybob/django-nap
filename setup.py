@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='django-nap',
-    version='0.7.1',
+    version='0.8',
     description='A light REST tool for Django',
     author='Curtis Maloney',
     author_email='curtis@tinbrain.net',
