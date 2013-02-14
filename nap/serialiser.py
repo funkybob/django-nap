@@ -72,7 +72,7 @@ class Serialiser(object):
             for data in data_list
         ]
 
-    def restore_object(self, obj, data, **kwargs):
+    def restore_object(self, obj, data, **kwargs): # pragma: no cover
         raise NotImplementedError
 
 FIELD_MAP = {}

@@ -11,11 +11,11 @@ from datetime import date, datetime, time
 class Engine(object):
     # The list of content types we match
     CONTENT_TYPES = []
-    def dumps(self, data):
+    def dumps(self, data): # pragma: no cover
         '''How to serialiser an object'''
         raise NotImplementedError
     
-    def loads(self, data):
+    def loads(self, data): # pragma: no cover
         '''How to deserialise a string'''
         raise NotImplementedError
 

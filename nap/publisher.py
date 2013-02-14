@@ -87,11 +87,11 @@ class Publisher(engine.JsonEngine, BasePublisher):
         '''Return the serialiser instance to use for this request'''
         return self.serialiser
 
-    def get_object_list(self):
+    def get_object_list(self): # pragma: no cover
         '''Return the object list appropriate for this request'''
         raise NotImplementedError
 
-    def get_object(self, object_id):
+    def get_object(self, object_id): # pragma: no cover
         '''Return the object for the given id'''
         raise NotImplementedError
 
