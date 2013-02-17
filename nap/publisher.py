@@ -32,7 +32,7 @@ class BasePublisher(auth.NullAuthorise):
             return self.dispatch(request, *args, **kwargs)
 
         if api_name:
-            name = '_'.join([api_name, cls.api_name])
+            name = '%s_%s' % (api_name, cls.api_name)
         else:
             name = self.api_name
 
