@@ -17,21 +17,15 @@ class DjangoAuthorise(object):
         opts = self.model._meta
 
         if action == 'default':
+            perm = None
             if request.method == 'POST' and object_id is None:
-                return request.user.has_perm('.'.join([
-                    opts.app_label,
-                    opts.get_add_permission()
-                ]))
+                perm = opts.get_add_permission()
             elif request.method == 'PUT' and object_id:
-                return request.user.has_perm('.'.join([
-                    opts.app_label,
-                    opts.get_change_permission()
-                ]))
+                perm = opts.get_change_permission()
             elif request.method == 'DELETE' and object_id:
-                return request.user.has_perm('.'.join([
-                    opts.app_label,
-                    opts.get_delete_permission()
-                ]))
+                perm = opts.get_delete_permission()
+            if perm:
+                return request.user.has_perm('%s.%s' % (opts.app_label, perm))
         return False
 
 
