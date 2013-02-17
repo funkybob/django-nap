@@ -68,10 +68,10 @@ class BasePublisher(auth.NullAuthorise):
         self.action = action
         method = request.method.lower()
         prefix = 'object' if object_id else 'list'
-        handler = getattr(self, '_'.join([prefix, method, action]), None)
+        handler = getattr(self, '%s_%s_%s' % (prefix, method, action), None)
         if handler is None:
-            handler = getattr(self, '_'.join([prefix, action]), None)
-        # See if there's a method agnostic handler
+            # See if there's a method agnostic handler
+            handler = getattr(self, '%s_%s' % (prefix, action), None)
         if handler is None:
             raise http.Http404
         # Permission check
