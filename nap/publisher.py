@@ -7,7 +7,7 @@ from . import auth
 from . import http
 from . import engine
 
-class BasePublisher(auth.NullAuthorise):
+class BasePublisher(object):
 
     def __init__(self, request, *args, **kwargs):
         self.request = request
@@ -74,9 +74,6 @@ class BasePublisher(auth.NullAuthorise):
             handler = getattr(self, '%s_%s' % (prefix, action), None)
         if handler is None:
             raise http.Http404
-        # Permission check
-        if not self.may(request, action, object_id, **kwargs):
-            return http.HttpResponseUnauthorized()
         # Do we need to pass any of this?
         return handler(request, action=action, object_id=object_id, **kwargs)
 

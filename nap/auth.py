@@ -2,57 +2,6 @@
 # Authentication and Authorisation
 from functools import wraps
 
-class NullAuthorise(object):
-
-    def may(self, request, action, object_id=None, **kwargs):
-        return True
-
-class DjangoAuthorise(object):
-    '''Permissions based on Django's'''
-    def may(self, request, action, object_id=None, **kwargs):
-        if not request.user.is_authenticated():
-            return request.method == 'GET'
-
-        # Logically these permissions only apply to basic CRUD
-        opts = self.model._meta
-
-        if action == 'default':
-            perm = None
-            if request.method == 'POST' and object_id is None:
-                perm = opts.get_add_permission()
-            elif request.method == 'PUT' and object_id:
-                perm = opts.get_change_permission()
-            elif request.method == 'DELETE' and object_id:
-                perm = opts.get_delete_permission()
-            if perm:
-                return request.user.has_perm('%s.%s' % (opts.app_label, perm))
-        return False
-
-
-class BaseAuthorise(object):
-    '''
-    Helper class to make targeting specific endpoints easier.
-
-    Follows the same pattern as finding a handler, but prefixes
-    the method name with 'may_'
-    '''
-    may_default = True
-    def may(self, request, action, object_id=None, **kwargs):
-        prefix = 'list' if object_id is None else 'object'
-        method = request.method.lower()
-        handler = getattr(self, 'may_%s_%s_%s' % (
-            prefix,
-            method,
-            action
-        ), None)
-        if handler is None:
-            handler = getattr(self, 'may_%s_%s' % (
-                prefix, action,
-            ), None)
-        if handler is None:
-            return self.may_default
-        return handler(request, action, object_id, **kwargs)
-        
 def permit(test_func):
     '''Decorate a handler to control access'''
     def decorator(view_func):
