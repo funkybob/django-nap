@@ -72,7 +72,7 @@ class Serialiser(object):
             for data in data_list
         ]
 
-    def restore_object(self, obj, data, **kwargs): # pragma: no cover
+    def restore_object(self, obj, **kwargs): # pragma: no cover
         raise NotImplementedError
 
 FIELD_MAP = {}
@@ -130,7 +130,7 @@ class ModelSerialiser(Serialiser):
             for k, v in data.items():
                 setattr(instance, k, v)
         else:
-            instance = self._meta.model(**data)
+            instance = self._meta.model(**obj)
         if kwargs.get('commit', True):
             instance.save()
         return instance
