@@ -1,3 +1,9 @@
+v0.9:
++ Added permit decorators
++ use string formatting not join - it's slightly faster
+- Fixed var name bug in ModelSerialiser.restore_object
+- Removed old 'may' auth API
+
 v0.8:
 + Added create/delete methods to ModelPublisher
 + Added http.STATUS dict/list utility class
