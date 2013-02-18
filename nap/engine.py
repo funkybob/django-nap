@@ -1,12 +1,6 @@
 
 import json
-try:
-    import msgpack
-except ImportError:
-    pass
 
-from decimal import Decimal
-from datetime import date, datetime, time
 
 class Engine(object):
     # The list of content types we match
@@ -19,6 +13,7 @@ class Engine(object):
         '''How to deserialise a string'''
         raise NotImplementedError
 
+
 class JsonEngine(Engine):
     CONTENT_TYPES = ['application/json',]
     def dumps(self, data):
@@ -26,9 +21,15 @@ class JsonEngine(Engine):
     def loads(self, data):
         return json.loads(data)
 
-class MsgPackEngine(Engine):
-    CONTENT_TYPES = ['application/x-msgpack',]
-    def dumps(self, data):
-        return msgpack.dumps(data)
-    def loads(self, data):
-        return msgpack.loads(data)
+
+try:
+    import msgpack
+except ImportError:
+    pass
+else:
+    class MsgPackEngine(Engine):
+        CONTENT_TYPES = ['application/x-msgpack',]
+        def dumps(self, data):
+            return msgpack.dumps(data)
+        def loads(self, data):
+            return msgpack.loads(data)
