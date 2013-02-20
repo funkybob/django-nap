@@ -101,8 +101,6 @@ class BasePublisher(object):
                 continue
             parts = name.split('_')
 
-            print cls.__name__, parts
-
             if parts[0] == 'list':
                 if len(parts) == 2:
                     list_handlers[parts[1]].append(getattr(fnc, '_accepts', 'ALL'))
