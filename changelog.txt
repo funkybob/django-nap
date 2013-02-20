@@ -1,5 +1,6 @@
 v0.9.2:
 + Wrap call to handlers to catch ValidationError
+- Removed useless cruft form utils
 
 v0.9.1:
 + Started documentation
