@@ -1,3 +1,6 @@
+v0.9.2:
++ Wrap call to handlers to catch ValidationError
+
 v0.9.1:
 + Started documentation
 + Added permit_groups decorator
