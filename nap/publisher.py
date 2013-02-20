@@ -1,6 +1,5 @@
 
 from django.conf.urls import url
-from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404
 
@@ -78,8 +77,8 @@ class BasePublisher(object):
         # Do we need to pass any of this?
         try:
             return handler(request, action=action, object_id=object_id, **kwargs)
-        except ValidationError as e:
-            return http.BadRequest(str(e))
+        except http.BaseHttpResponse as response:
+            return response
 
 class Publisher(engine.JsonEngine, BasePublisher):
     '''Default API-style publisher'''
