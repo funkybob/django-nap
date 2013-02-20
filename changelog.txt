@@ -1,3 +1,7 @@
+v0.10.1:
++ Added Publisher introspection
++ Added LocationHeaderMixin to HTTP classes
+
 v0.10:
 + Replaced http subclasses with Exceptional ones
 + Wrap call to handlers to catch Exceptional http responses
