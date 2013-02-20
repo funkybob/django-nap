@@ -1,3 +1,8 @@
+v0.9.1:
++ Started documentation
++ Added permit_groups decorator
++ Minor speedup in MetaSerialiser
+
 v0.9:
 + Added permit decorators
 + use string formatting not join - it's slightly faster
