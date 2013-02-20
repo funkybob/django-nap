@@ -132,7 +132,7 @@ class TemporaryRedirect(HttpResponseRedirect):
 # Client Error Responses (4xx)
 #
 
-class HttpResponseError(HttpResponse):
+class HttpResponseError(BaseHttpResponse):
     '''A base class for all 4xx responses.'''
 
 class BadRequest(HttpResponseError):
