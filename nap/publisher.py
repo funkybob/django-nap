@@ -80,6 +80,7 @@ class BasePublisher(object):
         except http.BaseHttpResponse as response:
             return response
 
+
 class Publisher(engine.JsonEngine, BasePublisher):
     '''Default API-style publisher'''
 

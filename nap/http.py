@@ -1,6 +1,6 @@
 
 '''Add some missing HttpResponse sub-classes'''
-from django.http import *
+from django.http import HttpResponse, Http404
 
 from functools import partial
 
