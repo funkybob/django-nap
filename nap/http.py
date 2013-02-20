@@ -26,7 +26,7 @@ STATUS_CODES = (
     (302, 'Found'),
     (303, 'See Other'),
     (304, 'Not Modified'),
-    (305, 'User Proxy'),
+    (305, 'Use Proxy'),
     #306 Deprecated
     (307, 'Temporary Redirect'),
 
@@ -37,7 +37,7 @@ STATUS_CODES = (
     (404, 'Not Found'),
     (405, 'Method Not Allowed'),
     (406, 'Not Acceptable'),
-    (407, 'Proxy Autentication Required'),
+    (407, 'Proxy Authentication Required'),
     (408, 'Request Timeout'),
     (409, 'Conflict'),
     (410, 'Gone'),
@@ -65,11 +65,156 @@ class ResponseTypes(OrderedDict):
 
 STATUS = ResponseTypes(STATUS_CODES)
 
-HttpResponseCreated = partial(HttpResponse, status=STATUS.CREATED)
-HttpResponseAccepted = partial(HttpResponse, status=STATUS.ACCEPTED)
-HttpResponseNoContent = partial(HttpResponse, status=STATUS.NO_CONTENT)
-HttpResponseResetContent = partial(HttpResponse, status=STATUS.RESET_CONTENT)
-HttpResponsePartialContent = partial(HttpResponse, status=STATUS.PARTIAL_CONTENT)
+class BaseHttpResponse(HttpResponse, Exception):
+    '''
+    A sub-class of HttpResponse that is also an Exception, allowign us to
+    raise/catch it.
+
+    With thanks to schinkel's repose.
+    '''
+
+#
+# Success Responses (2xx)
+#
+
+class HttpResponseSuccess(BaseHttpResponse):
+    '''A base class for all 2xx responses, so we can issubclass test.'''
+
+class OK(HttpResponseSuccess):
+    status_code = STATUS.OK
+
+class Created(HttpResponseSuccess):
+    status_code = STATUS.CREATED
+
+class Accepted(HttpResponseSuccess):
+    status_code = STATUS.ACCEPTED
+
+class NoContent(HttpResponseSuccess):
+    status_code = STATUS.NO_CONTENT
+
+class ResetContent(HttpResponseSuccess):
+    status_code = STATUS.RESET_CONTENT
+
+class PartialContent(HttpResponseSuccess):
+    status_code = STATUS.PARTIAL_CONTENT
+
+#
+# Redirection Responses (3xx)
+#
+
+class HttpResponseRedirect(BaseHttpResponse):
+    '''A base class for all 3xx responses.'''
+
+# XXX LocationHeaderMixin?
+
+class MultipleChoices(HttpResponseRedirect):
+    status_code = STATUS.MULTIPLE_CHOICES
+
+class MovedPermanently(HttpResponseRedirect):
+    status_code = STATUS.MOVED_PERMANENTLY
+
+class Found(HttpResponseRedirect):
+    status_code = STATUS.FOUND
+
+class SeeOther(HttpResponseRedirect):
+    status_code = STATUS.SEE_OTHER
+
+class NotModified(HttpResponseRedirect):
+    status_code = STATUS.NOT_MODIFIED
+
+class UseProxy(HttpResponseRedirect):
+    status_code = STATUS.USE_PROXY
+
+class TemporaryRedirect(HttpResponseRedirect):
+    status_code = STATUS.TEMPORARY_REDIRECT
+
+#
+# Client Error Responses (4xx)
+#
+
+class HttpResponseError(HttpResponse):
+    '''A base class for all 4xx responses.'''
+
+class BadRequest(HttpResponseError):
+    status_code = STATUS.BAD_REQUEST
+
+# XXX Auth-Realm ?
+class Unauthorized(HttpResponseError):
+    status_code = STATUS.UNAUTHORIZED
+
+class PaymentRequired(HttpResponseError):
+    status_code = STATUS.PAYMENT_REQUIRED
+
+class Forbidden(HttpResponseError):
+    status_code = STATUS.FORBIDDEN
+
+class NotFound(HttpResponseError):
+    status_code = STATUS.NOT_FOUND
+
+# XXX Permitted methods?
+class MethodNotAllowed(HttpResponseError):
+    status_code = STATUS.METHOD_NOT_ALLOWED
+
+class NotAcceptable(HttpResponseError):
+    status_code = STATUS.NOT_ACCEPTABLE
+
+class ProxyAuthenticationRequired(HttpResponseError):
+    status_code = STATUS.PROXY_AUTHENTICATION_REQUIRED
+
+class RequestTimeout(HttpResponseError):
+    status_code = STATUS.REQUEST_TIMEOUT
+
+class Conflict(HttpResponseError):
+    status_code = STATUS.CONFLICT
+
+class Gone(HttpResponseError):
+    status_code = STATUS.GONE
+
+class LengthRequired(HttpResponseError):
+    status_code = STATUS.LENGTH_REQUIRED
+
+class PreconditionFailed(HttpResponseError):
+    status_code = STATUS.PRECONDITION_FAILED
+
+class RequestEntityTooLarge(HttpResponseError):
+    status_code = STATUS.REQUEST_ENTITY_TOO_LARGE
+
+class RequestURITooLong(HttpResponseError):
+    status_code = STATUS.REQUEST_URI_TOO_LONG
+
+class UnsupportedMediaType(HttpResponseError):
+    status_code = STATUS.UNSUPPORTED_MEDIA_TYPE
+
+class RequestedRangeNotSatisfiable(HttpResponseError):
+    status_code = STATUS.REQUESTED_RANGE_NOT_SATISFIABLE
+
+class ExpectationFailed(HttpResponseError):
+    status_code = STATUS.EXPECTATION_FAILED
+
+#
+# Server Error (5xx)
+#
+
+class HttpResponseServerError(BaseHttpResponse):
+    '''A base class for 5xx responses.'''
+
+class InternalServerError(HttpResponseServerError):
+    status_code = STATUS.INTERNAL_SERVER_ERROR
+
+class NotImplemented(HttpResponseServerError):
+    status_code = STATUS.NOT_IMPLEMENTED
+
+class BadGateway(HttpResponseServerError):
+    status_code = STATUS.BAD_GATEWAY
+
+class ServiceUnavailable(HttpResponseServerError):
+    status_code = STATUS.SERVICE_UNAVAILABLE
+
+class GatewayTimeout(HttpResponseServerError):
+    status_code = STATUS.GATEWAY_TIMEOUT
+
+class HttpVersiontNotSupported(HttpResponseServerError):
+    status_code = STATUS.HTTP_VERSION_NOT_SUPPORTED
 
 class JsonResponse(HttpResponse):
     '''Handy shortcut for dumping JSON data'''

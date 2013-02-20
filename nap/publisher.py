@@ -79,7 +79,7 @@ class BasePublisher(object):
         try:
             return handler(request, action=action, object_id=object_id, **kwargs)
         except ValidationError as e:
-            return http.HttpResponseBadRequest(str(e))
+            return http.BadRequest(str(e))
 
 class Publisher(engine.JsonEngine, BasePublisher):
     '''Default API-style publisher'''
@@ -237,5 +237,5 @@ class ModelFormMixin(object):
         obj = self.get_object(object_id)
         # XXX Some sort of verification?
         obj.delete()
-        return http.HttpResponseNoContent()
+        return http.NoContent()
 
