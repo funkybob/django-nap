@@ -27,7 +27,10 @@ class Api(object):
     def index(self, request, *args, **kwargs):
         '''Return a dict of publisher name: url'''
         return http.JsonResponse(dict(
-            (name, reverse('%s_%s_list_default' % (self.name, name), kwargs=kwargs))
+            (name, {
+                'path': reverse('%s_%s_list_default' % (self.name, name), kwargs=kwargs),
+                'methods': child.index(),
+            })
             for name, child in self.children.items()
         ))
 

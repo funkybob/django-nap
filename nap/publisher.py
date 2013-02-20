@@ -3,9 +3,18 @@ from django.conf.urls import url
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404
 
+from collections import defaultdict
+
 from . import auth
 from . import http
 from . import engine
+
+def accepts(*verbs):
+    '''Annotate a method with the HTTP verbs it accepts'''
+    def _inner(method):
+        setattr(method, '_accepts', verbs)
+        return method
+    return _inner
 
 class BasePublisher(object):
 
@@ -80,7 +89,38 @@ class BasePublisher(object):
         except http.BaseHttpResponse as response:
             return response
 
+    @classmethod
+    def index(cls):
+        '''Return details about which handlers exist on this publisher.'''
+        # XXX Allow verb-generic methods to be annotated
+        list_handlers = defaultdict(list)
+        object_handlers = defaultdict(list)
+        for name in dir(cls):
+            fnc = getattr(cls, name)
+            if not callable(fnc):
+                continue
+            parts = name.split('_')
 
+            print cls.__name__, parts
+
+            if parts[0] == 'list':
+                if len(parts) == 2:
+                    list_handlers[parts[1]].append(getattr(fnc, '_accepts', 'ALL'))
+                else:
+                    list_handlers[parts[2]].append(parts[1])
+
+            elif parts[0] == 'object':
+                if len(parts) == 2:
+                    object_handlers[parts[1]].append(getattr(fnc, '_accepts', 'ALL'))
+                else:
+                    object_handlers[parts[2]].append(parts[1])
+
+        return {
+            'list': list_handlers,
+            'object': object_handlers,
+        }
+
+            
 class Publisher(engine.JsonEngine, BasePublisher):
     '''Default API-style publisher'''
 

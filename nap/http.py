@@ -3,7 +3,7 @@
 from django.http import HttpResponse, Http404
 
 from functools import partial
-
+from urlparse import urlparse
 from collections import OrderedDict
 
 import json
@@ -105,24 +105,35 @@ class PartialContent(HttpResponseSuccess):
 class HttpResponseRedirect(BaseHttpResponse):
     '''A base class for all 3xx responses.'''
 
-# XXX LocationHeaderMixin?
+class LocationHeaderMixin(object):
+    '''Many 3xx responses require a Location header'''
+    def __init__(self, location, *args, **kwargs):
+        super(LocationHeaderMixin, self).__init__(*args, **kwargs)
+        parsed = urlparse(redirect_to)
+        if parsed.scheme and parsed.scheme not in self.allowed_schemes:
+            raise SuspiciousOperation("Unsafe redirect to URL with protocol '%s'" % parsed.scheme)
+        super(HttpResponseRedirectBase, self).__init__(*args, **kwargs)
+        self['Location'] = iri_to_uri(redirect_to)
+
+    url = property(lambda self: self['Location'])
+
 
 class MultipleChoices(HttpResponseRedirect):
     status_code = STATUS.MULTIPLE_CHOICES
 
-class MovedPermanently(HttpResponseRedirect):
+class MovedPermanently(LocationHeaderMixin, HttpResponseRedirect):
     status_code = STATUS.MOVED_PERMANENTLY
 
-class Found(HttpResponseRedirect):
+class Found(LocationHeaderMixin, HttpResponseRedirect):
     status_code = STATUS.FOUND
 
-class SeeOther(HttpResponseRedirect):
+class SeeOther(LocationHeaderMixin, HttpResponseRedirect):
     status_code = STATUS.SEE_OTHER
 
 class NotModified(HttpResponseRedirect):
     status_code = STATUS.NOT_MODIFIED
 
-class UseProxy(HttpResponseRedirect):
+class UseProxy(LocationHeaderMixin, HttpResponseRedirect):
     status_code = STATUS.USE_PROXY
 
 class TemporaryRedirect(HttpResponseRedirect):
@@ -151,8 +162,11 @@ class Forbidden(HttpResponseError):
 class NotFound(HttpResponseError):
     status_code = STATUS.NOT_FOUND
 
-# XXX Permitted methods?
 class MethodNotAllowed(HttpResponseError):
+    def __init__(self, permitted_methods, *args, **kwargs):
+        super(HttpResponseNotAllowed, self).__init__(*args, **kwargs)
+        self['Allow'] = ', '.join(permitted_methods)
+
     status_code = STATUS.METHOD_NOT_ALLOWED
 
 class NotAcceptable(HttpResponseError):
@@ -215,6 +229,10 @@ class GatewayTimeout(HttpResponseServerError):
 
 class HttpVersiontNotSupported(HttpResponseServerError):
     status_code = STATUS.HTTP_VERSION_NOT_SUPPORTED
+
+#
+# General Helpers
+#
 
 class JsonResponse(HttpResponse):
     '''Handy shortcut for dumping JSON data'''
