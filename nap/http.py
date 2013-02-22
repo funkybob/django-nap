@@ -4,7 +4,10 @@ from django.http import HttpResponse, Http404
 
 from functools import partial
 from urlparse import urlparse
-from collections import OrderedDict
+try:
+    from collections import OrderedDict
+except ImportError:
+    from ordereddict import OrderedDict
 
 import json
 import re
