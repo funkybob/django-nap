@@ -23,6 +23,8 @@ Case 1: Simple Blog API
 # serialiser.py
 
     from nap.serialiser import ModelSerialiser
+    from nap.publisher import ModelPublisher
+    from nap import fields
 
     class PostSerialiser(ModelSerialiser):
         class Meta:
