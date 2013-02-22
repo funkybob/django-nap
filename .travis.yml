@@ -5,6 +5,7 @@ python:
 env:
   - DJANGO=1.4
 install:
+  - if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then pip install -q ordereddict --use-mirrors; fi
   - pip install -q Django==$DJANGO --use-mirrors
   - pip install -r requirements.txt --use-mirrors
 script:
