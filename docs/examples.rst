@@ -7,7 +7,7 @@ Sometimes, an example is much easier to understand than abstract API docs, so he
 Case 1: Simple Blog API
 =======================
 
-    # models.py
+# models.py
 
     from django.db import models
     from taggit.managers import TaggableManager
@@ -20,7 +20,7 @@ Case 1: Simple Blog API
         tags = TaggableManager(blank=True)
 
 
-    # serialiser.py
+# serialiser.py
 
     from nap.serialiser import ModelSerialiser
 
@@ -38,7 +38,8 @@ Case 1: Simple Blog API
     class PostPublisher(ModelPublisher):
         serialiser = PostSerialiser()
 
-    # urls.py
+# urls.py
+
     from .serialiser import PostPublisher
 
     urlpatters = patterns('',
