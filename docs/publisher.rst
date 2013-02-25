@@ -25,7 +25,8 @@ Both action and object_id are passed as kwargs, so where they're not needed they
 
 Every handler is expected to return a proper HttpResponse object.
 
-## Publishing
+Publishing
+----------
 
 In order to add a ``Publisher`` to your URL patterns, you need to include all of its own patterns.  Fortunately, it provides a handy method to make this simple:
 
