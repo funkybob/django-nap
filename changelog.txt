@@ -1,3 +1,9 @@
+v0.10.3:
++ Added python2.6 support back [thanks nkuttler]
+
+v0.10.2:
+- Removed leftover debug print
+
 v0.10.1:
 + Added Publisher introspection
 + Added LocationHeaderMixin to HTTP classes
