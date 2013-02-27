@@ -157,7 +157,7 @@ class Publisher(engine.JsonEngine, BasePublisher):
             'objects': page.object_list,
         }
 
-    def get_data(self):
+    def get_request_data(self):
         '''Retrieve data from request'''
         if self.request.META.get('CONTENT_TYPE', '') in self.CONTENT_TYPES:
             if not self.request.body:
