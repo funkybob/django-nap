@@ -103,13 +103,13 @@ class BasePublisher(object):
 
             if parts[0] == 'list':
                 if len(parts) == 2:
-                    list_handlers[parts[1]].append(getattr(fnc, '_accepts', 'ALL'))
+                    list_handlers[parts[1]].extend(getattr(fnc, '_accepts', ['ALL']))
                 else:
                     list_handlers[parts[2]].append(parts[1])
 
             elif parts[0] == 'object':
                 if len(parts) == 2:
-                    object_handlers[parts[1]].append(getattr(fnc, '_accepts', 'ALL'))
+                    object_handlers[parts[1]].extend(getattr(fnc, '_accepts', ['ALL']))
                 else:
                     object_handlers[parts[2]].append(parts[1])
 
@@ -166,6 +166,7 @@ class Publisher(engine.JsonEngine, BasePublisher):
         if self.request.method == 'GET':
             return self.request.GET
         return self.request.POST
+    get_data = get_request_data
 
     def render_single_object(self, obj, serialiser=None, **response_kwargs):
         '''Helper to return a single object instance serialised.'''
