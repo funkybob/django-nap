@@ -172,7 +172,6 @@ class Publisher(engine.JsonEngine, BasePublisher):
         if self.request.method == 'GET':
             return self.request.GET
         return self.request.POST
-    get_data = get_request_data
 
     def render_single_object(self, obj, serialiser=None, **response_kwargs):
         '''Helper to return a single object instance serialised.'''
