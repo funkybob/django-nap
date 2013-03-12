@@ -1,5 +1,7 @@
 v0.10.3:
 + Added python2.6 support back [thanks nkuttler]
++ Added Publisher.get_serialiser_kwargs hook
++ Publisher.get_data was renamed to Publisher.get_request_data for clarity
 
 v0.10.2:
 - Removed leftover debug print
