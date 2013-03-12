@@ -76,7 +76,7 @@ class BasePublisher(object):
         '''View dispatcher called by Django'''
         self.action = action
         method = request.method.lower()
-        prefix = 'object' if object_id else 'list'
+        self.mode = prefix = 'object' if object_id else 'list'
         handler = getattr(self, '%s_%s_%s' % (prefix, method, action), None)
         if handler is None:
             # See if there's a method agnostic handler
@@ -126,6 +126,12 @@ class Publisher(engine.JsonEngine, BasePublisher):
         '''Return the serialiser instance to use for this request'''
         return self.serialiser
 
+    def get_serialiser_kwargs(self):
+        '''Allow passing of extra kwargs to serialiser calls'''
+        return {
+            'publisher': self,
+        }
+
     def get_object_list(self): # pragma: no cover
         '''Return the object list appropriate for this request'''
         raise NotImplementedError
@@ -166,13 +172,15 @@ class Publisher(engine.JsonEngine, BasePublisher):
         if self.request.method == 'GET':
             return self.request.GET
         return self.request.POST
-    get_data = get_request_data
 
     def render_single_object(self, obj, serialiser=None, **response_kwargs):
         '''Helper to return a single object instance serialised.'''
         if serialiser is None:
             serialiser = self.get_serialiser()
-        data = serialiser.deflate_object(obj, publisher=self)
+        serialiser_kwargs = response_kwargs.pop('serialiser_kwargs', None)
+        if serialiser_kwargs is None:
+            serialiser_kwargs = self.get_serialiser_kwargs()
+        data = serialiser.deflate_object(obj, **serialiser_kwargs)
         return self.create_response(data, **response_kwargs)
 
     def create_response(self, content, **response_kwargs):
@@ -186,7 +194,8 @@ class Publisher(engine.JsonEngine, BasePublisher):
         data = self.get_page(object_list)
 
         serialiser = self.get_serialiser()
-        data['objects'] = serialiser.deflate_list(data['objects'], publisher=self)
+        serialiser_kwargs = self.get_serialiser_kwargs()
+        data['objects'] = serialiser.deflate_list(data['objects'], **serialiser_kwargs)
         return self.create_response(data)
 
     def object_get_default(self, request, object_id, **kwargs):
