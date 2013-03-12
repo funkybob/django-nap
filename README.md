@@ -63,7 +63,7 @@ Internal methods:
     get_page(object_list):
         Returns the page of objects for this request.
 
-    def get_data():
+    def get_request_data():
         Returns the client-supplied data.
 
 Serialiser

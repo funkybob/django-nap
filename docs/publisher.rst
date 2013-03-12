@@ -63,7 +63,7 @@ The Publisher extends the BasePublisher class with some useful methods for typic
 
             If there is no page_size set, the meta dict will be empty, and objects will be the full object list.
 
-        def get_data():
+        def get_request_data():
             Returns the data sent in this request.
             If the request type is specified in the ``Engine``'s supported types, it will be used to de-serialise the data.
             Otherwise, request.GET or request.POST will be returned as apporpriate for the HTTP method used.
