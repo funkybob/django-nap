@@ -180,7 +180,7 @@ class Publisher(engine.JsonEngine, BasePublisher):
         serialiser_kwargs = response_kwargs.pop('serialiser_kwargs', None)
         if serialiser_kwargs is None:
             serialiser_kwargs = self.get_serialiser_kwargs()
-        data = serialiser.deflate_object(obj, **serialiser_kwargs)
+        data = serialiser.object_deflate(obj, **serialiser_kwargs)
         return self.create_response(data, **response_kwargs)
 
     def create_response(self, content, **response_kwargs):
@@ -195,7 +195,7 @@ class Publisher(engine.JsonEngine, BasePublisher):
 
         serialiser = self.get_serialiser()
         serialiser_kwargs = self.get_serialiser_kwargs()
-        data['objects'] = serialiser.deflate_list(data['objects'], **serialiser_kwargs)
+        data['objects'] = serialiser.list_deflate(data['objects'], **serialiser_kwargs)
         return self.create_response(data)
 
     def object_get_default(self, request, object_id, **kwargs):

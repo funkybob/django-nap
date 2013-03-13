@@ -34,7 +34,7 @@ class MetaSerialiser(type):
 class Serialiser(object):
     __metaclass__ = MetaSerialiser
 
-    def deflate_object(self, obj, **kwargs):
+    def object_deflate(self, obj, **kwargs):
         data = {}
         for name, field in self._fields.items():
             field.deflate(name, obj=obj, data=data, **kwargs)
@@ -43,13 +43,13 @@ class Serialiser(object):
                 data[name] = method(obj=obj, data=data, **kwargs)
         return data
 
-    def deflate_list(self, obj_list, **kwargs):
+    def list_deflate(self, obj_list, **kwargs):
         return [
-            self.deflate_object(obj, **kwargs)
+            self.object_deflate(obj, **kwargs)
             for obj in iter(obj_list)
         ]
 
-    def inflate_object(self, data, instance=None, **kwargs):
+    def object_inflate(self, data, instance=None, **kwargs):
         obj = {}
         for name, field in self._fields.items():
             if field.readonly:
@@ -61,10 +61,10 @@ class Serialiser(object):
                 field.inflate(name, data, obj, **kwargs)
         return self.restore_object(obj, instance=instance, **kwargs)
 
-    def inflate_list(self, data_list, **kwargs):
+    def list_inflate(self, data_list, **kwargs):
         # XXX target object list?
         return [
-            self.inflate_object(data, **kwargs)
+            self.object_inflate(data, **kwargs)
             for data in data_list
         ]
 
