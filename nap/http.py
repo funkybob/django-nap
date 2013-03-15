@@ -2,7 +2,6 @@
 '''Add some missing HttpResponse sub-classes'''
 from django.http import HttpResponse, Http404
 
-from functools import partial
 from urlparse import urlparse
 try:
     from collections import OrderedDict
