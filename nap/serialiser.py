@@ -4,7 +4,7 @@ from .meta import Meta
 
 
 class MetaSerialiser(type):
-    def __new__(cls, name, bases, attrs):
+    def __new__(mcs, name, bases, attrs):
         # Inherited fields
         attrs['_fields'] = {}
 
@@ -24,7 +24,7 @@ class MetaSerialiser(type):
 
         attrs['_fields'].update(declared_fields)
 
-        new_class = super(MetaSerialiser, cls).__new__(cls, name, bases, attrs)
+        new_class = super(MetaSerialiser, mcs).__new__(mcs, name, bases, attrs)
         meta = getattr(new_class, 'Meta', None)
         new_class._meta = Meta(meta)
 
@@ -82,9 +82,9 @@ for f in dir(fields):
         pass
 
 class MetaModelSerialiser(MetaSerialiser):
-    def __new__(cls, name, bases, attrs):
+    def __new__(mcs, name, bases, attrs):
 
-        new_class = super(MetaModelSerialiser, cls).__new__(cls, name, bases, attrs)
+        new_class = super(MetaModelSerialiser, mcs).__new__(mcs, name, bases, attrs)
 
         include = getattr(new_class._meta, 'fields', [])
         exclude = getattr(new_class._meta, 'exclude', [])
@@ -123,8 +123,8 @@ class ModelSerialiser(Serialiser):
 
     def restore_object(self, obj, instance, **kwargs):
         if instance:
-            for k, v in data.items():
-                setattr(instance, k, v)
+            for key, val in obj.items():
+                setattr(instance, key, val)
         else:
             instance = self._meta.model(**obj)
         if kwargs.get('commit', True):
