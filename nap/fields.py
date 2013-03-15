@@ -2,7 +2,7 @@
 from .utils import digattr
 
 from decimal import Decimal
-from datetime import datetime, date, time
+from datetime import datetime
 
 class Field(object):
     type_class = None
