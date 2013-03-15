@@ -1,11 +1,10 @@
 
-from django.conf.urls import url
+from django.conf.urls import url, patterns, include
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404
 
 from collections import defaultdict
 
-from . import auth
 from . import http
 from . import engine
 
@@ -23,7 +22,6 @@ class BasePublisher(object):
         self.args = args
         self.kwargs = kwargs
 
-    # XXX Need some names/labels to build url pattern names?
     @classmethod
     def patterns(cls, api_name=None):
         '''
@@ -43,20 +41,21 @@ class BasePublisher(object):
         if api_name:
             name = '%s_%s' % (api_name, cls.api_name)
         else:
-            name = self.api_name
+            name = cls.api_name
 
         return [
-            url(r'^object/(?P<object_id>[-\w]+)/(?P<action>\w+)/(?P<argument>.+)/?$',
-                view,
-                name='%s_object_action_arg' % name,
-            ),
-            url(r'^object/(?P<object_id>[-\w]+)/(?P<action>\w+)/?$',
-                view,
-                name='%s_object_action' % name,
-            ),
-            url(r'^object/(?P<object_id>[-\w]+)/?$',
-                view,
-                name='%s_object_default' % name,
+            url(r'^object/(?P<object_id>[-\w]+)/',
+                include(patterns('',
+                    url(r'^(?P<action>\w+)/(?P<argument>.+)/?$', view,
+                        name='%s_object_action_arg' % name
+                    ),
+                    url(r'^(?P<object_id>[-\w]+)/(?P<action>\w+)/?$', view,
+                        name='%s_object_action' % name,
+                    ),
+                    url(r'^$', view,
+                        name='%s_object_default' % name,
+                    ),
+                ))
             ),
             url(r'^(?P<action>\w+)/(?P<argument>.+)/$',
                 view,
@@ -72,6 +71,7 @@ class BasePublisher(object):
             ),
         ]
 
+
     def dispatch(self, request, action='default', object_id=None, **kwargs):
         '''View dispatcher called by Django'''
         self.action = action
@@ -85,14 +85,15 @@ class BasePublisher(object):
             raise http.Http404
         # Do we need to pass any of this?
         try:
-            return handler(request, action=action, object_id=object_id, **kwargs)
+            return handler(request, action=action, object_id=object_id,
+                **kwargs
+            )
         except http.BaseHttpResponse as response:
             return response
 
     @classmethod
     def index(cls):
         '''Return details about which handlers exist on this publisher.'''
-        # XXX Allow verb-generic methods to be annotated
         list_handlers = defaultdict(list)
         object_handlers = defaultdict(list)
         for name in dir(cls):
