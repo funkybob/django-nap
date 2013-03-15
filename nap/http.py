@@ -1,6 +1,8 @@
 
 '''Add some missing HttpResponse sub-classes'''
+from django.core.exceptions import SuspiciousOperation
 from django.http import HttpResponse, Http404
+from django.utils.encoding import iri_to_uri
 
 from urlparse import urlparse
 try:
@@ -63,7 +65,7 @@ class ResponseTypes(OrderedDict):
     def __init__(self, choices):
         super(ResponseTypes, self).__init__(choices)
         for code, label in choices:
-            setattr(self, re.sub('\W', '_', label.upper()), code)
+            setattr(self, re.sub(r'\W', '_', label.upper()), code)
 
 STATUS = ResponseTypes(STATUS_CODES)
 
@@ -111,11 +113,12 @@ class LocationHeaderMixin(object):
     '''Many 3xx responses require a Location header'''
     def __init__(self, location, *args, **kwargs):
         super(LocationHeaderMixin, self).__init__(*args, **kwargs)
-        parsed = urlparse(redirect_to)
+        parsed = urlparse(location)
         if parsed.scheme and parsed.scheme not in self.allowed_schemes:
-            raise SuspiciousOperation("Unsafe redirect to URL with protocol '%s'" % parsed.scheme)
-        super(HttpResponseRedirectBase, self).__init__(*args, **kwargs)
-        self['Location'] = iri_to_uri(redirect_to)
+            raise SuspiciousOperation(
+                "Unsafe redirect to URL with protocol '%s'" % parsed.scheme
+            )
+        self['Location'] = iri_to_uri(location)
 
     url = property(lambda self: self['Location'])
 
