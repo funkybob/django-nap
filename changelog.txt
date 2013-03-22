@@ -1,6 +1,7 @@
 v0.11:
 # WARNING: API breakage
 + Changed deflate_object and deflate_list to object_deflate and list_deflate to avoid potential field deflater name conflict
++ Moved all model related code to models.py
 
 v0.10.3:
 + Added python2.6 support back [thanks nkuttler]
