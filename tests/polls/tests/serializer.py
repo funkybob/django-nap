@@ -1,6 +1,7 @@
 from django.test import TestCase
 from polls import models
-from nap.serialiser import ModelSerialiser, Serialiser
+from nap.serialiser import Serialiser
+from nap.models import ModelSerialiser
 from nap.fields import Field
 
 
