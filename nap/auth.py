@@ -17,7 +17,7 @@ def permit(test_func):
 permit_logged_in = permit(lambda self, request, *args, **kwargs: request.user.is_authenticated())
 permit_staff = permit(lambda self, request, *args, **kwargs: request.user.is_staff)
 
-def permit_groups(func, *groups):
+def permit_groups(*groups):
     def in_groups(request, *args):
         return requets.user.groups.filter(name__in=args).exists()
     return permit(lambda self, request, *args, **kwargs: in_groups(request, *groups))
