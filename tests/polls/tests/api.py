@@ -1,6 +1,6 @@
 from django.test import TestCase
 from polls import models
-from nap.serialiser import ModelSerialiser
+from nap.models import ModelSerialiser
 from nap.publisher import Publisher
 from nap import api
 
