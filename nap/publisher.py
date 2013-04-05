@@ -1,6 +1,7 @@
 
 from django.conf.urls import url, patterns, include
 from django.core.paginator import Paginator
+from djangi.views.decorators.http import require_http_methods
 
 from collections import defaultdict
 
@@ -8,10 +9,10 @@ from . import http
 from . import engine
 
 def accepts(*verbs):
-    '''Annotate a method with the HTTP verbs it accepts'''
+    '''Annotate a method with the HTTP verbs it accepts, and enforce it.'''
     def _inner(method):
         setattr(method, '_accepts', verbs)
-        return method
+        return require_http_methods([x.upper() for x in verbs])(method)
     return _inner
 
 class BasePublisher(object):
