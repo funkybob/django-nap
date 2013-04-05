@@ -95,8 +95,9 @@ class SerialiserField(Field):
 
 class ManySerialiserField(Field):
     def __init__(self, *args, **kwargs):
-        super(ManySerialiserField, self).__init__(*args, **kwargs)
-        self.serialiser = self.kwargs.pop('serialiser')
+        super(ManySerialiserField, self).__init__(serialiser=None, *args, **kwargs)
+        # XXX Need a ModelSerialiser factory so we can pass model/include/exclude here instead
+        self.serialiser = serialiser
 
     def deflate(self, name, obj, data, **kwargs):
         src = self._get_attrname(name)
