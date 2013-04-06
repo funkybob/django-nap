@@ -20,6 +20,11 @@ Simple::
 Overview
 ========
 
+Installing
+==========
+
+It is NOT necessary to add nap to your INSTALLED\_APPS.  It does not provide models, templates, template tags, or static files.
+
 Publisher
 =========
 
@@ -117,4 +122,6 @@ Besides Field, there are some special case fields also:
 SerialiserField will accept a serialiser class to apply to the value retrieved.  Primarily, this is useful for providing values through a "ToOne" relation (OneToOne or ForeignKey), but can be used on any value, no matter how it's retrieved.
 
 The ManySerialiserField will perform similarly, but will treat its value as an iterable.
+
+You can optionally pass a model to ManySerialiserField/SerialiserField and have it automatically create a serialiser from it.  In this case, you can also pass 'fields' and/or 'exclude' to control which fields are used.
 

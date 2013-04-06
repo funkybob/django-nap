@@ -11,7 +11,7 @@ Field objects
 
 .. method:: Field.__init__([``attribute``=None,] [``default``=None,] [``readonly``=False])
 
-    Defines a field
+    Defines a field which controls how values are converted from the object to its pre-serialised "reduced" form.
 
 
 Attributes
