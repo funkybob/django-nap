@@ -1,5 +1,6 @@
 
 from . import fields
+from .meta import Meta
 from .serialiser import MetaSerialiser, Serialiser
 from .publisher import Publisher
 
@@ -149,4 +150,33 @@ class ModelFormMixin(object):
         # XXX Some sort of verification?
         obj.delete()
         return http.NoContent()
+
+
+def modelserialiser_factory(name, model, **kwargs):
+    attrs = {
+        'model': model,
+    }
+    try:
+        attrs['fields'] = kwargs['fields']
+    except KeyError:
+        pass
+    try:
+        attrs['exclude'] = kwargs['exclude']
+    except KeyError:
+        pass
+
+    meta = type('Meta', (object,), attrs)
+    return type(ModelSerialiser)(name, (ModelSerialiser,), {'Meta': meta})
+
+def ModelSerialiserField(fields.SerialiserField):
+    def __init__(self, serialiser=None, model=None, *args, **kwargs):
+        if serialiser is None:
+            serialiser = modelserialiser_factory(model.__name__ + 'Serialiser', model, **kwargs)()
+        super(ModelSerialiserField, self).__init__(serialiser, *args, **kwargs)
+
+def ModelManySerialiserField(fields.ManySerialiserField):
+    def __init__(self, serialiser=None, model=None, *args, **kwargs):
+        if serialiser is None:
+            serialiser = modelserialiser_factory(model.__name__ + 'Serialiser', model, **kwargs)()
+        super(ModelManySerialiserField, self).__init__(serialiser, *args, **kwargs)
 

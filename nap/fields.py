@@ -1,6 +1,5 @@
 
 from .utils import digattr
-from .factory import modelserialiser_factory
 
 from decimal import Decimal
 from datetime import datetime
@@ -75,10 +74,8 @@ class TimeField(Field):
 
 
 class SerialiserField(Field):
-    def __init__(self, serialiser=None, model=None, *args, **kwargs):
+    def __init__(self, serialiser, *args, **kwargs):
         super(SerialiserField, self).__init__(*args, **kwargs)
-        if serialiser is None:
-            serialiser = modelserialiser_factory(model.__name__ + 'Serialiser', **kwargs)
         self.serialiser = serialiser
 
     def deflate(self, name, obj, data, **kwargs):
@@ -97,11 +94,8 @@ class SerialiserField(Field):
 
 
 class ManySerialiserField(Field):
-    def __init__(self, *args, **kwargs):
-        super(ManySerialiserField, self).__init__(serialiser=None, model=None, *args, **kwargs)
-        # XXX Need a ModelSerialiser factory so we can pass model/include/exclude here instead
-        if serialiser is None:
-            serialiser = modelserialiser_factory(model.__name__ + 'Serialiser', **kwargs)
+    def __init__(self, serialiser, *args, **kwargs):
+        super(ManySerialiserField, self).__init__(*args, **kwargs)
         self.serialiser = serialiser
 
     def deflate(self, name, obj, data, **kwargs):
