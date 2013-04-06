@@ -168,13 +168,13 @@ def modelserialiser_factory(name, model, **kwargs):
     meta = type('Meta', (object,), attrs)
     return type(ModelSerialiser)(name, (ModelSerialiser,), {'Meta': meta})
 
-def ModelSerialiserField(fields.SerialiserField):
+class ModelSerialiserField(fields.SerialiserField):
     def __init__(self, serialiser=None, model=None, *args, **kwargs):
         if serialiser is None:
             serialiser = modelserialiser_factory(model.__name__ + 'Serialiser', model, **kwargs)()
         super(ModelSerialiserField, self).__init__(serialiser, *args, **kwargs)
 
-def ModelManySerialiserField(fields.ManySerialiserField):
+class ModelManySerialiserField(fields.ManySerialiserField):
     def __init__(self, serialiser=None, model=None, *args, **kwargs):
         if serialiser is None:
             serialiser = modelserialiser_factory(model.__name__ + 'Serialiser', model, **kwargs)()
