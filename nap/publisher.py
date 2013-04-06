@@ -1,7 +1,7 @@
 
 from django.conf.urls import url, patterns, include
 from django.core.paginator import Paginator
-from djangi.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_http_methods
 
 from collections import defaultdict
 
