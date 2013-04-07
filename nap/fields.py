@@ -38,7 +38,7 @@ class Field(object):
         dest = self._get_attrname(name)
         try:
             value = data[name]
-            obj[dest] = self.restore(value)
+            obj[dest] = self.restore(value, **kwargs)
         except KeyError:
             pass
 
@@ -55,21 +55,21 @@ class DecimalField(Field):
 class DateTimeField(Field):
     def reduce(self, value, **kwargs):
         return value.replace(microsecond=0).isoformat(' ')
-    def restore(self, value):
+    def restore(self, value, **kwargs):
         return datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
 
 
 class DateField(Field):
     def reduce(self, value, **kwargs):
         return value.isoformat()
-    def restore(self, value):
+    def restore(self, value, **kwargs):
         return datetime.strptime(value, '%Y-%m-%d').date()
 
 
 class TimeField(Field):
     def reduce(self, value, **kwargs):
         return value.isoformat()
-    def restore(self, value):
+    def restore(self, value, **kwargs):
         return datetime.strptime(value, '%H:%M:%S').time()
 
 
@@ -80,7 +80,7 @@ class SerialiserField(Field):
 
     def reduce(self, value, **kwargs):
         return self.serialiser.object_deflate(value)
-    def restore(self, value):
+    def restore(self, value, **kwargs):
         return self.serialiser.object_inflate(value)
 
 
