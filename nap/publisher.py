@@ -1,6 +1,7 @@
 
 from django.conf.urls import url, patterns, include
 from django.core.paginator import Paginator
+from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_http_methods
 
 from collections import defaultdict
@@ -12,7 +13,7 @@ def accepts(*verbs):
     '''Annotate a method with the HTTP verbs it accepts, and enforce it.'''
     def _inner(method):
         setattr(method, '_accepts', verbs)
-        return require_http_methods([x.upper() for x in verbs])(method)
+        return method_decorator(require_http_methods([x.upper() for x in verbs]))(method)
     return _inner
 
 class BasePublisher(object):
@@ -49,7 +50,7 @@ class BasePublisher(object):
                     url(r'^(?P<action>\w+)/(?P<argument>.+)/?$', view,
                         name='%s_object_action_arg' % name
                     ),
-                    url(r'^(?P<object_id>[-\w]+)/(?P<action>\w+)/?$', view,
+                    url(r'^(?P<action>\w+)/?$', view,
                         name='%s_object_action' % name,
                     ),
                     url(r'^$', view,
