@@ -18,9 +18,9 @@ class Field(object):
     def _get_attrname(self, name):
         return self.attribute if self.attribute else name
 
-    def reduce(self, value):
+    def reduce(self, value, **kwargs):
         return value
-    def restore(self, value):
+    def restore(self, value, **kwargs):
         if self.type_class is not None:
             return self.type_class(value)
         return value
@@ -29,7 +29,7 @@ class Field(object):
         src = self._get_attrname(name)
         value = digattr(obj, src, self.default)
         if value is not None:
-            value = self.reduce(value)
+            value = self.reduce(value, **kwargs)
         data[name] = value
 
     def inflate(self, name, data, obj, **kwargs):
@@ -48,66 +48,49 @@ class IntegerField(Field):
 
 class DecimalField(Field):
     type_class = Decimal
-    def reduce(self, value):
+    def reduce(self, value, **kwargs):
         return float(value)
 
 
 class DateTimeField(Field):
-    def reduce(self, value):
+    def reduce(self, value, **kwargs):
         return value.replace(microsecond=0).isoformat(' ')
     def restore(self, value):
         return datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
 
 
 class DateField(Field):
-    def reduce(self, value):
+    def reduce(self, value, **kwargs):
         return value.isoformat()
     def restore(self, value):
         return datetime.strptime(value, '%Y-%m-%d').date()
 
 
 class TimeField(Field):
-    def reduce(self, value):
+    def reduce(self, value, **kwargs):
         return value.isoformat()
     def restore(self, value):
         return datetime.strptime(value, '%H:%M:%S').time()
 
 
 class SerialiserField(Field):
-    def __init__(self, serialiser, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super(SerialiserField, self).__init__(*args, **kwargs)
-        self.serialiser = serialiser
+        self.serialiser = kwargs['serialiser']
 
-    def deflate(self, name, obj, data, **kwargs):
-        src = self._get_attrname(name)
-        val = digattr(obj, src, self.default)
-        data[name] = self.serialiser.deflate_object(val)
-
-    def inflate(self, name, data, obj, **kwargs):
-        if self.readonly:
-            return
-        dest = self._get_attrname(name)
-        try:
-            obj[dest] = self.serialiser.inflate_object(data[name])
-        except KeyError:
-            pass
+    def reduce(self, value, **kwargs):
+        return self.serialiser.object_deflate(value)
+    def restore(self, value):
+        return self.serialiser.object_inflate(value)
 
 
 class ManySerialiserField(Field):
-    def __init__(self, serialiser, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super(ManySerialiserField, self).__init__(*args, **kwargs)
-        self.serialiser = serialiser
+        self.serialiser = kwargs['serialiser']
 
-    def deflate(self, name, obj, data, **kwargs):
-        src = self._get_attrname(name)
-        val = digattr(obj, src, self.default)
-        data[name] = self.serialiser.deflate_list(iter(val), **kwargs)
+    def reduce(self, value, **kwargs):
+        return self.serialiser.list_deflate(iter(value), **kwargs)
+    def restore(self, value, **kwargs):
+        return self.serialiser.list_inflate(value, **kwargs)
 
-    def inflate(self, name, data, obj, **kwargs):
-        if self.readonly:
-            return
-        dest = self._get_attrname(name)
-        try:
-            obj[dest] = self.serialiser.inflate_list(data[name], **kwargs)
-        except KeyError:
-            pass
