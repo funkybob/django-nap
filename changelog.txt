@@ -1,3 +1,7 @@
+v0.11.2:
++ Added BooleanField
++ Extended tests
+
 v0.11.1:
 + Changed SerialiserField/ManySerialiserField to replace reduce/restore instead of overriding inflate/deflate methods
 + Fixed broken url pattern for object action
