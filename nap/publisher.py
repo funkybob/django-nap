@@ -3,6 +3,7 @@ from django.conf.urls import url, patterns, include
 from django.core.paginator import Paginator
 from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 from collections import defaultdict
 
@@ -34,6 +35,7 @@ class BasePublisher(object):
         /object/(id)/           instance view
         /object/(id)/(action)/  custom action on instance
         '''
+        @ensure_csrf_cookie
         def view(request, *args, **kwargs):
             '''A wrapper view to instanciate and dispatch'''
             self = cls(request, *args, **kwargs)
