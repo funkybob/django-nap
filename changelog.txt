@@ -6,6 +6,7 @@ v0.11.3:
 v0.11.2:
 + Added BooleanField
 + Extended tests
++ Force CSRF protection
 
 v0.11.1:
 + Changed SerialiserField/ManySerialiserField to replace reduce/restore instead of overriding inflate/deflate methods
