@@ -150,14 +150,17 @@ class Publisher(engine.JsonEngine, BasePublisher):
                 'meta': {},
                 'objects': object_list,
             }
+        max_page_size = getattr(self, 'max_page_size', page_size)
         paginator = Paginator(object_list, page_size)
         offset = int(self.request.GET.get('offset', 0))
-        page_num = offset // page_size
+        limit = int(self.request.GET.get('limit', page_size))
+        limit = max(1, min(limit, max_page_size))
+        page_num = offset // limit
         page = paginator.page(page_num + 1)
         return {
             'meta': {
                 'offset': page.start_index() - 1,
-                'limit': page_size,
+                'limit': limit,
                 'count': paginator.count,
                 'has_next': page.has_next(),
                 'has_prev': page.has_previous(),

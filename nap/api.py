@@ -39,7 +39,7 @@ class Api(object):
             name = getattr(child, 'api_name', child.__class__.__name__.lower())
         if name in self.children:
             raise Warning(
-                'Publisher with name %s already registered: %r -> %r' % (
+                'Publisher with name "%s" already registered: %r -> %r' % (
                     name, self.children[name], child
                 )
             )
