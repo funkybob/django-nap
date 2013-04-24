@@ -43,7 +43,7 @@ class Field(object):
             pass
 
 class BooleanField(Field):
-    type_clas = bool
+    type_class = bool
 
 class IntegerField(Field):
     type_class = int
