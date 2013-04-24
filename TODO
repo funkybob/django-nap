@@ -4,9 +4,8 @@
 - Provide an internal API layer that's devoid of de/serialising, and an outer layer.
     This should promote re-use of the facilities.
 
-- Shortcut syntax for nested lists/records
-
 - Enforce not null?
 
-- Have ModelSerialiser auto-create ModelSerialisers for ForeignKeys?
+- Make CSRF configurable
 
+- Make meta.next/meta.next URLs
