@@ -147,23 +147,24 @@ class Publisher(engine.JsonEngine, BasePublisher):
 
     def get_page(self, object_list):
         '''Return a paginated object list, along with some metadata'''
-        max_page_size = page_size = getattr(self, 'page_size', 0)
-        page_size = int(self.request.GET.get(LIMIT_PARAM, page_size))
-        page_size = max(0, min(page_size, max_page_size))
-        if not page_size:
+        page_size = getattr(self, 'page_size', None)
+        if page_size is None:
             return {
                 'meta': {},
                 'objects': object_list,
             }
+        max_page_size = getattr(self, 'max_page_size', page_size)
+        page_size = int(self.request.GET.get(self.LIMIT_PARAM, page_size))
+        page_size = max(0, min(page_size, max_page_size))
         page_num = 0
         try:
-            page_num = int(self.request.GET[PAGE_PARAM]
+            page_num = int(self.request.GET[self.PAGE_PARAM])
         except ValueError:
             # Bad page - default to 0
             pass
         except KeyError:
             try:
-                offset = int(self.request.GET[OFFSET_PARAM])
+                offset = int(self.request.GET[self.OFFSET_PARAM])
             except ValueError:
                 # Bad page - default to 0
                 pass
@@ -178,7 +179,8 @@ class Publisher(engine.JsonEngine, BasePublisher):
         return {
             'meta': {
                 'offset': page.start_index() - 1,
-                'limit': limit,
+                'page': page_num,
+                'limit': page_size,
                 'count': paginator.count,
                 'has_next': page.has_next(),
                 'has_prev': page.has_previous(),
