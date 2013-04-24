@@ -123,6 +123,8 @@ class BasePublisher(object):
             
 class Publisher(engine.JsonEngine, BasePublisher):
     '''Default API-style publisher'''
+    LIMIT_PARAM = 'limit'
+    OFFSET_PARAM = 'offset'
 
     def get_serialiser(self):
         '''Return the serialiser instance to use for this request'''
@@ -152,8 +154,8 @@ class Publisher(engine.JsonEngine, BasePublisher):
             }
         max_page_size = getattr(self, 'max_page_size', page_size)
         paginator = Paginator(object_list, page_size)
-        offset = int(self.request.GET.get('offset', 0))
-        limit = int(self.request.GET.get('limit', page_size))
+        offset = int(self.request.GET.get(self.OFFSET_PARAM, 0))
+        limit = int(self.request.GET.get(self.LIMIT_PARAM, page_size))
         limit = max(1, min(limit, max_page_size))
         page_num = offset // limit
         page = paginator.page(page_num + 1)
