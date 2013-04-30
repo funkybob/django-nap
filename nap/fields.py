@@ -42,6 +42,8 @@ class Field(object):
         except KeyError:
             pass
 
+class BooleanField(Field):
+    type_clas = bool
 
 class IntegerField(Field):
     type_class = int

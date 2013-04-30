@@ -1,5 +1,12 @@
+v0.11.3:
++ Make get_page honor limit parameter, but bound it to max_page_size, which defaults to page_size
++ Allow changing the GET param names for page, offset and limit
++ Allow passing page+limit or offset+limit
+
 v0.11.2:
-+ Wrap the dispatcher view with csrf's ensure_csrf_cookie
++ Added BooleanField
++ Extended tests
++ Force CSRF protection
 
 v0.11.1:
 + Changed SerialiserField/ManySerialiserField to replace reduce/restore instead of overriding inflate/deflate methods
