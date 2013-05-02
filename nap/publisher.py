@@ -176,7 +176,7 @@ class Publisher(engine.JsonEngine, BasePublisher):
             else:
                 page_num = offset // page_size
 
-        paginator = Paginator(object_list, page_size)
+        paginator = Paginator(object_list, page_size, allow_empty_first_page=True)
         page = paginator.page(page_num + 1)
         return {
             'meta': {
