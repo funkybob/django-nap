@@ -94,7 +94,7 @@ class BasePublisher(object):
     def execute(self, handler, *args, **kwargs):
         '''This allows wrapping calls to handler functions'''
         try:
-            return handler(request, *args, **kwargs)
+            return handler(*args, **kwargs)
         except http.BaseHttpResponse as response:
             return response
 
