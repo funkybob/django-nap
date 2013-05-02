@@ -1,3 +1,6 @@
+v0.11.4:
++ Make content-type detection more forgiving
+
 v0.11.3:
 + Make get_page honor limit parameter, but bound it to max_page_size, which defaults to page_size
 + Allow changing the GET param names for page, offset and limit
