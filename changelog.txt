@@ -1,3 +1,6 @@
+v0.11.5.1:
+- Fix arguments passed to execute method
+
 v0.11.5:
 + Add Publisher.execute to make wrapping handler calls easier [also, makes NewRelic simpler to hook in]
 + Allow empty first pages in pagination
