@@ -1,3 +1,8 @@
+v0.11.5:
++ Add Publisher.execute to make wrapping handler calls easier [also, makes NewRelic simpler to hook in]
++ Allow empty first pages in pagination
++ Added support module for NewRelic
+
 v0.11.4:
 + Make content-type detection more forgiving
 
