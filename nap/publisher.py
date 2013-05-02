@@ -87,10 +87,14 @@ class BasePublisher(object):
         if handler is None:
             raise http.Http404
         # Do we need to pass any of this?
+        return self.execute(handler, request, action=action, object_id=object_id,
+            **kwargs
+        )
+
+    def execute(self, handler, *args, **kwargs):
+        '''This allows wrapping calls to handler functions'''
         try:
-            return handler(request, action=action, object_id=object_id,
-                **kwargs
-            )
+            return handler(request, *args, **kwargs)
         except http.BaseHttpResponse as response:
             return response
 
