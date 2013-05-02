@@ -29,7 +29,7 @@ def instrument_django_nap_publisher(module):
         set_transaction_name(name)
 
         with FunctionTrace(transaction, name):
-            return wrapped(*args, *kwargs)
+            return wrapped(*args, **kwargs)
 
     module.BasePublisher.execute = ObjectWrapper(
         module.BasePublisher.execute, None, execute_wrapper)
