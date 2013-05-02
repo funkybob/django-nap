@@ -4,7 +4,7 @@
 #
 # [import-hook:nap.publisher]
 # enabled = true
-# execute = newrelic_django_nap:instrument_django_nap_publisher
+# execute = nap.newrelic:instrument_django_nap_publisher
 from __future__ import absolute_import
 
 from newrelic.agent import (current_transaction, set_transaction_name,
