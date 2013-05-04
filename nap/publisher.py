@@ -1,6 +1,6 @@
 
 from django.conf.urls import url, patterns, include
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage
 from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -181,7 +181,10 @@ class Publisher(engine.JsonEngine, BasePublisher):
                 page_num = offset // page_size
 
         paginator = Paginator(object_list, page_size, allow_empty_first_page=True)
-        page = paginator.page(page_num + 1)
+        try:
+            page = paginator.page(page_num + 1)
+        except EmptyPage:
+            raise http.Http404
         return {
             'meta': {
                 'offset': page.start_index() - 1,
