@@ -1,3 +1,6 @@
+v0.11.6:
+- Raise a 404 on paginator raising EmptyPage, instead of failing
+
 v0.11.5.1:
 - Fix arguments passed to execute method
 
