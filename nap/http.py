@@ -106,7 +106,7 @@ class PartialContent(HttpResponseSuccess):
 # Redirection Responses (3xx)
 #
 
-class HttpResponseRedirect(BaseHttpResponse):
+class HttpResponseRedirection(BaseHttpResponse):
     '''A base class for all 3xx responses.'''
 
 class LocationHeaderMixin(object):
@@ -123,25 +123,25 @@ class LocationHeaderMixin(object):
     url = property(lambda self: self['Location'])
 
 
-class MultipleChoices(HttpResponseRedirect):
+class MultipleChoices(HttpResponseRedirection):
     status_code = STATUS.MULTIPLE_CHOICES
 
-class MovedPermanently(LocationHeaderMixin, HttpResponseRedirect):
+class MovedPermanently(LocationHeaderMixin, HttpResponseRedirection):
     status_code = STATUS.MOVED_PERMANENTLY
 
-class Found(LocationHeaderMixin, HttpResponseRedirect):
+class Found(LocationHeaderMixin, HttpResponseRedirection):
     status_code = STATUS.FOUND
 
-class SeeOther(LocationHeaderMixin, HttpResponseRedirect):
+class SeeOther(LocationHeaderMixin, HttpResponseRedirection):
     status_code = STATUS.SEE_OTHER
 
-class NotModified(HttpResponseRedirect):
+class NotModified(HttpResponseRedirection):
     status_code = STATUS.NOT_MODIFIED
 
-class UseProxy(LocationHeaderMixin, HttpResponseRedirect):
+class UseProxy(LocationHeaderMixin, HttpResponseRedirection):
     status_code = STATUS.USE_PROXY
 
-class TemporaryRedirect(HttpResponseRedirect):
+class TemporaryRedirect(HttpResponseRedirection):
     status_code = STATUS.TEMPORARY_REDIRECT
 
 #
