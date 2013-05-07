@@ -1,3 +1,6 @@
+v0.11.6.1:
+- Renamed HttpResponseRedirect to HttpResponseRedirection to avoid clashing with Django http class
+
 v0.11.6:
 - Raise a 404 on paginator raising EmptyPage, instead of failing
 
