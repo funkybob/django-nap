@@ -60,7 +60,7 @@ class BasePublisher(object):
                     ),
                 ))
             ),
-            url(r'^(?P<action>\w+)/(?P<argument>.+)/$',
+            url(r'^(?P<action>\w+)/(?P<argument>.+)/?$',
                 view,
                 name='%s_list_action_arg' % name,
             ),
