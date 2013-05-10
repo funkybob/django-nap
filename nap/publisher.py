@@ -49,7 +49,7 @@ class BasePublisher(object):
         return [
             url(r'^object/(?P<object_id>[-\w]+)/',
                 include(patterns('',
-                    url(r'^(?P<action>\w+)/(?P<argument>.+)/?$', view,
+                    url(r'^(?P<action>\w+)/(?P<argument>.+?)/?$', view,
                         name='%s_object_action_arg' % name
                     ),
                     url(r'^(?P<action>\w+)/?$', view,
@@ -60,7 +60,7 @@ class BasePublisher(object):
                     ),
                 ))
             ),
-            url(r'^(?P<action>\w+)/(?P<argument>.+)/?$',
+            url(r'^(?P<action>\w+)/(?P<argument>.+?)/?$',
                 view,
                 name='%s_list_action_arg' % name,
             ),
