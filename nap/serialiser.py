@@ -2,6 +2,7 @@
 from . import fields
 from .meta import Meta
 
+from functools import partial
 
 class MetaSerialiser(type):
     def __new__(mcs, name, bases, attrs):
@@ -34,13 +35,34 @@ class MetaSerialiser(type):
 class Serialiser(object):
     __metaclass__ = MetaSerialiser
 
-    def object_deflate(self, obj, **kwargs):
-        data = {}
+    def __init__(self):
+        # Build list of deflate and inflate methods
+        self._deflaters = []
+        self._inflaters = []
+        def _setter(name, method, obj, data, *args, **kwargs):
+            '''Wrapper for deflate_FOO'''
+            data[name] = method(obj=obj, data=data, *args, **kwargs)
+        def _getter(name, method, data, obj, *args, **kwargs):
+            obj[name] = method(data=data, obj=obj, *args, **kwargs)
+
         for name, field in self._fields.items():
-            field.deflate(name, obj=obj, data=data, **kwargs)
+            self._deflaters.append(partial(field.deflate, name))
             method = getattr(self, 'deflate_%s' % name, None)
             if method is not None:
-                data[name] = method(obj=obj, data=data, **kwargs)
+                self._deflaters.append(partial(_setter, name, method))
+
+            if field.readonly:
+                continue
+            method = getattr(self, 'inflate_%s' % name, None)
+            if method:
+                self._inflaters.append(partial(_getter, name, method))
+            else:
+                self._inflaters.append(partial(field.inflate, name))
+
+    def object_deflate(self, obj, **kwargs):
+        data = {}
+        for method in self._deflaters:
+            method(obj=obj, data=data, **kwargs)
         return data
 
     def list_deflate(self, obj_list, **kwargs):
@@ -51,14 +73,8 @@ class Serialiser(object):
 
     def object_inflate(self, data, instance=None, **kwargs):
         obj = {}
-        for name, field in self._fields.items():
-            if field.readonly:
-                continue
-            method = getattr(self, 'inflate_%s' % name, None)
-            if method is not None:
-                obj[name] = method(data=data, obj=obj, instance=instance, **kwargs)
-            else:
-                field.inflate(name, data, obj, **kwargs)
+        for method in self._inflaters:
+            method(data=data, obj=obj, instance=instance, **kwargs)
         return self.restore_object(obj, instance=instance, **kwargs)
 
     def list_inflate(self, data_list, **kwargs):
