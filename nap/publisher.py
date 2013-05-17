@@ -19,8 +19,9 @@ def accepts(*verbs):
 
 class BasePublisher(object):
 
-    def __init__(self, request, **kwargs):
+    def __init__(self, request, *args, **kwargs):
         self.request = request
+        self.args = args
         self.kwargs = kwargs
 
     @classmethod
@@ -35,9 +36,9 @@ class BasePublisher(object):
         /object/(id)/(action)/  custom action on instance
         '''
         @ensure_csrf_cookie
-        def view(request, **kwargs):
+        def view(request, *args, **kwargs):
             '''A wrapper view to instanciate and dispatch'''
-            self = cls(request, **kwargs)
+            self = cls(request, *args, **kwargs)
             return self.dispatch(request, **kwargs)
 
         if api_name:
