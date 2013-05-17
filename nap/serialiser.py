@@ -36,13 +36,26 @@ class Serialiser(object):
     __metaclass__ = MetaSerialiser
 
     def __init__(self):
+        '''
+        Since the list of methods to call to deflate/inflate an object 
+        don't change, we might as well construct the lists once right here.
+        '''
         # Build list of deflate and inflate methods
         self._deflaters = []
         self._inflaters = []
         def _setter(name, method, obj, data, *args, **kwargs):
-            '''Wrapper for deflate_FOO'''
+            '''Wrapper for deflate_FOO
+
+            Custom deflate handlers don't get passed their name, and don't
+            update the data dict themselves, so we need to wrap them.
+            '''
             data[name] = method(obj=obj, data=data, *args, **kwargs)
         def _getter(name, method, data, obj, *args, **kwargs):
+            '''Wrapper for inflate_FOO
+
+            Custom inflate handlers don't get passed their name, and don't
+            update the obj dict themselves, so we need to wrap them.
+            '''
             obj[name] = method(data=data, obj=obj, *args, **kwargs)
 
         for name, field in self._fields.items():
