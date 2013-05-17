@@ -19,9 +19,8 @@ def accepts(*verbs):
 
 class BasePublisher(object):
 
-    def __init__(self, request, *args, **kwargs):
+    def __init__(self, request, **kwargs):
         self.request = request
-        self.args = args
         self.kwargs = kwargs
 
     @classmethod
@@ -36,10 +35,10 @@ class BasePublisher(object):
         /object/(id)/(action)/  custom action on instance
         '''
         @ensure_csrf_cookie
-        def view(request, *args, **kwargs):
+        def view(request, **kwargs):
             '''A wrapper view to instanciate and dispatch'''
-            self = cls(request, *args, **kwargs)
-            return self.dispatch(request, *args, **kwargs)
+            self = cls(request, **kwargs)
+            return self.dispatch(request, **kwargs)
 
         if api_name:
             name = '%s_%s' % (api_name, cls.api_name)
@@ -78,6 +77,7 @@ class BasePublisher(object):
     def dispatch(self, request, action='default', object_id=None, **kwargs):
         '''View dispatcher called by Django'''
         self.action = action
+        self.object_id = object_id
         method = request.method.lower()
         self.mode = prefix = 'object' if object_id else 'list'
         handler = getattr(self, '%s_%s_%s' % (prefix, method, action), None)
@@ -87,14 +87,12 @@ class BasePublisher(object):
         if handler is None:
             raise http.Http404
         # Do we need to pass any of this?
-        return self.execute(handler, request, action=action, object_id=object_id,
-            **kwargs
-        )
+        return self.execute(handler)
 
-    def execute(self, handler, *args, **kwargs):
+    def execute(self, handler, **kwargs):
         '''This allows wrapping calls to handler functions'''
         try:
-            return handler(*args, **kwargs)
+            return handler(self.request, action=self.action, object_id=self.object_id, **kwargs)
         except http.BaseHttpResponse as response:
             return response
 
