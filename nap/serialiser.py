@@ -2,7 +2,6 @@
 from . import fields
 from .meta import Meta
 
-from functools import partial
 
 class MetaSerialiser(type):
     def __new__(mcs, name, bases, attrs):
@@ -41,41 +40,31 @@ class Serialiser(object):
         don't change, we might as well construct the lists once right here.
         '''
         # Build list of deflate and inflate methods
-        self._deflaters = []
-        self._inflaters = []
-        def _setter(name, method, obj, data, *args, **kwargs):
-            '''Wrapper for deflate_FOO
-
-            Custom deflate handlers don't get passed their name, and don't
-            update the data dict themselves, so we need to wrap them.
-            '''
-            data[name] = method(obj=obj, data=data, *args, **kwargs)
-        def _getter(name, method, data, obj, *args, **kwargs):
-            '''Wrapper for inflate_FOO
-
-            Custom inflate handlers don't get passed their name, and don't
-            update the obj dict themselves, so we need to wrap them.
-            '''
-            obj[name] = method(data=data, obj=obj, *args, **kwargs)
+        self._field_deflaters = []
+        self._custom_deflaters = []
+        self._field_inflaters = []
+        self._custom_inflaters = []
 
         for name, field in self._fields.items():
-            self._deflaters.append(partial(field.deflate, name))
+            self._field_deflaters.append((name, field.deflate))
             method = getattr(self, 'deflate_%s' % name, None)
             if method is not None:
-                self._deflaters.append(partial(_setter, name, method))
+                self._custom_deflaters.append((name, method))
 
             if field.readonly:
                 continue
             method = getattr(self, 'inflate_%s' % name, None)
             if method:
-                self._inflaters.append(partial(_getter, name, method))
+                self._custom_inflaters.append((name, method))
             else:
-                self._inflaters.append(partial(field.inflate, name))
+                self._field_inflaters.append((name, field.inflate))
 
     def object_deflate(self, obj, **kwargs):
         data = {}
-        for method in self._deflaters:
-            method(obj=obj, data=data, **kwargs)
+        for name, method in self._field_deflaters:
+            method(name, obj=obj, data=data, **kwargs)
+        for name, method in self._custom_deflaters:
+            data[name] = method(obj=obj, data=data, **kwargs)
         return data
 
     def list_deflate(self, obj_list, **kwargs):
@@ -86,8 +75,10 @@ class Serialiser(object):
 
     def object_inflate(self, data, instance=None, **kwargs):
         obj = {}
-        for method in self._inflaters:
-            method(data=data, obj=obj, instance=instance, **kwargs)
+        for name, method in self._field_inflaters:
+            method(name, data=data, obj=obj, instance=instance, **kwargs)
+        for name, method in self._custom_inflaters:
+            obj[name] = method(data=data, obj=obj, instance=instance, **kwargs)
         return self.restore_object(obj, instance=instance, **kwargs)
 
     def list_inflate(self, data_list, **kwargs):
