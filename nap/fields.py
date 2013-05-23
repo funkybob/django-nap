@@ -8,11 +8,10 @@ class Field(object):
     type_class = None
 
     def __init__(self, attribute=None, default=None, readonly=False,
-        *args, **kwargs):
+        **kwargs):
         self.attribute = attribute
         self.default = default
         self.readonly = readonly
-        self.args = args
         self.kwargs = kwargs
 
     def _get_attrname(self, name):
@@ -76,8 +75,8 @@ class TimeField(Field):
 
 
 class SerialiserField(Field):
-    def __init__(self, *args, **kwargs):
-        super(SerialiserField, self).__init__(*args, **kwargs)
+    def __init__(self, **kwargs):
+        super(SerialiserField, self).__init__(**kwargs)
         self.serialiser = kwargs['serialiser']
 
     def reduce(self, value, **kwargs):
@@ -96,3 +95,9 @@ class ManySerialiserField(Field):
     def restore(self, value, **kwargs):
         return self.serialiser.list_inflate(value, **kwargs)
 
+
+class FileField(Field):
+    def reduce(self, value, **kwargs):
+        return value.url
+    def restore(self, value, **kwargs):
+        pass
