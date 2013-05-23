@@ -1,5 +1,6 @@
 v0.12:
 + Tune Serialisers to pre-build their deflater/inflater method lists, removing work from the inner loop
++ Remove *args where it's no helpful
 
 v0.11.6.1:
 - Renamed HttpResponseRedirect to HttpResponseRedirection to avoid clashing with Django http class
