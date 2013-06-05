@@ -1,3 +1,6 @@
+v0.12.1:
+- Flatten url patterns so object_default can match without trailing /
+
 v0.12:
 + Tune Serialisers to pre-build their deflater/inflater method lists, removing work from the inner loop
 + Remove *args where it's no helpful
