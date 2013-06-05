@@ -47,30 +47,29 @@ class BasePublisher(object):
             name = cls.api_name
 
         return [
-            url(r'^object/(?P<object_id>[-\w]+)/',
-                include(patterns('',
-                    url(r'^(?P<action>\w+)/(?P<argument>.+?)/?$', view,
-                        name='%s_object_action_arg' % name
-                    ),
-                    url(r'^(?P<action>\w+)/?$', view,
-                        name='%s_object_action' % name,
-                    ),
-                    url(r'^$', view,
-                        name='%s_object_default' % name,
-                    ),
-                ))
+            url(r'^object/(?P<object_id>[-\w]+)/(?P<action>\w+)/(?P<argument>.+?)/?$',
+                view,
+                name='%s_object_action_arg' % name
+            ),
+            url(r'^object/(?P<object_id>[-\w]+)/(?P<action>\w+)/?$',
+                view,
+                name='%s_object_action' % name
+            ),
+            url(r'^object/(?P<object_id>[-\w]+)/?$',
+                view,
+                name='%s_object_default' % name
             ),
             url(r'^(?P<action>\w+)/(?P<argument>.+?)/?$',
                 view,
-                name='%s_list_action_arg' % name,
+                name='%s_list_action_arg' % name
             ),
             url(r'^(?P<action>\w+)/?$',
                 view,
-                name='%s_list_action' % name,
+                name='%s_list_action' % name
             ),
             url(r'^$',
                 view,
-                name='%s_list_default' % name,
+                name='%s_list_default' % name
             ),
         ]
 
