@@ -1,5 +1,6 @@
 v0.12.1:
 - Flatten url patterns so object_default can match without trailing /
+- Fix class returned in permit decorator [Thanks emilkjer]
 
 v0.12:
 + Tune Serialisers to pre-build their deflater/inflater method lists, removing work from the inner loop
