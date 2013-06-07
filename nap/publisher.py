@@ -37,7 +37,7 @@ class BasePublisher(object):
         '''
         @ensure_csrf_cookie
         def view(request, *args, **kwargs):
-            '''A wrapper view to instanciate and dispatch'''
+            '''A wrapper view to instantiate and dispatch'''
             self = cls(request, *args, **kwargs)
             return self.dispatch(request, **kwargs)
 
