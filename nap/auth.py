@@ -10,7 +10,7 @@ def permit(test_func):
         def _wrapped_view(self, *args, **kwargs):
             if test_func(self, *args, **kwargs):
                 return view_func(self, *args, **kwargs)
-            return http.HttpResponseForbidden()
+            return http.Forbidden()
         return _wrapped_view
     return decorator
 
