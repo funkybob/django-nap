@@ -23,6 +23,7 @@ class MetaModelSerialiser(MetaSerialiser):
 
         include = getattr(new_class._meta, 'fields', [])
         exclude = getattr(new_class._meta, 'exclude', [])
+        read_only = getattr(new_class._meta, 'read_only_fields', [])
 
         current_fields = new_class._fields.keys()
 
@@ -43,6 +44,7 @@ class MetaModelSerialiser(MetaSerialiser):
 
                 kwargs = {
                     'default': f.default,
+                    'readonly': f.name in read_only,
                 }
 
                 field_class = FIELD_MAP.get(f.__class__.__name__, fields.Field)
