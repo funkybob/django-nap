@@ -167,6 +167,11 @@ def modelserialiser_factory(name, model, **kwargs):
     except KeyError:
         pass
 
+    try:
+        attrs['read_only'] = kwargs['read_only']
+    except KeyError:
+        pass
+
     meta = type('Meta', (object,), attrs)
     return type(ModelSerialiser)(name, (ModelSerialiser,), {'Meta': meta})
 
