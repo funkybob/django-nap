@@ -1,3 +1,6 @@
+v0.12.2:
++ Support read_only in modelserialiser_factory
+
 v0.12.1:
 - Flatten url patterns so object_default can match without trailing /
 - Fix class returned in permit decorator [Thanks emilkjer]
