@@ -1,5 +1,8 @@
 
-import json
+try:
+    import ujson as json
+except ImportError:
+    import json
 
 
 class Engine(object):
