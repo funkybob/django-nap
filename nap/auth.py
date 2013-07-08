@@ -1,7 +1,7 @@
-
 # Authentication and Authorisation
 from functools import wraps
 from . import http
+
 
 def permit(test_func):
     '''Decorate a handler to control access'''
@@ -14,10 +14,15 @@ def permit(test_func):
         return _wrapped_view
     return decorator
 
-permit_logged_in = permit(lambda self, request, *args, **kwargs: request.user.is_authenticated())
-permit_staff = permit(lambda self, request, *args, **kwargs: request.user.is_staff)
+permit_logged_in = permit(
+    lambda self, request, *args, **kwargs: request.user.is_authenticated())
+
+permit_staff = permit(
+    lambda self, request, *args, **kwargs: request.user.is_staff)
+
 
 def permit_groups(*groups):
     def in_groups(request, *args):
-        return requets.user.groups.filter(name__in=args).exists()
-    return permit(lambda self, request, *args, **kwargs: in_groups(request, *groups))
+        return request.user.groups.filter(name__in=args).exists()
+    return permit(
+        lambda self, request, *args, **kwargs: in_groups(request, *groups))
