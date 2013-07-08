@@ -11,11 +11,11 @@ I wanted to take the solid serialising pattern from TastyPie, with the separatio
 Benefits
 ========
 
-Modular::
+1. Modular
 
     By having the Serialiser as a separate class from the Publisher, it's simple to have different 'shapes' of data handled for different views.  You can also use the Serialisers elsewhere in your code.
 
-Simple::
+1. Simple
 
     If you want an API that provides every feature ever, go look at TastyPie.  But if you want something simple and fast, this is your tool.
 
@@ -32,10 +32,10 @@ Publisher
 
 A publisher gives you access to the resource.  Firstly, it uses the url patterns as follows:
 
-    r'^object/(?P<object_id>[-\w]+)/(?P<action>\w+)/(?P<argument>.+)/?$'
+    r'^object/(?P<object_id>[-\w]+)/(?P<action>\w+)/(?P<argument>.+?)/?$'
     r'^object/(?P<object_id>[-\w]+)/(?P<action>\w+)/?$'
     r'^object/(?P<object_id>[-\w]+)/?$'
-    r'^(?P<action>\w+)/(?P<argument>.+)/?$'
+    r'^(?P<action>\w+)/(?P<argument>.+?)/?$'
     r'^(?P<action>\w+)/?$'
     r'^$'
 
