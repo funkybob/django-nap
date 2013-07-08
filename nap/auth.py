@@ -1,3 +1,4 @@
+
 # Authentication and Authorisation
 from functools import wraps
 from . import http
@@ -15,10 +16,12 @@ def permit(test_func):
     return decorator
 
 permit_logged_in = permit(
-    lambda self, request, *args, **kwargs: request.user.is_authenticated())
+    lambda self, request, *args, **kwargs: request.user.is_authenticated()
+)
 
 permit_staff = permit(
-    lambda self, request, *args, **kwargs: request.user.is_staff)
+    lambda self, request, *args, **kwargs: request.user.is_staff
+)
 
 
 def permit_groups(*groups):
