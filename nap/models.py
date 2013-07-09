@@ -35,7 +35,7 @@ class MetaModelSerialiser(MetaSerialiser):
                     continue
 
                 # If we have a whitelist, and it's not in it, skip
-                if include and not f.name in include:
+                if not f.name in include:
                     continue
 
                 # If it's blacklisted, skip
