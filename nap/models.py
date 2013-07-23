@@ -176,14 +176,16 @@ def modelserialiser_factory(name, model, **kwargs):
     return type(ModelSerialiser)(name, (ModelSerialiser,), {'Meta': meta})
 
 class ModelSerialiserField(fields.SerialiserField):
-    def __init__(self, serialiser=None, model=None, *args, **kwargs):
-        if serialiser is None:
-            serialiser = modelserialiser_factory(model.__name__ + 'Serialiser', model, **kwargs)()
-        super(ModelSerialiserField, self).__init__(serialiser, *args, **kwargs)
+    def __init__(self, **kwargs):
+        if not 'serialiser' in kwargs:
+            model = kwargs.pop('model')
+            kwargs['serialiser'] = modelserialiser_factory(model.__name__ + 'Serialiser', model, **kwargs)()
+        super(ModelSerialiserField, self).__init__(**kwargs)
 
 class ModelManySerialiserField(fields.ManySerialiserField):
     def __init__(self, serialiser=None, model=None, *args, **kwargs):
-        if serialiser is None:
-            serialiser = modelserialiser_factory(model.__name__ + 'Serialiser', model, **kwargs)()
-        super(ModelManySerialiserField, self).__init__(serialiser, *args, **kwargs)
+        if not serialiser in kwargs:
+            model = kwargs.pop('model')
+            kwargs['serialiser'] = modelserialiser_factory(model.__name__ + 'Serialiser', model, **kwargs)()
+        super(ModelManySerialiserField, self).__init__(**kwargs)
 
