@@ -183,8 +183,8 @@ class ModelSerialiserField(fields.SerialiserField):
         super(ModelSerialiserField, self).__init__(**kwargs)
 
 class ModelManySerialiserField(fields.ManySerialiserField):
-    def __init__(self, serialiser=None, model=None, *args, **kwargs):
-        if not serialiser in kwargs:
+    def __init__(self, **kwargs):
+        if not 'serialiser' in kwargs:
             model = kwargs.pop('model')
             kwargs['serialiser'] = modelserialiser_factory(model.__name__ + 'Serialiser', model, **kwargs)()
         super(ModelManySerialiserField, self).__init__(**kwargs)
