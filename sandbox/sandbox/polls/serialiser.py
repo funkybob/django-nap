@@ -16,7 +16,7 @@ class PollSerialiser(serialiser.Serialiser):
 
     question = fields.Field()
     published = fields.DateTimeField('pub_date')
-    choices = fields.ManySerialiserField(serialiser=ChoiceSerialiser())
+    choices = fields.ManySerialiserField(attribute='choice_set.all', serialiser=ChoiceSerialiser())
 
 
 class PollPublisher(publisher.Publisher):
