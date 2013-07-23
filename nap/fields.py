@@ -87,8 +87,8 @@ class TimeField(Field):
 
 class SerialiserField(Field):
 
-    def __init__(self, **kwargs):
-        super(SerialiserField, self).__init__(**kwargs)
+    def __init__(self, *args, **kwargs):
+        super(SerialiserField, self).__init__(*args, **kwargs)
         self.serialiser = kwargs['serialiser']
 
     def reduce(self, value, **kwargs):
@@ -100,8 +100,8 @@ class SerialiserField(Field):
 
 class ManySerialiserField(Field):
 
-    def __init__(self, **kwargs):
-        super(ManySerialiserField, self).__init__(**kwargs)
+    def __init__(self, *args, **kwargs):
+        super(ManySerialiserField, self).__init__(*args, **kwargs)
         self.serialiser = kwargs['serialiser']
 
     def reduce(self, value, **kwargs):
