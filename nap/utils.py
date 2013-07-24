@@ -1,5 +1,4 @@
 from __future__ import unicode_literals
-from collections import Callable
 
 def digattr(obj, attr, default=None):
     '''Perform template-style dotted lookup'''
@@ -15,7 +14,7 @@ def digattr(obj, attr, default=None):
                     obj = obj[int(step)]
                 except (IndexError, ValueError, KeyError, TypeError):
                     return default
-        if isinstance(obj,Callable):
+        if callable(obj):
             obj = obj()
     return obj
 

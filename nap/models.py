@@ -28,7 +28,7 @@ class MetaModelSerialiser(MetaSerialiser):
         exclude = getattr(new_class._meta, 'exclude', [])
         read_only = getattr(new_class._meta, 'read_only_fields', [])
 
-        current_fields = list(new_class._fields.keys())
+        current_fields = new_class._fields.keys()
 
         try:
             model = new_class._meta.model
@@ -62,7 +62,7 @@ class ModelSerialiser(with_metaclass(MetaModelSerialiser,Serialiser)):
 
     def restore_object(self, obj, instance, **kwargs):
         if instance:
-            for key, val in obj.items():
+            for key, val in list(obj.items()):
                 setattr(instance, key, val)
         else:
             instance = self._meta.model(**obj)
