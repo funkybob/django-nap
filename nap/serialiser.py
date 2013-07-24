@@ -19,7 +19,7 @@ class MetaSerialiser(type):
             pass
 
         declared_fields = {}
-        for field_name, field in list(attrs.items()):
+        for field_name, field in attrs.items():
             if isinstance(field, fields.Field):
                 declared_fields[field_name] = attrs.pop(field_name)
 
@@ -44,7 +44,7 @@ class Serialiser(with_metaclass(MetaSerialiser,object)):
         self._field_inflaters = []
         self._custom_inflaters = []
 
-        for name, field in list(self._fields.items()):
+        for name, field in self._fields.items():
             self._field_deflaters.append((name, field.deflate))
             method = getattr(self, 'deflate_%s' % name, None)
             if method is not None:
