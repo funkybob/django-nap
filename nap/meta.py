@@ -10,4 +10,4 @@ class Meta(object):
             for name in dir(meta)
             if not name[0] == '_'
         )
-        return object.__new__(type('Meta', (cls,), attrs))
+        return object.__new__(type(str('Meta'), (cls,), attrs))
