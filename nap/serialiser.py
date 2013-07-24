@@ -1,7 +1,8 @@
 
 from . import fields
 from .meta import Meta
-
+from __future__ import unicode_literals
+from six import with_metaclass
 
 class MetaSerialiser(type):
     def __new__(mcs, name, bases, attrs):
@@ -18,7 +19,7 @@ class MetaSerialiser(type):
             pass
 
         declared_fields = {}
-        for field_name, field in attrs.items():
+        for field_name, field in list(attrs.items()):
             if isinstance(field, fields.Field):
                 declared_fields[field_name] = attrs.pop(field_name)
 
@@ -31,12 +32,10 @@ class MetaSerialiser(type):
         return new_class
 
 
-class Serialiser(object):
-    __metaclass__ = MetaSerialiser
-
+class Serialiser(with_metaclass(MetaSerialiser,object)):
     def __init__(self):
         '''
-        Since the list of methods to call to deflate/inflate an object 
+        Since the list of methods to call to deflate/inflate an object
         don't change, we might as well construct the lists once right here.
         '''
         # Build list of deflate and inflate methods
@@ -45,7 +44,7 @@ class Serialiser(object):
         self._field_inflaters = []
         self._custom_inflaters = []
 
-        for name, field in self._fields.items():
+        for name, field in list(self._fields.items()):
             self._field_deflaters.append((name, field.deflate))
             method = getattr(self, 'deflate_%s' % name, None)
             if method is not None:

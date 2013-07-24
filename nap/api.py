@@ -1,6 +1,7 @@
 
 from django.conf.urls import url, include
 from django.core.urlresolvers import reverse
+from __future__ import unicode_literals
 
 from . import http
 
@@ -16,7 +17,7 @@ class Api(object):
             url(r'^$', self.index),
         ] + [
             url(r'^%s/' % name, include(child.patterns(self.name)))
-            for name, child in self.children.items()
+            for name, child in list(self.children.items())
         ]
         if flat:
             return urlpatterns
@@ -31,7 +32,7 @@ class Api(object):
                 'path': reverse('%s_%s_list_default' % (self.name, name), kwargs=kwargs),
                 'methods': child.index(),
             })
-            for name, child in self.children.items()
+            for name, child in list(self.children.items())
         ))
 
     def register(self, child, name=None):
@@ -79,6 +80,6 @@ def autodiscover():
 
 def patterns(flat=False):
     urlpatterns = []
-    for api in APIS.values():
+    for api in list(APIS.values()):
         urlpatterns.extend(api.patterns(flat=flat))
     return urlpatterns

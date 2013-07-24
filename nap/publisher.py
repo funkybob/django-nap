@@ -5,6 +5,9 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import ensure_csrf_cookie
 
+from __future__ import unicode_literals
+import collections
+
 from collections import defaultdict
 
 from . import http
@@ -124,7 +127,7 @@ class BasePublisher(object):
             'object': object_handlers,
         }
 
-            
+
 class Publisher(engine.JsonEngine, BasePublisher):
     '''Default API-style publisher'''
     LIMIT_PARAM = 'limit'

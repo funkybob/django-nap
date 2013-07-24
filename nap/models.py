@@ -4,6 +4,9 @@ from .meta import Meta
 from .serialiser import MetaSerialiser, Serialiser
 from .publisher import Publisher
 
+from __future__ import unicode_literals
+from six import with_metaclass
+
 from django.shortcuts import get_object_or_404
 
 FIELD_MAP = {}
@@ -25,7 +28,7 @@ class MetaModelSerialiser(MetaSerialiser):
         exclude = getattr(new_class._meta, 'exclude', [])
         read_only = getattr(new_class._meta, 'read_only_fields', [])
 
-        current_fields = new_class._fields.keys()
+        current_fields = list(new_class._fields.keys())
 
         try:
             model = new_class._meta.model
@@ -55,12 +58,11 @@ class MetaModelSerialiser(MetaSerialiser):
         return new_class
 
 
-class ModelSerialiser(Serialiser):
-    __metaclass__ = MetaModelSerialiser
+class ModelSerialiser(with_metaclass(MetaModelSerialiser,Serialiser)):
 
     def restore_object(self, obj, instance, **kwargs):
         if instance:
-            for key, val in obj.items():
+            for key, val in list(obj.items()):
                 setattr(instance, key, val)
         else:
             instance = self._meta.model(**obj)
