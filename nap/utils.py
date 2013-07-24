@@ -1,4 +1,4 @@
-
+from __future__ import unicode_literals
 
 def digattr(obj, attr, default=None):
     '''Perform template-style dotted lookup'''
