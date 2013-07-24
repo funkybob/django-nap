@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 
 try:
     import ujson as json
@@ -11,7 +12,7 @@ class Engine(object):
     def dumps(self, data): # pragma: no cover
         '''How to serialiser an object'''
         raise NotImplementedError
-    
+
     def loads(self, data): # pragma: no cover
         '''How to deserialise a string'''
         raise NotImplementedError

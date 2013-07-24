@@ -1,11 +1,13 @@
+from __future__ import unicode_literals
 
 from django.core.cache import get_cache
+from six import string_types
 
 class CachedSerialiser(object):
     '''Mixin to cache per-object serialised data'''
     def __init__(self, *args, **kwargs):
         cache = getattr(self._meta, 'cache', 'default')
-        if isinstance(cache, basestring):
+        if isinstance(cache, string_types):
             self._meta.cache = get_cache(cache)
 
     def object_deflate(self, obj, **kwargs):

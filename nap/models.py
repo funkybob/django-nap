@@ -1,8 +1,11 @@
+from __future__ import unicode_literals
 
 from . import fields
 from .meta import Meta
 from .serialiser import MetaSerialiser, Serialiser
 from .publisher import Publisher
+
+from six import with_metaclass
 
 from django.shortcuts import get_object_or_404
 
@@ -55,8 +58,7 @@ class MetaModelSerialiser(MetaSerialiser):
         return new_class
 
 
-class ModelSerialiser(Serialiser):
-    __metaclass__ = MetaModelSerialiser
+class ModelSerialiser(with_metaclass(MetaModelSerialiser,Serialiser)):
 
     def restore_object(self, obj, instance, **kwargs):
         if instance:
