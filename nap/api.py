@@ -17,7 +17,7 @@ class Api(object):
             url(r'^$', self.index),
         ] + [
             url(r'^%s/' % name, include(child.patterns(self.name)))
-            for name, child in list(self.children.items())
+            for name, child in self.children.items()
         ]
         if flat:
             return urlpatterns
@@ -32,7 +32,7 @@ class Api(object):
                 'path': reverse('%s_%s_list_default' % (self.name, name), kwargs=kwargs),
                 'methods': child.index(),
             })
-            for name, child in list(self.children.items())
+            for name, child in self.children.items()
         ))
 
     def register(self, child, name=None):

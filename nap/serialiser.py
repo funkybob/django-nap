@@ -44,7 +44,7 @@ class Serialiser(with_metaclass(MetaSerialiser,object)):
         self._field_inflaters = []
         self._custom_inflaters = []
 
-        for name, field in list(self._fields.items()):
+        for name, field in self._fields.items():
             self._field_deflaters.append((name, field.deflate))
             method = getattr(self, 'deflate_%s' % name, None)
             if method is not None:
@@ -60,9 +60,9 @@ class Serialiser(with_metaclass(MetaSerialiser,object)):
 
     def object_deflate(self, obj, **kwargs):
         data = {}
-        for name, method in list(self._field_deflaters):
+        for name, method in self._field_deflaters:
             method(name, obj=obj, data=data, **kwargs)
-        for name, method in list(self._custom_deflaters):
+        for name, method in self._custom_deflaters:
             data[name] = method(obj=obj, data=data, **kwargs)
         return data
 

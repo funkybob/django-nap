@@ -62,7 +62,7 @@ class ModelSerialiser(with_metaclass(MetaModelSerialiser,Serialiser)):
 
     def restore_object(self, obj, instance, **kwargs):
         if instance:
-            for key, val in list(obj.items()):
+            for key, val in obj.items():
                 setattr(instance, key, val)
         else:
             instance = self._meta.model(**obj)
