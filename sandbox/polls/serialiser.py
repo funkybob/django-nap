@@ -5,10 +5,14 @@ from .models import Choice, Poll
 
 
 class ChoiceSerialiser(models.ModelSerialiser):
+    poll = models.ModelSerialiserField(model=Poll, exclude=('choices',))
 
     class Meta:
         model = Choice
-        exclude = ('poll,')
+
+class ChoicePublisher(models.ModelPublisher):
+    serialiser = ChoiceSerialiser()
+    api_name = 'choice'
 
 
 class PollSerialiser(serialiser.Serialiser):
@@ -16,7 +20,7 @@ class PollSerialiser(serialiser.Serialiser):
 
     question = fields.Field()
     published = fields.DateTimeField('pub_date')
-    choices = fields.ManySerialiserField(attribute='choice_set.all', serialiser=ChoiceSerialiser())
+    choices = models.ModelManySerialiserField('choice_set.all', model=Choice, exclude=('poll',))
 
 
 class PollPublisher(publisher.Publisher):
@@ -28,3 +32,4 @@ class PollPublisher(publisher.Publisher):
 
 
 api.register('api', PollPublisher)
+api.register('api', ChoicePublisher)
