@@ -1,9 +1,9 @@
+from __future__ import unicode_literals
 
 '''Add some missing HttpResponse sub-classes'''
 from django.core.exceptions import SuspiciousOperation
 from django.http import HttpResponse, Http404
 from django.utils.encoding import iri_to_uri
-from __future__ import unicode_literals
 
 try:
   from urlparse import urlparse

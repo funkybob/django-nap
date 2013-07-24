@@ -1,7 +1,7 @@
+from __future__ import unicode_literals
 
 from . import fields
 from .meta import Meta
-from __future__ import unicode_literals
 from six import with_metaclass
 
 class MetaSerialiser(type):

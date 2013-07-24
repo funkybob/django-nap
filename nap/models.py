@@ -1,10 +1,10 @@
+from __future__ import unicode_literals
 
 from . import fields
 from .meta import Meta
 from .serialiser import MetaSerialiser, Serialiser
 from .publisher import Publisher
 
-from __future__ import unicode_literals
 from six import with_metaclass
 
 from django.shortcuts import get_object_or_404

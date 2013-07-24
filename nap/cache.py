@@ -1,6 +1,6 @@
+from __future__ import unicode_literals
 
 from django.core.cache import get_cache
-from __future__ import unicode_literals
 from six import string_types
 
 class CachedSerialiser(object):
