@@ -4,28 +4,29 @@ from . import fields
 from .meta import Meta
 from six import with_metaclass
 
+import inspect
+
 class MetaSerialiser(type):
     def __new__(mcs, name, bases, attrs):
-        # Inherited fields
         attrs['_fields'] = {}
 
-        # Inherit from parents
-        try:
-            for base in bases[::-1]:
-                parent_fields = getattr(base, '_fields', {})
-                attrs['_fields'].update(parent_fields)
-        except NameError:
-            # Can't do this for Serialiser
-            pass
-
+        # Field declared on this new class
         declared_fields = {}
         for field_name, field in list(attrs.items()):
             if isinstance(field, fields.Field):
                 declared_fields[field_name] = attrs.pop(field_name)
 
-        attrs['_fields'].update(declared_fields)
-
         new_class = super(MetaSerialiser, mcs).__new__(mcs, name, bases, attrs)
+
+        # Find fields declared on parents
+        base_fields = {}
+        for base in reversed(inspect.getmro(new_class)):
+            base_fields.update(getattr(base, '_fields', {}))
+
+        base_fields.update(declared_fields)
+        new_class._fields = base_fields
+
+        # Handle class Meta
         meta = getattr(new_class, 'Meta', None)
         new_class._meta = Meta(meta)
 
