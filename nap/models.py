@@ -30,8 +30,12 @@ class MetaModelSerialiser(MetaSerialiser):
 
         current_fields = new_class._fields.keys()
 
+        model_fields = {}
         try:
             model = new_class._meta.model
+        except AttributeError as err:
+            pass
+        else:
             for f in model._meta.fields:
                 # If we've got one, skip...
                 if f.name in current_fields:
@@ -51,9 +55,9 @@ class MetaModelSerialiser(MetaSerialiser):
                 }
 
                 field_class = FIELD_MAP.get(f.__class__.__name__, fields.Field)
-                new_class._fields[f.name] = field_class(**kwargs)
-        except AttributeError:
-            pass
+                model_fields[f.name ] = field_class(**kwargs)
+
+        new_class._fields.update(model_fields)
 
         return new_class
 
