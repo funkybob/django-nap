@@ -2,6 +2,7 @@ v0.12.3:
 + Support ujson library
 - Fix argument handling in Model*SerialiserFields
 + Added support for Py3.3 [thanks ioneyed]
++ Overhauled the MetaSerialiser class
 
 v0.12.2:
 + Support read_only in modelserialiser_factory
