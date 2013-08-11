@@ -1,9 +1,6 @@
 from __future__ import unicode_literals
 
-try:
-    import ujson as json
-except ImportError:
-    import json
+import json
 
 
 class Engine(object):
