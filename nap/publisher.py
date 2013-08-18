@@ -6,7 +6,6 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import ensure_csrf_cookie
 
-import collections
 from collections import defaultdict
 
 from . import http
