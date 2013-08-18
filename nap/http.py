@@ -173,7 +173,7 @@ class NotFound(HttpResponseError):
 
 class MethodNotAllowed(HttpResponseError):
     def __init__(self, permitted_methods, *args, **kwargs):
-        super(HttpResponseNotAllowed, self).__init__(*args, **kwargs)
+        super(MethodNotAllowed, self).__init__(*args, **kwargs)
         self['Allow'] = ', '.join(permitted_methods)
 
     status_code = STATUS.METHOD_NOT_ALLOWED
