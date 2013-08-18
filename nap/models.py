@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 
-from . import fields
-from .meta import Meta
+from . import fields, http
 from .serialiser import MetaSerialiser, Serialiser
 from .publisher import Publisher
 
@@ -33,7 +32,7 @@ class MetaModelSerialiser(MetaSerialiser):
         model_fields = {}
         try:
             model = new_class._meta.model
-        except AttributeError as err:
+        except AttributeError:
             pass
         else:
             for f in model._meta.fields:
