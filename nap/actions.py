@@ -1,5 +1,8 @@
 
+from django.http import StreamingHttpResponse
 from django.utils.encoding import force_text
+
+from .models import modelserialiser_factory
 
 class CSV(object):
     '''
@@ -70,9 +73,9 @@ class ExportCsv(object):
             )
         else:
             ser_class = self.serialiser
-        csv = CSV(fields=serialiser._fields.keys())
 
         def inner(ser):
+            csv = CSV(fields=ser._fields.keys())
             yield csv.write_headers()
             for obj in queryset:
                 data = { 
