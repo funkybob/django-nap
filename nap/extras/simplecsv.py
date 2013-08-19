@@ -74,7 +74,7 @@ class Reader(object):
     def __init__(self, source, **opts):
         self.source = iter(source)
         self.__dict__.update(opts)
-        self.field = re.compile(r'^(?P<quote>:%(QUOTE)s?)([^%(SEP)s]+)(?P=quote)%(SEP)s?' % {
+        self.field = re.compile(r'^(?P<quote>%(QUOTE)s?)([^%(SEP)s]+)(?P=quote)%(SEP)s?' % {
             'QUOTE': self.QUOTE,
             'SEP': self.SEP,
             'ESCQ': self.ESCQUOTE,
