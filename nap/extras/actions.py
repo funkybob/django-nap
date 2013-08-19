@@ -34,7 +34,15 @@ class ExportCsv(object):
                 yield csv.write_dict(data)
 
         response = StreamingHttpResponse(inner(ser_class()), content_type='text/csv')
-        filename = admin.csv_
+        filename = self.opts.get('filename', 'export_{classname}.csv')
+        if callable(filename):
+            filename = filename(admin)
+        else:
+            filename = filename.format(
+                classname=admin.__class__.__name__,
+                model=admin.model._meta.module_name,
+                app_label=admin.model._meta.app_label,
+            )
         response['Content-Disposition'] = 'attachment; filename=%s' % filename
 
         return response
