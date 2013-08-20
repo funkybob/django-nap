@@ -7,6 +7,14 @@ from .simplecsv import Writer
 
 
 class ExportCsv(object):
+    '''
+    A factory class for Admin Actions to export a model as CSV.
+
+    actions = [ ExportCsv(myserialiser, 'Export as CSV'), ]
+
+    Optionally, you can pass kwargs to be passed to modelserialiser_factory to
+    create a ModelSerialiser.
+    '''
     def __init__(self, serialiser=None, label=None, **opts):
         self.serialiser = serialiser
         self.opts = opts
