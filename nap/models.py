@@ -163,19 +163,11 @@ def modelserialiser_factory(name, model, **kwargs):
     attrs = {
         'model': model,
     }
-    try:
-        attrs['fields'] = kwargs['fields']
-    except KeyError:
-        pass
-    try:
-        attrs['exclude'] = kwargs['exclude']
-    except KeyError:
-        pass
-
-    try:
-        attrs['read_only'] = kwargs['read_only']
-    except KeyError:
-        pass
+    for key in ['fields', 'exclude', 'read_only']:
+        try:
+            attrs[key] = kwargs[key]
+        except KeyError:
+            pass
 
     meta = type('Meta', (object,), attrs)
     return type(ModelSerialiser)(name, (ModelSerialiser,), {'Meta': meta})
