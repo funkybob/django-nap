@@ -5,6 +5,7 @@ from .utils import digattr
 from decimal import Decimal
 from datetime import datetime
 
+from django.utils.encoding import force_text
 
 class Field(object):
     type_class = None
@@ -120,3 +121,19 @@ class FileField(Field):
 
     def restore(self, value, **kwargs):
         pass
+
+
+class StringField(Field):
+    '''
+    Like Field, but always casts value to a text type.
+
+    Since it can't know what type to restore to, it is set readonly by
+    default.  If you want it to be writable, you must clear this flag and
+    provide a custom inflater.
+    '''
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault('readonly', True)
+        super(StringField, self).__init__(*args, **kwargs)
+
+    def reduce(self, value, **kwargs):
+        return force_text(value)
