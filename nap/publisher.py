@@ -7,9 +7,9 @@ from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 from collections import defaultdict
+import json
 
 from . import http
-from . import engine
 
 def accepts(*verbs):
     '''Annotate a method with the HTTP verbs it accepts, and enforce it.'''
@@ -126,11 +126,25 @@ class BasePublisher(object):
         }
 
 
-class Publisher(engine.JsonEngine, BasePublisher):
+class Publisher(BasePublisher):
     '''Default API-style publisher'''
     LIMIT_PARAM = 'limit'
     OFFSET_PARAM = 'offset'
     PAGE_PARAM = 'page'
+
+    # De/Serialising
+    # Which content types will we attempt to parse?
+    # The first in the list will be used for responses.
+    CONTENT_TYPES = ['application/json', 'text/json']
+
+    def dumps(self, data):
+        '''How to parse content that matches our content types list.'''
+        return json.dumps(data)
+    def loads(self, data):
+        '''Serialise data for responses.'''
+        return json.loads(data)
+
+    # Hooks for controlling which serialiser to use
 
     def get_serialiser(self):
         '''Return the serialiser instance to use for this request'''
@@ -142,6 +156,8 @@ class Publisher(engine.JsonEngine, BasePublisher):
             'publisher': self,
         }
 
+    # Object access
+
     def get_object_list(self): # pragma: no cover
         '''Return the object list appropriate for this request'''
         raise NotImplementedError
@@ -149,6 +165,8 @@ class Publisher(engine.JsonEngine, BasePublisher):
     def get_object(self, object_id): # pragma: no cover
         '''Return the object for the given id'''
         raise NotImplementedError
+
+    # Pagination
 
     def get_page(self, object_list):
         '''Return a paginated object list, along with some metadata'''
@@ -196,6 +214,8 @@ class Publisher(engine.JsonEngine, BasePublisher):
             'objects': page.object_list,
         }
 
+    # Get the parsed request data
+
     def get_request_data(self, default=None):
         '''Retrieve data from request'''
         ctype = self.request.META.get('CONTENT_TYPE', '').split(';')[0].strip()
@@ -207,6 +227,14 @@ class Publisher(engine.JsonEngine, BasePublisher):
             return self.request.GET
         return self.request.POST
 
+    # Response helpers
+
+    def create_response(self, content, **response_kwargs):
+        '''Return a response, serialising the content'''
+        response_class = response_kwargs.pop('response_class', http.HttpResponse)
+        response_kwargs.setdefault('content_type', self.CONTENT_TYPES[0])
+        return response_class(self.dumps(content), **response_kwargs)
+
     def render_single_object(self, obj, serialiser=None, **response_kwargs):
         '''Helper to return a single object instance serialised.'''
         if serialiser is None:
@@ -217,11 +245,7 @@ class Publisher(engine.JsonEngine, BasePublisher):
         data = serialiser.object_deflate(obj, **serialiser_kwargs)
         return self.create_response(data, **response_kwargs)
 
-    def create_response(self, content, **response_kwargs):
-        '''Return a response, serialising the content'''
-        response_class = response_kwargs.pop('response_class', http.HttpResponse)
-        response_kwargs.setdefault('content_type', self.CONTENT_TYPES[0])
-        return response_class(self.dumps(content), **response_kwargs)
+    # Default handlers
 
     def list_get_default(self, request, **kwargs):
         object_list = self.get_object_list()
