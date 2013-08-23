@@ -3,6 +3,7 @@ v0.12.4:
 - Fixed filename generation in csv export action
 - Fixed unicode/str issues with type() calls
 + Merged engine class directly into Publisher
++ Added fields.StringField
 
 v0.12.3:
 - Fix argument handling in Model*SerialiserFields
