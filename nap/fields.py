@@ -5,7 +5,11 @@ from .utils import digattr
 from decimal import Decimal
 from datetime import datetime
 
-from django.utils.encoding import force_text
+try:
+    from django.utils.encoding import force_text
+except ImportError:
+    # For Django1.4
+    from django.utils.encoding import force_unicode as force_text
 
 class Field(object):
     type_class = None
