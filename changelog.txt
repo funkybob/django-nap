@@ -1,5 +1,6 @@
 v0.12.5:
 + Allow disabling of API introspection index
+- Restored Django 1.4 compatibility
 
 v0.12.4:
 + Split simplecsv and csv export into extras module
