@@ -8,9 +8,10 @@ from . import http
 
 class Api(object):
     '''Helper class for registering many Publishers in one URL namespace'''
-    def __init__(self, name):
+    def __init__(self, name, show_index=True):
         self.name = name
         self.children = {}
+        self.show_index = show_index
 
     def patterns(self, flat=False):
         urlpatterns = [
@@ -27,6 +28,8 @@ class Api(object):
 
     def index(self, request, *args, **kwargs):
         '''Return a dict of publisher name: url'''
+        if not self.show_index:
+            raise http.NotFound()
         return http.JsonResponse(dict(
             (name, {
                 'path': reverse('%s_%s_list_default' % (self.name, name), kwargs=kwargs),

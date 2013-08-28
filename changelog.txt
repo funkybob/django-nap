@@ -1,3 +1,6 @@
+v0.12.5:
++ Allow disabling of API introspection index
+
 v0.12.4:
 + Split simplecsv and csv export into extras module
 - Fixed filename generation in csv export action
