@@ -8,7 +8,7 @@ from . import http
 
 class Api(object):
     '''Helper class for registering many Publishers in one URL namespace'''
-    def __init__(self, name, show_index=False):
+    def __init__(self, name, show_index=True):
         self.name = name
         self.children = {}
         self.show_index = show_index
@@ -79,8 +79,6 @@ def autodiscover():
             # attempting to import it, otherwise we want it to bubble up.
             if module_has_submodule(mod, 'serialiser'):
                 raise
-            import traceback
-            print traceback.format_exc()
 
 
 def patterns(flat=False):
