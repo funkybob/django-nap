@@ -37,6 +37,7 @@ STATUS_CODES = (
     (305, 'Use Proxy'),
     #306 Deprecated
     (307, 'Temporary Redirect'),
+    (308, 'Permanent Redirect'),
 
     (400, 'Bad Request'),
     (401, 'Unauthorized'),
@@ -147,6 +148,9 @@ class UseProxy(LocationHeaderMixin, HttpResponseRedirection):
 
 class TemporaryRedirect(HttpResponseRedirection):
     status_code = STATUS.TEMPORARY_REDIRECT
+
+class PermanentRedirect(HttpResponseRedirection):
+    status_code = STATUS.PERMANENT_REDIRECT
 
 #
 # Client Error Responses (4xx)
