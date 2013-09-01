@@ -1,6 +1,4 @@
 
-import re
-
 try:
     import chardet
 except ImportError:
@@ -74,11 +72,6 @@ class Reader(object):
     def __init__(self, source, **opts):
         self.source = iter(source)
         self.__dict__.update(opts)
-        self.field = re.compile(r'^(?P<quote>%(QUOTE)s?)([^%(SEP)s]+)(?P=quote)%(SEP)s?' % {
-            'QUOTE': self.QUOTE,
-            'SEP': self.SEP,
-            'ESCQ': self.ESCQUOTE,
-        })
         if self.ENCODING == 'auto' and chardet is None:
             raise ImportError('Encoding auto-detect requires chardet installed.')
 
@@ -86,11 +79,26 @@ class Reader(object):
         return self
 
     def next(self):
-        line = self.source.next()
+        line = self.source.next().rstrip('\n')
         if self.ENCODING == 'auto':
             line = line.decode(chardet.detect(line)['encoding'] or 'ascii')
         else:
             line = line.decode(self.ENCODING)
 
-        fields = [ field.replace(self.ESCQUOTE, self.QUOTE) for quote, field in self.field.findall(line.strip())]
+        # Split on all separators
+        fragments = line.split(self.SEP)
+        # Now check each fragment for quoting
+        fields = []
+        frags = iter(fragments)
+        qs = len(self.QUOTE)
+        for frag in frags:
+            while True:
+                if frag.startswith(self.QUOTE):
+                    if not frag.endswith(self.QUOTE):
+                        frag = self.SEP.join([frag, frags.next()])
+                        continue
+                    frag = frag[qs:-qs]
+                    frag.replace(self.ESCQUOTE, self.QUOTE)
+                fields.append(frag)
+                break
         return fields
