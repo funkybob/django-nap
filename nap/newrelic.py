@@ -1,7 +1,5 @@
-from __future__ import unicode_literals
+from __future__ import absolute_import
 
-# Put this on module path in file newrelic_django_nap.py.
-#
 # In agent configuration file add:
 #
 # [import-hook:nap.publisher]
