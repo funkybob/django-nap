@@ -1,3 +1,6 @@
+v0.12.4.1:
+- Fix mistake introduced in 0.12.3 which broke NewRelic support
+
 v0.12.5:
 + Allow disabling of API introspection index
 - Restored Django 1.4 compatibility
