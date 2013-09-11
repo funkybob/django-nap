@@ -60,7 +60,7 @@ class Serialiser(with_metaclass(MetaSerialiser,object)):
             if method:
                 self._custom_inflaters.append((name, method))
             else:
-                self._field_inflaters.append((name, partial(field.inflate, name)))
+                self._field_inflaters.append((name, field.inflate))
 
     def object_deflate(self, obj, **kwargs):
         data = {}
