@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+from .exceptions import ValidationError
 from .utils import digattr
 
 from decimal import Decimal
@@ -52,10 +53,17 @@ class Field(object):
         except KeyError:
             if self.default is not NoDefault:
                 obj[dest] = self.default
-        else:
-            if value is None and self.null:
-                return value
-            obj[dest] = self.restore(value, **kwargs)
+            return
+
+        if value is not None:
+            try:
+                value = self.restore(value, **kwargs)
+            except ValueError:
+                raise ValidationError("Field '%s' received invalid value: %r" % (name, value))
+        elif not self.null:
+            raise ValidationError("Field '%s' must not be None." % name)
+
+        obj[dest] = value
 
 
 class BooleanField(Field):
