@@ -1,7 +1,10 @@
 from __future__ import unicode_literals
 
 from . import fields
+from .exceptions import ValidationError, ValidationErrors
 from .meta import Meta
+
+from collections import defaultdict
 from six import with_metaclass
 
 import inspect
@@ -57,7 +60,7 @@ class Serialiser(with_metaclass(MetaSerialiser,object)):
             if method:
                 self._custom_inflaters.append((name, method))
             else:
-                self._field_inflaters.append((name, field.inflate))
+                self._field_inflaters.append((name, partial(field.inflate, name)))
 
     def object_deflate(self, obj, **kwargs):
         data = {}
@@ -75,10 +78,19 @@ class Serialiser(with_metaclass(MetaSerialiser,object)):
 
     def object_inflate(self, data, instance=None, **kwargs):
         obj = {}
+        errors = defaultdict(list)
         for name, method in self._field_inflaters:
-            method(name, data=data, obj=obj, instance=instance, **kwargs)
+            try:
+                method(name, data=data, obj=obj, instance=instance, **kwargs)
+            except ValidationError as e:
+                errors[name].append(e)
         for name, method in self._custom_inflaters:
-            obj[name] = method(data=data, obj=obj, instance=instance, **kwargs)
+            try:
+                obj[name] = method(data=data, obj=obj, instance=instance, **kwargs)
+            except ValidationError as e:
+                errors[name].append(e)
+        if errors:
+            raise ValidationErrors(errors)
         return self.restore_object(obj, instance=instance, **kwargs)
 
     def list_inflate(self, data_list, **kwargs):
