@@ -11,14 +11,18 @@ except ImportError:
     # For Django1.4
     from django.utils.encoding import force_unicode as force_text
 
+class NoDefault(object):
+    '''Indicates no default value was provided.'''
+
 class Field(object):
     type_class = None
 
-    def __init__(self, attribute=None, default=None, readonly=False,
-                 **kwargs):
+    def __init__(self, attribute=None, default=NoDefault, readonly=False,
+                 null=True, **kwargs):
         self.attribute = attribute
         self.default = default
         self.readonly = readonly
+        self.null = null
         self.kwargs = kwargs
 
     def _get_attrname(self, name):
@@ -45,9 +49,13 @@ class Field(object):
         dest = self._get_attrname(name)
         try:
             value = data[name]
-            obj[dest] = self.restore(value, **kwargs)
         except KeyError:
-            pass
+            if self.default is not NoDefault:
+                obj[dest] = self.default
+        else:
+            if value is None and self.null:
+                return value
+            obj[dest] = self.restore(value, **kwargs)
 
 
 class BooleanField(Field):
