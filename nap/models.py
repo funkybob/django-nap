@@ -51,6 +51,7 @@ class MetaModelSerialiser(MetaSerialiser):
                 kwargs = {
                     'default': f.default,
                     'readonly': f.name in read_only,
+                    'null': f.null,
                 }
 
                 field_class = FIELD_MAP.get(f.__class__.__name__, fields.Field)
