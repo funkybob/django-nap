@@ -71,13 +71,13 @@ def autodiscover():
         mod = import_module(app)
         # Attempt to import the app's api module.
         try:
-            import_module('%s.serialiser' % app)
+            import_module('%s.publishers' % app)
         except:
 
             # Decide whether to bubble up this error. If the app just
             # doesn't have an admin module, we can ignore the error
             # attempting to import it, otherwise we want it to bubble up.
-            if module_has_submodule(mod, 'serialiser'):
+            if module_has_submodule(mod, 'publishers'):
                 raise
 
 

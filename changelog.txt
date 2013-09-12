@@ -1,4 +1,6 @@
-v0.12.6:
+v0.13.0:
+# WARNING: API breakage
+> Changed auto-discover to look for 'publishers' instead of 'seraliser'.
 + Added Field.null support
 + Now use the Field.default value
 + ValidationError handled in all field and custom inflator methods
