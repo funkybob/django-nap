@@ -1,8 +1,9 @@
 v0.13.0:
+# WARNING: API breakage
+> Changed auto-discover to look for 'publishers' instead of 'seraliser'.
 + Added Field.null support
 + Now use the Field.default value
 + ValidationError handled in all field and custom inflator methods
-> Changed auto-discover to look for 'publishers' instead of 'seraliser'.
 
 v0.12.5.1:
 - Fix mistake introduced in 0.12.3 which broke NewRelic support
