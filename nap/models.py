@@ -6,6 +6,7 @@ from .publisher import Publisher
 
 from six import with_metaclass
 
+from django.db.models.fields import NOT_PROVIDED
 from django.shortcuts import get_object_or_404
 
 FIELD_MAP = {}
@@ -49,10 +50,11 @@ class MetaModelSerialiser(MetaSerialiser):
                     continue
 
                 kwargs = {
-                    'default': f.default,
                     'readonly': f.name in read_only,
                     'null': f.null,
                 }
+                if not f.default is NOT_PROVIDED:
+                    kwargs['default'] = f.default
 
                 field_class = FIELD_MAP.get(f.__class__.__name__, fields.Field)
                 model_fields[f.name ] = field_class(**kwargs)
