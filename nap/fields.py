@@ -53,7 +53,7 @@ class Field(object):
         try:
             value = data[name]
         except KeyError:
-            if self.default is not NoDefault and not instance in kwargs:
+            if self.default is not NoDefault and not 'instance' in kwargs:
                 obj[dest] = self.default
             return
 
