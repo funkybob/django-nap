@@ -40,6 +40,8 @@ class Field(object):
     def deflate(self, name, obj, data, **kwargs):
         src = self._get_attrname(name)
         value = digattr(obj, src, self.default)
+        if value is NoDefault:
+            return
         if value is not None:
             value = self.reduce(value, **kwargs)
         data[name] = value
@@ -51,7 +53,7 @@ class Field(object):
         try:
             value = data[name]
         except KeyError:
-            if self.default is not NoDefault:
+            if self.default is not NoDefault and not instance in kwargs:
                 obj[dest] = self.default
             return
 
