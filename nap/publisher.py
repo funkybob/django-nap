@@ -26,6 +26,17 @@ class BasePublisher(object):
         self.kwargs = kwargs
 
     @classmethod
+    def build_view(cls):
+        '''Builds the view function for this publisher.'''
+        @ensure_csrf_cookie
+        def view(request, *args, **kwargs):
+            '''A wrapper view to instantiate and dispatch'''
+            self = cls(request, *args, **kwargs)
+            return self.dispatch(request, **kwargs)
+
+        return view
+
+    @classmethod
     def patterns(cls, api_name=None):
         '''
         Add this to your url patterns like:
@@ -36,11 +47,7 @@ class BasePublisher(object):
         /object/(id)/           instance view
         /object/(id)/(action)/  custom action on instance
         '''
-        @ensure_csrf_cookie
-        def view(request, *args, **kwargs):
-            '''A wrapper view to instantiate and dispatch'''
-            self = cls(request, *args, **kwargs)
-            return self.dispatch(request, **kwargs)
+        view = cls.build_view()
 
         if api_name:
             name = '%s_%s' % (api_name, cls.api_name)
