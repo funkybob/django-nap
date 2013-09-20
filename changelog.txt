@@ -1,3 +1,6 @@
+v0.13.2:
++ Separate Publisher.build_view from Publisher.patterns to ease providing custom patterns
+
 v0.13.1:
 - Fixed silly bug in inflate
 
