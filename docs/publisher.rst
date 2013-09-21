@@ -25,6 +25,15 @@ Both action and object_id are passed as kwargs, so where they're not needed they
 
 Every handler is expected to return a proper HttpResponse object.
 
+Custom Patterns
+---------------
+
+By overridding the patterns method, you can provide your own url patterns.
+
+One sample is included: nap.publisher.SimplePatternsMixin
+
+It omits the object/ portion of the object urls above, but limits object_ids to just digits.
+
 Publishing
 ----------
 
