@@ -133,6 +133,48 @@ class BasePublisher(object):
         }
 
 
+class SimplePatternsMixin(object):
+    '''
+    A "flatter" set of url patterns for when your object IDs are numbers only.
+    '''
+
+    @classmethod
+    def patterns(cls, api_name=None):
+        view = cls.build_view()
+
+        if api_name:
+            name = '%s_%s' % (api_name, cls.api_name)
+        else:
+            name = cls.api_name
+
+        return [
+            url(r'^(?P<object_id>\d+)/(?P<action>\w+)/(?P<argument>.+?)/?$',
+                view,
+                name='%s_object_action_arg' % name
+            ),
+            url(r'^(?P<object_id>\d+)/(?P<action>\w+)/?$',
+                view,
+                name='%s_object_action' % name
+            ),
+            url(r'^(?P<object_id>\d+)/?$',
+                view,
+                name='%s_object_default' % name
+            ),
+            url(r'^(?P<action>\w+)/(?P<argument>.+?)/?$',
+                view,
+                name='%s_list_action_arg' % name
+            ),
+            url(r'^(?P<action>\w+)/?$',
+                view,
+                name='%s_list_action' % name
+            ),
+            url(r'^$',
+                view,
+                name='%s_list_default' % name
+            ),
+        ]
+
+
 class Publisher(BasePublisher):
     '''Default API-style publisher'''
     LIMIT_PARAM = 'limit'
