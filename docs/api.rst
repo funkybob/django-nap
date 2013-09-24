@@ -24,13 +24,13 @@ Auto-discover
 
 Just like Django's Admin, Api supports auto-discover.
 
-In your serialiser.py use:
+In your publishers.py use:
 
     from nap import api
 
     ...
 
-    api.register('apiname', Publisher....)
+    api.register('apiname', Publisher,....)
 
 An Api instance with that name will be created, if it hasn't already, and put into api.APIS.  Then the publisher(s) you pass will be registered with it.
 
