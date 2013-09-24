@@ -215,6 +215,16 @@ class Publisher(BasePublisher):
         '''Return the object for the given id'''
         raise NotImplementedError
 
+    # List filtering and sorting
+
+    def filter_object_list(self, object_list):
+        '''Hook to allow custom filtering of object lists'''
+        return object_lsit
+
+    def sort_object_list(self, object_list):
+        '''Hook to allow custom sorting of object lists'''
+        return object_list
+
     # Pagination
 
     def get_page(self, object_list):
@@ -298,6 +308,9 @@ class Publisher(BasePublisher):
 
     def list_get_default(self, request, **kwargs):
         object_list = self.get_object_list()
+        object_list = self.filter_object_list(object_list)
+        object_list = self.sort_object_list(object_list)
+
         data = self.get_page(object_list)
 
         serialiser = self.get_serialiser()

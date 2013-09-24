@@ -1,6 +1,7 @@
 v0.13.2:
 + Separate Publisher.build_view from Publisher.patterns to ease providing custom patterns
 + Added SimplePatternsMixin for Publisher
++ Added Publisher.sort_object_list and Publisher.filter_object_list hooks
 
 v0.13.1:
 - Fixed silly bug in inflate

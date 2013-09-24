@@ -98,6 +98,19 @@ The Publisher extends the BasePublisher class with some useful methods for typic
             Defaul object handler.
             Passes the result of ``get_object`` to ``render_single_object``
 
+Filtering and Sorting
+~~~~~~~~~~~~~~~~~~~~~
+
+Additionally, the Publisher class has two methods for sorting and filtering:
+
+    def filter_object_list(self, object_list)
+    def sort_object_list(self, object_list)
+
+By default, these simply return the list they are passed.
+
+Filtering and sorting are not applied by get_object_list.  This lets you apply required filtering [site, security, user, etc] in get_object_list, and optional filtering [query, etc] where it's wanted.  Also, ordering can be an unwanted expense when it's not important to the use.
+
+The default Publisher.list_get_default will pass the result of get_object_list to filter_object_list and sort_object_list in turn before serialising.
 
 ModelPublisher
 ==============
