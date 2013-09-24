@@ -37,6 +37,10 @@ Case 1: Simple Blog API
             return [tag.name for tag in obj.tags.all()]
 
 
+# publishers.py
+
+    from .serialiser import PostSerialiser
+
     class PostPublisher(ModelPublisher):
         serialiser = PostSerialiser()
 
