@@ -4,7 +4,7 @@ from django.conf.urls import url
 from django.core.paginator import Paginator, EmptyPage
 from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_http_methods
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 
 from collections import defaultdict
 import json
@@ -19,6 +19,7 @@ def accepts(*verbs):
     return _inner
 
 class BasePublisher(object):
+    CSRF = True
 
     def __init__(self, request, *args, **kwargs):
         self.request = request
@@ -28,12 +29,15 @@ class BasePublisher(object):
     @classmethod
     def build_view(cls):
         '''Builds the view function for this publisher.'''
-        @ensure_csrf_cookie
         def view(request, *args, **kwargs):
             '''A wrapper view to instantiate and dispatch'''
             self = cls(request, *args, **kwargs)
             return self.dispatch(request, **kwargs)
 
+        if self.CSRF:
+            view = ensure_csrf_cookie(view)
+        else:
+            view = csrf_exempt(view)
         return view
 
     @classmethod
