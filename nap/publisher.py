@@ -34,7 +34,7 @@ class BasePublisher(object):
             self = cls(request, *args, **kwargs)
             return self.dispatch(request, **kwargs)
 
-        if self.CSRF:
+        if cls.CSRF:
             view = ensure_csrf_cookie(view)
         else:
             view = csrf_exempt(view)
