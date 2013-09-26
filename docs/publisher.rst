@@ -46,7 +46,8 @@ Publisher
 
 The Publisher extends the BasePublisher class with some useful methods for typical REST-ful uses.
 
-    Publisher(engine.JsonEngine, BasePublisher):
+    Publisher(BasePublisher):
+        CSRF = True # Set this to False to make this publisher CSRF exempt
 
         def get_serialiser():
             Allows you to use a different ``Serialiser`` depending on the handler, or other criterial.
