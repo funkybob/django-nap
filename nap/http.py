@@ -76,7 +76,7 @@ STATUS = ResponseTypes(STATUS_CODES)
 
 class BaseHttpResponse(HttpResponse, Exception):
     '''
-    A sub-class of HttpResponse that is also an Exception, allowign us to
+    A sub-class of HttpResponse that is also an Exception, allowing us to
     raise/catch it.
 
     With thanks to schinkel's repose.
