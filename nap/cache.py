@@ -8,7 +8,8 @@ class CachedSerialiser(object):
     def __init__(self, *args, **kwargs):
         cache = getattr(self._meta, 'cache', cache)
         if isinstance(cache, string_types):
-            self._meta.cache = get_cache(cache)
+            cache = get_cache(cache)
+        self._meta.cache = cache
 
     def object_deflate(self, obj, **kwargs):
         '''Add object caching'''
