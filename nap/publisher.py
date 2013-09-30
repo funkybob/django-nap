@@ -223,7 +223,7 @@ class Publisher(BasePublisher):
 
     def filter_object_list(self, object_list):
         '''Hook to allow custom filtering of object lists'''
-        return object_lsit
+        return object_list
 
     def sort_object_list(self, object_list):
         '''Hook to allow custom sorting of object lists'''
