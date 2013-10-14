@@ -1,3 +1,7 @@
+v0.13.3:
+- Make API return NotFound, instead of Raising it
+- Remove bogus CSV Reader class
+
 v0.13.2.1:
 - Fixed typo
 - Fixed resolving cache in mixin
