@@ -29,7 +29,7 @@ class Api(object):
     def index(self, request, *args, **kwargs):
         '''Return a dict of publisher name: url'''
         if not self.show_index:
-            raise http.NotFound()
+            return http.NotFound()
         return http.JsonResponse(dict(
             (name, {
                 'path': reverse('%s_%s_list_default' % (self.name, name), kwargs=kwargs),
