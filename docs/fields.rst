@@ -13,6 +13,7 @@ There are also some for common types:
     DateTimeField
     DateField
     TimeField
+    StringField
 
 Finally, there are the two Serialiser Fields, which will generate their value using a serialiser class.  They are the SerialiserField, and ManySerialiserField.
 
@@ -51,6 +52,11 @@ Inflate Cycle
     + Save the value in the obj dict
 
 By default, restore tries to construct a new self.type_class from the value, unless type_class is None.
+
+StringField
+===========
+
+StringField is for cases where you want to ensure the value is forced to a string.  Its `reduce` method uses `django.utils.encoding.force_text`.
 
 Serialiser Fields
 =================

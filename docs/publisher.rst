@@ -56,6 +56,14 @@ The Publisher extends the BasePublisher class with some useful methods for typic
         def get_object_list():
             Returns the object list for use in list handlers.
 
+        def filter_object_list(object_list):
+            A hook to apply common filtering to object list.
+            Default is to return the object_list unchanged.
+
+        def sort_object_list(object_list):
+            A hook to apply common sorting logic to an object list.
+            Default is to return the object_list unchanged.
+
         def get_object(object_id):
             Returns the requested object, or raises Http404
 
@@ -92,7 +100,8 @@ The Publisher extends the BasePublisher class with some useful methods for typic
 
         def list_get_default():
             Default list handler.
-            Passes the result of ``get_object_list`` to ``get_page``, and then uses the serialiser returned by ``get_serialiser`` to deflate the object list.
+            Calls `get_object_list`, `filter_object_list` and `sort_object_list`, then passes the list to `get_page`.
+            It then uses the object from `get_serialiser` to deflate the object list.
             Returns the resulting data using ``create_response``.
 
         def object_get_default():
@@ -102,7 +111,7 @@ The Publisher extends the BasePublisher class with some useful methods for typic
 Filtering and Sorting
 ~~~~~~~~~~~~~~~~~~~~~
 
-Additionally, the Publisher class has two methods for sorting and filtering:
+The Publisher class has two methods for sorting and filtering:
 
     def filter_object_list(self, object_list)
     def sort_object_list(self, object_list)
