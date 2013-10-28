@@ -97,7 +97,7 @@ class BasePublisher(object):
             # See if there's a method agnostic handler
             handler = getattr(self, '%s_%s' % (prefix, action), None)
         if handler is None:
-            raise http.Http404
+            raise http.HttpNotFound()
         # Do we need to pass any of this?
         return self.execute(handler)
 
@@ -264,7 +264,7 @@ class Publisher(BasePublisher):
         try:
             page = paginator.page(page_num + 1)
         except EmptyPage:
-            raise http.Http404
+            raise http.HttpNotFound()
         return {
             'meta': {
                 'offset': page.start_index() - 1,
