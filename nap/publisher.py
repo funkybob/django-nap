@@ -185,6 +185,8 @@ class Publisher(BasePublisher):
     OFFSET_PARAM = 'offset'
     PAGE_PARAM = 'page'
 
+    response_class = http.HttpResponse
+
     # De/Serialising
     # Which content types will we attempt to parse?
     # The first in the list will be used for responses.
@@ -294,7 +296,7 @@ class Publisher(BasePublisher):
 
     def create_response(self, content, **response_kwargs):
         '''Return a response, serialising the content'''
-        response_class = response_kwargs.pop('response_class', http.HttpResponse)
+        response_class = response_kwargs.pop('response_class', self.response_class)
         response_kwargs.setdefault('content_type', self.CONTENT_TYPES[0])
         return response_class(self.dumps(content), **response_kwargs)
 
