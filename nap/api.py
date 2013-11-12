@@ -32,7 +32,10 @@ class Api(object):
             return http.NotFound()
         return http.JsonResponse(dict(
             (name, {
-                'path': reverse('%s_%s_list_default' % (self.name, name), kwargs=kwargs),
+                'path': reverse(
+                    '%s_%s_list_default' % (self.name, name),
+                    kwargs=kwargs
+                ),
                 'methods': child.index(),
             })
             for name, child in self.children.items()

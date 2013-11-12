@@ -61,7 +61,9 @@ class Field(object):
             try:
                 value = self.restore(value, **kwargs)
             except ValueError:
-                raise ValidationError("Field '%s' received invalid value: %r" % (name, value))
+                raise ValidationError(
+                    "Field '%s' received invalid value: %r" % (name, value)
+                )
         elif not self.null:
             raise ValidationError("Field '%s' must not be None." % name)
 

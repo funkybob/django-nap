@@ -15,7 +15,9 @@ def accepts(*verbs):
     '''Annotate a method with the HTTP verbs it accepts, and enforce it.'''
     def _inner(method):
         setattr(method, '_accepts', verbs)
-        return method_decorator(require_http_methods([x.upper() for x in verbs]))(method)
+        return method_decorator(
+            require_http_methods([x.upper() for x in verbs])
+        )(method)
     return _inner
 
 class BasePublisher(object):
@@ -97,14 +99,18 @@ class BasePublisher(object):
             # See if there's a method agnostic handler
             handler = getattr(self, '%s_%s' % (prefix, action), None)
         if handler is None:
-            raise http.HttpNotFound()
+            raise http.NotFound()
         # Do we need to pass any of this?
         return self.execute(handler)
 
     def execute(self, handler, **kwargs):
         '''This allows wrapping calls to handler functions'''
         try:
-            return handler(self.request, action=self.action, object_id=self.object_id, **kwargs)
+            return handler(self.request,
+                action=self.action,
+                object_id=self.object_id,
+                **kwargs
+            )
         except http.BaseHttpResponse as response:
             return response
 
@@ -266,7 +272,7 @@ class Publisher(BasePublisher):
         try:
             page = paginator.page(page_num + 1)
         except EmptyPage:
-            raise http.HttpNotFound()
+            raise http.NotFound()
         return {
             'meta': {
                 'offset': page.start_index() - 1,

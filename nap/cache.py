@@ -18,6 +18,7 @@ class CachedSerialiser(object):
         data = self._meta.cache.get(cache_key)
         if data is None:
             data = super(CachedSerialiser, self).object_deflate(obj, **kwargs)
-            self._meta.cache.set(data, timeout=getattr(self._meta, 'timeout', None))
+            timeout = getattr(self._meta, 'timeout', None)
+            self._meta.cache.set(data, timeout=timeout)
         return data
 

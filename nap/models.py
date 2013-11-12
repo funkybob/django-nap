@@ -36,35 +36,35 @@ class MetaModelSerialiser(MetaSerialiser):
         except AttributeError:
             pass
         else:
-            for f in model._meta.fields:
+            for field in model._meta.fields:
                 # If we've got one, skip...
-                if f.name in current_fields:
+                if field.name in current_fields:
                     continue
 
                 # If we have a whitelist, and it's not in it, skip
-                if include and not f.name in include:
+                if include and not field.name in include:
                     continue
 
                 # If it's blacklisted, skip
-                if f.name in exclude:
+                if field.name in exclude:
                     continue
 
                 kwargs = {
-                    'readonly': f.name in read_only,
-                    'null': f.null,
+                    'readonly': field.name in read_only,
+                    'null': field.null,
                 }
-                if not f.default is NOT_PROVIDED:
-                    kwargs['default'] = f.default
+                if not field.default is NOT_PROVIDED:
+                    kwargs['default'] = field.default
 
-                field_class = FIELD_MAP.get(f.__class__.__name__, fields.Field)
-                model_fields[f.name ] = field_class(**kwargs)
+                field_class = FIELD_MAP.get(field.__class__.__name__, fields.Field)
+                model_fields[field.name ] = field_class(**kwargs)
 
         new_class._fields.update(model_fields)
 
         return new_class
 
 
-class ModelSerialiser(with_metaclass(MetaModelSerialiser,Serialiser)):
+class ModelSerialiser(with_metaclass(MetaModelSerialiser, Serialiser)):
 
     def restore_object(self, obj, instance, **kwargs):
         if instance:

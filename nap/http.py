@@ -6,9 +6,9 @@ from django.http import HttpResponse, Http404
 from django.utils.encoding import iri_to_uri
 
 try:
-  from urlparse import urlparse
+    from urlparse import urlparse
 except ImportError:
-  from urllib.parse import urlparse
+    from urllib.parse import urlparse
 try:
     from collections import OrderedDict
 except ImportError:

@@ -13,6 +13,9 @@ class MetaSerialiser(type):
     def __new__(mcs, name, bases, attrs):
         attrs['_fields'] = {}
 
+        # Remove from attrs
+        meta = attrs.pop('Meta', None)
+
         # Field declared on this new class
         declared_fields = {}
         for field_name, field in list(attrs.items()):
@@ -30,13 +33,12 @@ class MetaSerialiser(type):
         new_class._fields = base_fields
 
         # Handle class Meta
-        meta = getattr(new_class, 'Meta', None)
         new_class._meta = Meta(meta)
 
         return new_class
 
 
-class Serialiser(with_metaclass(MetaSerialiser,object)):
+class Serialiser(with_metaclass(MetaSerialiser, object)):
     def __init__(self):
         '''
         Since the list of methods to call to deflate/inflate an object
@@ -82,13 +84,15 @@ class Serialiser(with_metaclass(MetaSerialiser,object)):
         for name, method in self._field_inflaters:
             try:
                 method(name, data=data, obj=obj, instance=instance, **kwargs)
-            except ValidationError as e:
-                errors[name].append(e)
+            except ValidationError as exc:
+                errors[name].append(exc)
         for name, method in self._custom_inflaters:
             try:
-                obj[name] = method(data=data, obj=obj, instance=instance, **kwargs)
-            except ValidationError as e:
-                errors[name].append(e)
+                obj[name] = method(data=data, obj=obj, instance=instance,
+                    **kwargs
+                )
+            except ValidationError as exc:
+                errors[name].append(exc)
         if errors:
             raise ValidationErrors(errors)
         return self.restore_object(obj, instance=instance, **kwargs)
