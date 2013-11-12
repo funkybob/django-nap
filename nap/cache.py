@@ -1,12 +1,12 @@
 from __future__ import unicode_literals
 
-from django.core.cache import get_cache, cache
+from django.core.cache import get_cache, default_cache
 from six import string_types
 
 class CachedSerialiser(object):
     '''Mixin to cache per-object serialised data'''
     def __init__(self, *args, **kwargs):
-        cache = getattr(self._meta, 'cache', cache)
+        cache = getattr(self._meta, 'cache', default_cache)
         if isinstance(cache, string_types):
             cache = get_cache(cache)
         self._meta.cache = cache
