@@ -328,5 +328,3 @@ class Publisher(BasePublisher):
         '''Default object GET handler -- get object'''
         obj = self.get_object(object_id)
         return self.render_single_object(obj)
-
-
