@@ -1,3 +1,11 @@
+v0.13.4:
++ Added views publisher
++ Updated docs
++ Re-added support for ujson, if installed
+- Return http.NotFound instead of raising it
++ Tidied up with pyflakes/pylint
++ Added Publisher.response_class property
+
 v0.13.3:
 - Make API return NotFound, instead of Raising it
 - Remove bogus CSV Reader class
