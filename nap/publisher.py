@@ -7,7 +7,10 @@ from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 
 from collections import defaultdict
-import json
+try:
+    import ujson as json
+except ImportError:
+    import json
 
 from . import http
 
