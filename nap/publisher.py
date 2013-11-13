@@ -275,7 +275,7 @@ class Publisher(BasePublisher):
         try:
             page = paginator.page(page_num + 1)
         except EmptyPage:
-            return http.NotFound()
+            raise http.NotFound()
         return {
             'meta': {
                 'offset': page.start_index() - 1,
