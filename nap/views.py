@@ -13,14 +13,6 @@ class ViewPublisherMixin(object):
     '''
     api_name = None
 
-    def get_template_name(self):
-        '''Return the template name to use for this view.'''
-        return '%s/%s_%s.html' % (
-            self.api_name or self.model._meta.app_label,
-            self.model._meta.model_name,
-            self.action,
-        )
-
     def create_response(self, content, **response_kwargs):
         '''Return a response serialising the content'''
         template = response_kwargs.pop('template', None)
@@ -31,7 +23,20 @@ class ViewPublisherMixin(object):
         )
 
 class ViewPublisher(SimplePatternsMixin, Publisher):
-    pass
+    def get_template_name(self):
+        return self.template_name % {
+            'action': self.action,
+            'method': self.method,
+            'mode': self.mode,
+        }
 
 class ModelViewPublisher(SimplePatternsMixin, ModelPublisher):
     model = None
+
+    def get_template_name(self):
+        '''Return the template name to use for this view.'''
+        return '%s/%s_%s.html' % (
+            self.api_name or self.model._meta.app_label,
+            self.model._meta.model_name,
+            self.action,
+        )
