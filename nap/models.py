@@ -172,7 +172,7 @@ def modelserialiser_factory(name, model, **kwargs):
         except KeyError:
             pass
 
-    meta = type(b'Meta', (object,), attrs)
+    meta = type(str('Meta'), (object,), attrs)
     return type(ModelSerialiser)(str(name), (ModelSerialiser,), {'Meta': meta})
 
 class ModelSerialiserField(fields.SerialiserField):
