@@ -29,4 +29,5 @@ def permit_groups(*groups):
     def in_groups(request, *args):
         return request.user.groups.filter(name__in=args).exists()
     return permit(
-        lambda self, request, *args, **kwargs: in_groups(request, *groups))
+        lambda self, request, *args, **kwargs: in_groups(request, *groups)
+    )
