@@ -88,7 +88,7 @@ class DecimalField(Field):
 class DateTimeField(Field):
 
     def reduce(self, value, **kwargs):
-        return value.replace(microsecond=0).isoformat(b' ')
+        return value.replace(microsecond=0).isoformat(' ')
 
     def restore(self, value, **kwargs):
         return datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
