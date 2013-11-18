@@ -6,6 +6,7 @@ from .publisher import Publisher
 
 from six import with_metaclass
 
+from django.db.models import Manager
 from django.db.models.fields import NOT_PROVIDED
 from django.shortcuts import get_object_or_404
 
@@ -189,3 +190,7 @@ class ModelManySerialiserField(fields.ManySerialiserField):
             kwargs['serialiser'] = modelserialiser_factory(model.__name__ + 'Serialiser', model, **kwargs)()
         super(ModelManySerialiserField, self).__init__(*args, **kwargs)
 
+    def reduce(self, value, **kwargs):
+        if isinstance(value, Manager):
+            value = value.all()
+        return super(ModelManySerialiserField, self).reduce(value, **kwargs)
