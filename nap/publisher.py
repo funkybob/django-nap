@@ -68,23 +68,23 @@ class BasePublisher(object):
             name = cls.api_name
 
         return [
-            url(r'^object/(?P<object_id>%s)/(?P<action>%s)/(?P<argument>%s)/?$' % (self.OBJECT_PATTERN, self.ACTION_PATTERN, self.ARGUMENT_PATTERN),
+            url(r'^object/(?P<object_id>%s)/(?P<action>%s)/(?P<argument>%s)/?$' % (cls.OBJECT_PATTERN, cls.ACTION_PATTERN, cls.ARGUMENT_PATTERN),
                 view,
                 name='%s_object_action_arg' % name
             ),
-            url(r'^object/(?P<object_id>%s)/(?P<action>%s)/?$' % (self.OBJECT_PATTERN, self.ACTION_PATTERN),
+            url(r'^object/(?P<object_id>%s)/(?P<action>%s)/?$' % (cls.OBJECT_PATTERN, cls.ACTION_PATTERN),
                 view,
                 name='%s_object_action' % name
             ),
-            url(r'^object/(?P<object_id>%s)/?$' % (self.OBJECT_PATTERN,),
+            url(r'^object/(?P<object_id>%s)/?$' % (cls.OBJECT_PATTERN,),
                 view,
                 name='%s_object_default' % name
             ),
-            url(r'^(?P<action>%s)/(?P<argument>%s)/?$' % (self.ACTION_PATTERN, self.ARGUMENT_PATTERN),
+            url(r'^(?P<action>%s)/(?P<argument>%s)/?$' % (cls.ACTION_PATTERN, cls.ARGUMENT_PATTERN),
                 view,
                 name='%s_list_action_arg' % name
             ),
-            url(r'^(?P<action>)%s/?$' % (self.ACTION_PATTERN,),
+            url(r'^(?P<action>%s)/?$' % (cls.ACTION_PATTERN,),
                 view,
                 name='%s_list_action' % name
             ),
@@ -116,7 +116,6 @@ class BasePublisher(object):
             return handler(self.request,
                 action=self.action,
                 object_id=self.object_id,
-                **kwargs
             )
         except http.BaseHttpResponse as response:
             return response
