@@ -1,5 +1,6 @@
 v0.13.5:
 - Fix use of b'' for Py3.3 [thanks zzing]
++ Add options to control patterns
 
 v0.13.4:
 + Added views publisher

@@ -8,10 +8,10 @@ This pattern works well for APIs, where typically a group of views require the s
 
 The publisher recognises a small, fixed set of URL patterns, and dispatches to them to methods on the class according to a simple pattern: target, method, action.  The target is either "list" or "object", depending on if an object_id was supplied.  The method is the HTTP method, lower cased (i.e. get, put, post, delete, etc.).  And finally, the action, which defaults to 'default'.
 
-    r'^object/(?P<object_id>[-\w]+)/(?P<action>\w+)/(?P<argument>.+)/?$'
+    r'^object/(?P<object_id>[-\w]+)/(?P<action>\w+)/(?P<argument>.+?)/?$'
     r'^object/(?P<object_id>[-\w]+)/(?P<action>\w+)/?$'
     r'^object/(?P<object_id>[-\w]+)/?$'
-    r'^(?P<action>\w+)/(?P<argument>.+)/$'
+    r'^(?P<action>\w+)/(?P<argument>.+?)/$'
     r'^(?P<action>\w+)/?$'
     r'^$'
 
@@ -33,6 +33,8 @@ By overridding the patterns method, you can provide your own url patterns.
 One sample is included: nap.publisher.SimplePatternsMixin
 
 It omits the object/ portion of the object urls above, but limits object_ids to just digits.
+
+Alternatively, if you just want to change the regex used for each part of the URL, you can overrid them using OBJECT_PATTERN, ACTION_PATTERN, and ARGUMENT_PATTERN, which default to '[-\w]+', '\w+' and '.*?' respectively.
 
 Publishing
 ----------
