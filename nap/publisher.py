@@ -26,6 +26,10 @@ def accepts(*verbs):
 class BasePublisher(object):
     CSRF = True
 
+    ACTION_PATTERN = r'\w+'
+    OBJECT_PATTERN = r'[-\w]+'
+    ARGUMENT_PATTERN = r'.+?'
+
     def __init__(self, request, *args, **kwargs):
         self.request = request
         self.args = args
@@ -64,23 +68,23 @@ class BasePublisher(object):
             name = cls.api_name
 
         return [
-            url(r'^object/(?P<object_id>[-\w]+)/(?P<action>\w+)/(?P<argument>.+?)/?$',
+            url(r'^object/(?P<object_id>%s)/(?P<action>%s)/(?P<argument>%s)/?$' % (self.OBJECT_PATTERN, self.ACTION_PATTERN, self.ARGUMENT_PATTERN),
                 view,
                 name='%s_object_action_arg' % name
             ),
-            url(r'^object/(?P<object_id>[-\w]+)/(?P<action>\w+)/?$',
+            url(r'^object/(?P<object_id>%s)/(?P<action>%s)/?$' % (self.OBJECT_PATTERN, self.ACTION_PATTERN),
                 view,
                 name='%s_object_action' % name
             ),
-            url(r'^object/(?P<object_id>[-\w]+)/?$',
+            url(r'^object/(?P<object_id>%s)/?$' % (self.OBJECT_PATTERN,),
                 view,
                 name='%s_object_default' % name
             ),
-            url(r'^(?P<action>\w+)/(?P<argument>.+?)/?$',
+            url(r'^(?P<action>%s)/(?P<argument>%s)/?$' % (self.ACTION_PATTERN, self.ARGUMENT_PATTERN),
                 view,
                 name='%s_list_action_arg' % name
             ),
-            url(r'^(?P<action>\w+)/?$',
+            url(r'^(?P<action>)%s/?$' % (self.ACTION_PATTERN,),
                 view,
                 name='%s_list_action' % name
             ),
@@ -106,7 +110,7 @@ class BasePublisher(object):
         # Do we need to pass any of this?
         return self.execute(handler)
 
-    def execute(self, handler, **kwargs):
+    def execute(self, handler):
         '''This allows wrapping calls to handler functions'''
         try:
             return handler(self.request,
