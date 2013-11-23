@@ -17,7 +17,7 @@ class DigattrTestCase(TestCase):
         }
 
         self.assertEqual(digattr(data, 'a'), 1)
-        self.assertEqual(digattr(data, 'b.2'), 2)
+        self.assertEqual(digattr(data, 'b.2'), 3)
         self.assertEqual(digattr(data, 'c'), 4)
         self.assertEqual(digattr(data, 'd.a'), 'test')
         self.assertEqual(digattr(data, 'd.a.1'), 'e')
