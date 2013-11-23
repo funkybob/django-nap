@@ -1,7 +1,7 @@
 
 from django.test import TestCase
 
-from nap import utils
+from nap.utils import digattr
 
 class DigattrTestCase(TestCase):
 
