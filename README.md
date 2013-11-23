@@ -89,7 +89,7 @@ Serialisers are defined declaratively, using nap.field.Field instances
 With an instance of this class, you can deflate/inflate an instance of MyClass easily:
 
     ser = MySerialiser()
-    data = ser.deflate(obj)
+    data = ser.object_deflate(obj)
     updated_obj = ser.inflate(data, obj)
 
 If you try to inflate without passing an object, a dummy 'object' instance will be created and have the values stored on it.
