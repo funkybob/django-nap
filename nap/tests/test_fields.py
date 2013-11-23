@@ -3,11 +3,10 @@ from django.test import TestCase
 
 from nap import fields
 
-class SourceObj(object):
-    def __init__(self):
-        self.bool = True
-        self.int = 1
-        self.str = 'test'
+class Mock(object):
+    def __init__(self, **kwargs):
+        for k, v in kwargs.items():
+            setattr(self, k, v)
 
 class FieldTestCase(TestCase):
     '''
@@ -16,15 +15,76 @@ class FieldTestCase(TestCase):
     inflate: data[name] -> restore -> dest[name]
     '''
 
-    def setUp(self):
-        self.src = SourceObj()
-        self.dest = {}
+    def test_000_field(self):
+        data = {}
+        field = fields.Field()
+
+        field.deflate('value', Mock(value='str'), data)
+        self.assertEqual('str', data['value'])
+
+        field.deflate('value', Mock(value=None), data)
+        self.assertTrue(data['value'] is None)
+
+        dest = {}
+
+        field.inflate('value', data, dest)
+        self.assertEqual(dest['value'], data['value'])
+
+    def test_000_field_default(self):
+        data = {}
+        field = fields.Field()
+
+        field.deflate('value', Mock(), data)
+        self.assertNotIn('value', data)
 
     def test_001_boolean(self):
-        field = fields.BooleanField()
-        field.deflate('bool', self.src, self.dest)
-        self.assertEqual(self.dest['bool'], self.src.bool)
-
         data = {}
-        field.inflate('bool', self.dest, data)
-        self.assertEqual(data['bool'], True)
+        field = fields.BooleanField()
+
+        field.deflate('value', Mock(value=True), data)
+        self.assertTrue(data['value'] is True)
+
+        dest = {}
+
+        field.inflate('value', data, dest)
+        self.assertTrue(dest['value'] is True)
+
+    def test_002_integer(self):
+        data = {}
+        field = fields.IntegerField()
+
+        field.deflate('value', Mock(value=7), data)
+        self.assertEqual(data['value'], 7)
+
+        dest = {}
+
+        field.inflate('value', data, dest)
+        self.assertEqual(dest['value'], data['value'])
+
+    def test_003_decimal(self):
+        from decimal import Decimal
+        data = {}
+        field = fields.DecimalField()
+
+        field.deflate('value', Mock(value=Decimal('1.05')), data)
+        self.assertEqual(data['value'], 1.05)
+
+        dest = {}
+
+        field.inflate('value', data, dest)
+        self.assertEqual(dest['value'], data['value'])
+
+    def test_004_datetime(self):
+        from datetime import datetime
+        data = {}
+        field = fields.DateTimeField()
+
+        when = datetime(2010, 11, 5, 12, 7, 19)
+        field.deflate('value', Mock(value=when), data)
+        self.assertEqual(data['value'], '2010-11-05 12:07:19')
+
+        dest = {}
+
+        field.inflate('value', data, dest)
+        self.assertEqual(dest['value'], when)
+
