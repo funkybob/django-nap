@@ -12,4 +12,4 @@ install:
   - if [[ $TRAVIS_PYTHON_VERSION == 2* ]]; then pip install -q Django==$DJANGO --use-mirrors; fi
   - pip install -r requirements.txt --use-mirrors
 script:
-  - python tests/manage.py test polls --settings=settings
+  - python tests/manage.py test nap --settings=settings
