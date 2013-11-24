@@ -1,3 +1,6 @@
+v0.13.6:
++ Overhauled testing
+
 v0.13.5.1:
 - Fix fix for b'' from last release, to work in py2
 
