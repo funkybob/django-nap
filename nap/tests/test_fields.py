@@ -22,13 +22,23 @@ class FieldTestCase(TestCase):
         field.deflate('value', Mock(value='str'), data)
         self.assertEqual('str', data['value'])
 
+        dest = {}
+
+        field.inflate('value', data, dest)
+        self.assertEqual(dest['value'], data['value'])
+
+    def test_000_field_none(self):
+        '''None is treated specially.'''
+        data = {}
+        field = fields.Field()
+
         field.deflate('value', Mock(value=None), data)
         self.assertTrue(data['value'] is None)
 
         dest = {}
 
         field.inflate('value', data, dest)
-        self.assertEqual(dest['value'], data['value'])
+        self.assertEqual(data['value'], dest['value'])
 
     def test_000_field_default(self):
         data = {}
@@ -67,6 +77,7 @@ class FieldTestCase(TestCase):
         field = fields.DecimalField()
 
         field.deflate('value', Mock(value=Decimal('1.05')), data)
+        # JS has no Decimal type, only float
         self.assertEqual(data['value'], 1.05)
 
         dest = {}
@@ -82,6 +93,34 @@ class FieldTestCase(TestCase):
         when = datetime(2010, 11, 5, 12, 7, 19)
         field.deflate('value', Mock(value=when), data)
         self.assertEqual(data['value'], '2010-11-05 12:07:19')
+
+        dest = {}
+
+        field.inflate('value', data, dest)
+        self.assertEqual(dest['value'], when)
+
+    def test_005_date(self):
+        from datetime import date
+        data = {}
+        field = fields.DateField()
+
+        when = date(2010, 11, 5)
+        field.deflate('value', Mock(value=when), data)
+        self.assertEqual(data['value'], '2010-11-05')
+
+        dest = {}
+
+        field.inflate('value', data, dest)
+        self.assertEqual(dest['value'], when)
+
+    def test_006_time(self):
+        from datetime import time
+        data = {}
+        field = fields.TimeField()
+
+        when = time(12, 7, 19)
+        field.deflate('value', Mock(value=when), data)
+        self.assertEqual(data['value'], '12:07:19')
 
         dest = {}
 
