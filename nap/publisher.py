@@ -283,6 +283,7 @@ class Publisher(BasePublisher):
             'meta': {
                 'offset': page.start_index() - 1,
                 'page': page_num,
+                'total_pages': paginator.num_pages,
                 'limit': page_size,
                 'count': paginator.count,
                 'has_next': page.has_next(),
