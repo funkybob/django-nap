@@ -2,6 +2,7 @@
 from django.test import TestCase
 
 from nap import fields
+from nap.exceptions import ValidationError
 
 class Mock(object):
     def __init__(self, **kwargs):
@@ -46,6 +47,36 @@ class FieldTestCase(TestCase):
 
         field.deflate('value', Mock(), data)
         self.assertNotIn('value', data)
+
+    def test_000_readonly(self):
+        data = {'value': 1}
+        dest = {}
+        field = fields.Field(readonly=True)
+        field.inflate('value', data, dest)
+        self.assertNotIn('value', dest)
+
+    def test_000_nodefault(self):
+        data = {}
+        dest = {}
+        field = fields.Field()
+        field.inflate('value', data, dest)
+        self.assertNotIn('value', dest)
+
+    def test_000_default(self):
+        data = {}
+        dest = {}
+        field = fields.Field(default=1)
+
+        field.inflate('value', data, dest)
+        self.assertEqual(dest['value'], 1)
+
+    def test_000_notnull(self):
+        data = {'value': None}
+        dest = {}
+        field = fields.Field(null=False)
+
+        with self.assertRaises(ValidationError):
+            field.inflate('value', data, dest)
 
     def test_001_boolean(self):
         data = {}
@@ -126,4 +157,20 @@ class FieldTestCase(TestCase):
 
         field.inflate('value', data, dest)
         self.assertEqual(dest['value'], when)
+
+    def test_007_serialiser(self):
+        from nap.serialiser import Serialiser
+        class SimpleSerialiser(Serialiser):
+            a = fields.Field()
+            b = fields.Field()
+            c = fields.Field()
+
+        data = {}
+        field = fields.SerialiserField(serialiser=SimpleSerialiser())
+
+        value = Mock(value=Mock(a=1, b='two', c=3.0))
+        field.deflate('value', value, data)
+        self.assertEqual(data['value']['a'], 1)
+        self.assertEqual(data['value']['b'], 'two')
+        self.assertEqual(data['value']['c'], 3.0)
 
