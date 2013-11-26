@@ -39,6 +39,8 @@ class MetaSerialiser(type):
 
 
 class Serialiser(with_metaclass(MetaSerialiser, object)):
+    obj_class = None
+
     def __init__(self):
         '''
         Since the list of methods to call to deflate/inflate an object
@@ -79,23 +81,23 @@ class Serialiser(with_metaclass(MetaSerialiser, object)):
         ]
 
     def object_inflate(self, data, instance=None, **kwargs):
-        obj = {}
+        objdata = {}
         errors = defaultdict(list)
         for name, method in self._field_inflaters:
             try:
-                method(name, data=data, obj=obj, instance=instance, **kwargs)
+                method(name, data=data, obj=objdata, instance=instance, **kwargs)
             except ValidationError as exc:
                 errors[name].append(exc)
         for name, method in self._custom_inflaters:
             try:
-                obj[name] = method(data=data, obj=obj, instance=instance,
+                objdata[name] = method(data=data, obj=objdata, instance=instance,
                     **kwargs
                 )
             except ValidationError as exc:
                 errors[name].append(exc)
         if errors:
             raise ValidationErrors(errors)
-        return self.restore_object(obj, instance=instance, **kwargs)
+        return self.restore_object(objdata, instance=instance, **kwargs)
 
     def list_inflate(self, data_list, **kwargs):
         # XXX target object list?
@@ -104,5 +106,7 @@ class Serialiser(with_metaclass(MetaSerialiser, object)):
             for data in data_list
         ]
 
-    def restore_object(self, obj, **kwargs): # pragma: no cover
-        raise NotImplementedError
+    def restore_object(self, objdata, **kwargs): # pragma: no cover
+        if not self.obj_class:
+            raise NotImplementedError
+        return self.obj_class(objdata)
