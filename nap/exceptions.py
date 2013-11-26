@@ -3,7 +3,7 @@ class ValidationError(Exception):
     def __init__(self, message):
         self.message = message
 
-    def __unicode__(self):
+    def __unicode__(self): # pragma: no cover
         return self.message
 
 
