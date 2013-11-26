@@ -1,6 +1,7 @@
 v0.13.6:
 + Overhauled testing
 + Added 'total_pages' to page meta.
++ Added Serialiser.obj_class
 
 v0.13.5.1:
 - Fix fix for b'' from last release, to work in py2
