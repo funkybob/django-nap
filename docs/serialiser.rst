@@ -50,3 +50,9 @@ def object_inflate(data, instance=None, \*\*kwargs):
         - otherwise, it calls the fields inflate method, passing name, data, obj, and kwargs
     Once this is complete, it calls the `restore_object` method on itself, passing the data dict, instance, and kwargs.
 
+def restore_object(objdata, \*\*kwargs):
+
+    Construct an object from the inflated data.
+
+    By default, if Serialiser.obj_class has been provided, it will construct a new instance, passing objdata as keyword arguments.  Otherwise, it will raise a NotImplementedError.
+
