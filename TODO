@@ -4,8 +4,6 @@
 - Provide an internal API layer that's devoid of de/serialising, and an outer layer.
     This should promote re-use of the facilities.
 
-- Enforce not null?
-
 - Make CSRF configurable
 
-- Make meta.next/meta.next URLs
+- Make meta.next/meta.prev URLs
