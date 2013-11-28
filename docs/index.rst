@@ -11,15 +11,15 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-    serialiser
-    fields
-    publisher
-    auth
-    api
-    models
-    http
-    newrelic
-    examples
+   serialiser
+   fields
+   publisher
+   auth
+   api
+   models
+   http
+   newrelic
+   examples
 
 
 Indices and tables

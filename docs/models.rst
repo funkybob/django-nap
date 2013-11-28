@@ -42,7 +42,7 @@ This utility class allows you to programmatically generate a ModelSerialiser.
 The optional arguments will be treated the same as if passed in the Meta of a ModelSerialiser.  Additional deflate/inflate methods may be passed in kwargs.
 
 ModelSerialiserField & ModelManySerialiserField
-====================
+===============================================
 
 Model counterparts to SerialiserField and ManySerialiserField.  If not passed a serialiser, they will generate one from the model provided.
 
