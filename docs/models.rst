@@ -48,7 +48,7 @@ This utility class allows you to programmatically generate a ModelSerialiser.
 
 .. code-block:: python
 
-    myser = modelserialiser_factory(name, model, [fields=], [exclude=], [read_only=], \**kwargs)
+    myser = modelserialiser_factory(name, model, [fields=], [exclude=], [read_only=], **kwargs)
 
 The optional arguments will be treated the same as if passed in the Meta of a
 ModelSerialiser.  Additional deflate/inflate methods may be passed in kwargs.
