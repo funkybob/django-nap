@@ -15,7 +15,10 @@ Serialiser objects
 
 A Serialiser class is defined much like a Form or Model:
 
+.. code-block:: python
+
     class MySerialiser(Serialiser):
+
         foo = fields.Field()
         bar = fields.Field('foo.bar')
         baz = fields.IntegerField()
