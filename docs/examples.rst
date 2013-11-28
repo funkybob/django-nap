@@ -10,7 +10,7 @@ Case 1: Simple Blog API
 models.py
 ---------
 
-.. code-block: python
+.. code-block:: python
 
     from django.db import models
     from taggit.managers import TaggableManager
@@ -26,7 +26,7 @@ models.py
 serialiser.py
 -------------
 
-.. code-block: python
+.. code-block:: python
 
     from nap.serialiser import ModelSerialiser
     from nap.publisher import ModelPublisher
@@ -46,7 +46,7 @@ serialiser.py
 publishers.py
 -------------
 
-.. code-block: python
+.. code-block:: python
 
     from .serialiser import PostSerialiser
 
@@ -56,7 +56,7 @@ publishers.py
 urls.py
 -------
 
-.. code-block: python
+.. code-block:: python
 
     from .serialiser import PostPublisher
 
