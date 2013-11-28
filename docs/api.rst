@@ -4,6 +4,8 @@ APIs
 
 When you have multiple Publishers collected together, it can be handy to publish them under the same path.  This is where the Api class comes in.
 
+.. code-block:: python
+
     api = Api('name')
 
     api.register(MyPublisher)
@@ -12,6 +14,8 @@ When you have multiple Publishers collected together, it can be handy to publish
 By default, each Publisher will be registered with the name in its "api_name" property.
 
 Once registered, you can get a list of URL patterns to include:
+
+.. code-block:: python
 
     (r'^api/', include(api.patterns())),
 
@@ -26,6 +30,8 @@ Just like Django's Admin, Api supports auto-discover.
 
 In your publishers.py use:
 
+.. code-block:: python
+
     from nap import api
 
     ...
@@ -36,10 +42,14 @@ An Api instance with that name will be created, if it hasn't already, and put in
 
 Then, in your urls.py, just add:
 
+.. code-block:: python
+
     from nap import api
     api.autodiscover()
 
 Which will trigger it to import $APP.serialiser from each of your INSTALLED_APPS.  Then you can just include the urls:
+
+.. code-block:: python
 
     (r'^apis/', include(api.patterns()))
 
