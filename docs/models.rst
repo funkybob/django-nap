@@ -25,8 +25,8 @@ inflate/deflate methods.
 
 By default, the restore_object method will pass the inflated dict to the model
 to create a new instance, or update all the properties on an existing instance.
- By default, it will save the updated instance, however you can pass
-commit=False to prevent this.
+It will save the updated instance, however you can pass commit=False to prevent
+this.
 
 
 ModelPublisher
