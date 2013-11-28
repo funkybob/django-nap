@@ -7,7 +7,10 @@ Sometimes, an example is much easier to understand than abstract API docs, so he
 Case 1: Simple Blog API
 =======================
 
-# models.py
+models.py
+---------
+
+.. code-block: python
 
     from django.db import models
     from taggit.managers import TaggableManager
@@ -20,7 +23,10 @@ Case 1: Simple Blog API
         tags = TaggableManager(blank=True)
 
 
-# serialiser.py
+serialiser.py
+-------------
+
+.. code-block: python
 
     from nap.serialiser import ModelSerialiser
     from nap.publisher import ModelPublisher
@@ -37,14 +43,20 @@ Case 1: Simple Blog API
             return [tag.name for tag in obj.tags.all()]
 
 
-# publishers.py
+publishers.py
+-------------
+
+.. code-block: python
 
     from .serialiser import PostSerialiser
 
     class PostPublisher(ModelPublisher):
         serialiser = PostSerialiser()
 
-# urls.py
+urls.py
+-------
+
+.. code-block: python
 
     from .serialiser import PostPublisher
 
