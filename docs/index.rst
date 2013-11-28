@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to django-nap's documentation!
-======================================
+Take a REST with django-nap: APIs for Django
+============================================
 
 Contents:
 
