@@ -2,6 +2,8 @@ django-nap
 ==========
 [![Build Status](https://secure.travis-ci.org/funkybob/django-nap.png?branch=master)](http://travis-ci.org/funkybob/django-nap)
 
+Read The Docs: http://django-nap.readthedocs.org/en/latest/
+
 A light REST library for Django.
 
 Whilst there are many existing RESTful API tools about, many of them are very complex, and [as I found] some are quite slow!
