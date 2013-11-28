@@ -11,6 +11,8 @@ same functions.
 
 The publisher recognises a small, fixed set of URL patterns, and dispatches to them to methods on the class according to a simple pattern: target, method, action.  The target is either "list" or "object", depending on if an object_id was supplied.  The method is the HTTP method, lower cased (i.e. get, put, post, delete, etc.).  And finally, the action, which defaults to 'default'.
 
+.. code-block:: python
+
     r'^object/(?P<object_id>[-\w]+)/(?P<action>\w+)/(?P<argument>.+?)/?$'
     r'^object/(?P<object_id>[-\w]+)/(?P<action>\w+)/?$'
     r'^object/(?P<object_id>[-\w]+)/?$'
@@ -76,6 +78,7 @@ The Publisher extends the BasePublisher class with some useful methods for typic
             Paginate the supplied object list.
             The default implementation will use the django Paginator class to paginate according to the 'offset' value in request.GET.
             The data returned will be a dict containing:
+
                 objects:    a list of objects on this page
                 meta:
                     offset: the offset of this page
@@ -119,6 +122,7 @@ Filtering and Sorting
 The Publisher class has two methods for sorting and filtering:
 
     def filter_object_list(self, object_list)
+
     def sort_object_list(self, object_list)
 
 By default, these simply return the list they are passed.
