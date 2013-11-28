@@ -1,10 +1,13 @@
+==========
+Publishers
+==========
 
-BasePublisher
-=============
+The publisher is a general purpose class for dispatching requests.  It's similar
+to the generic Class-Based Views in Django, but handles many views in a single
+class.
 
-The publisher is a general purpose class for dispatching requests.  It's similar to the generic Class-Based Views in Django, but handles many views in a single class.
-
-This pattern works well for APIs, where typically a group of views require the same functions.
+This pattern works well for APIs, where typically a group of views require the
+same functions.
 
 The publisher recognises a small, fixed set of URL patterns, and dispatches to them to methods on the class according to a simple pattern: target, method, action.  The target is either "list" or "object", depending on if an object_id was supplied.  The method is the HTTP method, lower cased (i.e. get, put, post, delete, etc.).  And finally, the action, which defaults to 'default'.
 
