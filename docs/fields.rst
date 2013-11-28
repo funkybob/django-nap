@@ -7,13 +7,14 @@ Fields are declared on Serialisers to pluck values from the object for deflation
 The basic Field class can be used for any value that has a matching JSON counterpart; i.e. bools, strings, floats, dicts, lists.
 
 There are also some for common types:
-    BooleanField
-    IntegerField
-    DecimalField
-    DateTimeField
-    DateField
-    TimeField
-    StringField
+
+- BooleanField
+- IntegerField
+- DecimalField
+- DateTimeField
+- DateField
+- TimeField
+- StringField
 
 Finally, there are the two Serialiser Fields, which will generate their value using a serialiser class.  They are the SerialiserField, and ManySerialiserField.
 
