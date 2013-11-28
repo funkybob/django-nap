@@ -20,6 +20,7 @@ Contents:
    http
    newrelic
    examples
+   changelog
 
 Quick Start
 ===========
