@@ -63,83 +63,206 @@ its patterns.  Fortunately, it provides a handy method to make this simple:
 
     url(r'^myresource/', include(MyPublisher.patterns())),
 
+
+Base Publisher
+==============
+
+.. class:: BasePublisher(request [,\*args] [,\**kwargs])
+
+   .. attribute:: CSRF = True
+
+      Determines if CSRF protection is applied to the view function used in ``patterns``
+
+   .. attribute:: ACTION_PATTERN
+   .. attribute:: OBJECT_PATTERN
+   .. attribute:: ARGUMENT_PATTERN
+
+      Used by the ``patterns`` method to control the URL patterns generated.
+
+   .. classmethod:: patterns(api_name=None)
+
+      Builds a list of URL patterns for this Publisher.
+
+      The ``api_name`` argument will be used for naming the url patterns.
+
+   .. method::  dispatch(request, action='default', object_id=None, \**kwargs):
+
+      Entry point used by the view function.
+
+   .. method:: execute(handler):
+
+      Call hook for intercepting handlers.  ``dispatch`` passes the handler
+      method here to invoke.  It will call the handler, and catch any ``BaseHttpResponse``
+      exceptions, returning them.
+
+      This was originally added to make New Relic support simpler.
+
+   .. classmethod:: index()
+
+      Returns details about handlers available on this publisher.
+
+      The result will be a dict with two keys: list, and detail.
+
+      Each item will contain a list of handlers and the HTTP verbs they accept.
+
 Publisher
 =========
 
 The Publisher extends the BasePublisher class with some useful methods for
 typical REST-ful uses.
 
-    Publisher(BasePublisher):
-        CSRF = True # Set this to False to make this publisher CSRF exempt
+.. class:: Publisher
 
-        def get_serialiser():
-            Allows you to use a different ``Serialiser`` depending on the handler, or other criterial.
-            The default method returns self.serialiser
+   .. attribute:: page_size
 
-        def get_object_list():
-            Returns the object list for use in list handlers.
+      Enable pagination and specify the default page size.
+      Default: unset
 
-        def filter_object_list(object_list):
-            A hook to apply common filtering to object list.
-            Default is to return the object_list unchanged.
+   .. attribute:: max_page_size
 
-        def sort_object_list(object_list):
-            A hook to apply common sorting logic to an object list.
-            Default is to return the object_list unchanged.
+      Limit the maximum page size.
+      Default: page_size
 
-        def get_object(object_id):
-            Returns the requested object, or raises Http404
+      If a request passes an override LIMIT value, it can not exceed this.
 
-        def get_page(object_list):
-            Paginate the supplied object list.
-            The default implementation will use the django Paginator class to paginate according to the 'offset' value in request.GET.
-            The data returned will be a dict containing:
+   .. attribute:: LIMIT_PARAM
 
-                objects:    a list of objects on this page
-                meta:
-                    offset: the offset of this page
-                    limit: the page size
-                    count: the total number of objects in the list before pagination 
-                    has_next: if there is a page after this one
-                    has_prev: is there is a page before this one
+      Specifies the query parameter name used to specify the pagination size limit.
+      Default: 'limit'
 
-            If there is no page_size set, the meta dict will be empty, and objects will be the full object list.
+   .. attribute:: OFFSET_PARAM
 
-        def get_request_data():
-            Returns the data sent in this request.
-            If the request type is specified in the ``Engine``'s supported types, it will be used to de-serialise the data.
-            Otherwise, request.GET or request.POST will be returned as apporpriate for the HTTP method used.
+      Specifies the query parameter name used to specify the pagination offset.
+      Default: 'offset'
 
-        def render_single_object(obj, serialiser=None, \**kwargs):
-            A helper function to serialise the object and create a response.
-            Will call get_serialiser if serialiser is None.
-            The kwargs are passed on to create_response
+   .. attribute:: PAGE_PARAM
 
-        def create_response(content, \**kwargs):
-            Return a HttpResponse and serialiser the content using the ``Engine```.
-            The default content_type will be the first in the ``Engine``'s CONTENT_TYPEs list.
-            The response class can be overridden by passing response_class in kwargs.
+      Specifies the query parameter name used to specify the pagination page.
+      Default: 'page'
 
-        ## Default Handlers
+   .. attribute:: response_class
 
-        def list_get_default():
-            Default list handler.
-            Calls `get_object_list`, `filter_object_list` and `sort_object_list`, then passes the list to `get_page`.
-            It then uses the object from `get_serialiser` to deflate the object list.
-            Returns the resulting data using ``create_response``.
+      Default class to use in ``create_response``
 
-        def object_get_default():
-            Defaul object handler.
-            Passes the result of ``get_object`` to ``render_single_object``
+   .. attribute:: CONTENT_TYPES
+
+      A list of content types supported by the de/serialiser.
+      Default: ['application/json', 'text/json']
+
+      The first value in the list will be used as the content type of responses.
+
+   .. method:: dumps(data)
+
+      Used to serialise data.  By default calls json.dumps.
+
+   .. method:: loads(data)
+
+      Deserialise data.  By default calls json.loads.
+
+   .. method:: get_serialiser()
+
+      Called to get the ``Serialiser`` instance to use for this request.
+      Default: returns self.serialiser
+
+   .. method:: get_serialiser_kwargs()
+
+      Used to generate extra kwargs to pass to serialiser calls (i.e.
+      object_deflate, list_deflate, etc)
+
+   .. method:: get_object_list()
+
+      Return the raw object list for this request.
+      This is Not Implemented.  You must provide this method in your Serialiser
+      class.
+
+   .. method:: get_object(object_id)
+
+      Return the object for the given ID.
+      You must provide this method in your Serialiser class.
+
+   .. method:: filter_object_list(object_list)
+
+      Apply filtering to an object list, returning the filtered list.
+      Default: Returns the passed object_list.
+
+   .. method:: sort_object_list(object_list)
+
+      Apply sorting to an object list, returning the sorted list.
+      Default: Returns the passed object_list.
+
+   .. method:: get_page(object_list):
+
+      Paginate the object_list.
+
+      If the page_size is not defined on the Serialiser, no pagination is
+      performed, and the following dict is returned:
+
+      .. code-block:: python
+
+         { 'meta': {}, 'objects': object_list }
+
+      Otherwise, the object_list is paginated.  If self.PAGE_PARAM was passed,
+      it will be used for the page number.  It not, and self.OFFSET_PARAM is
+      supplied, the page will be determined by dividing the offset by page_size.
+
+      The ``meta`` dict will contain:
+
+      .. code-block:: python
+
+         'offset': page.start_index() - 1,
+         'page': page_num,
+         'total_pages': paginator.num_pages,
+         'limit': page_size,
+         'count': paginator.count,
+         'has_next': page.has_next(),
+         'has_prev': page.has_previous(),
+
+
+   .. method:: get_request_data()
+
+      Returns the data sent in this request.
+      If the request type is specified in ``CONTENT_TYPES`` it will be used to
+      de-serialise the data.  Otherwise, request.GET or request.POST will be
+      returned as apporpriate for the HTTP method used.
+
+   .. method:: render_single_object(obj, serialiser=None, \**kwargs):
+
+      A helper function to serialise the object and create a response, using
+      self.response_class.  If ``serialiser`` is None, it will call
+      ``get_serialiser``.  The kwargs will be passed on to ``create_response``
+
+   .. method:: create_response(content, \**kwargs):
+
+      A helper function for building ``self.response_class``.
+      Passing response_class as an argument overrides the class used.
+
+      It sets 'content_type' in kwargs to self.CONTENT_TYPES[0] if it's not set.
+      Then, it passes ``content`` to ``self.dumps``, and passes that, along with
+      kwargs, to build a new response_class instance, returning it.
+
+   .. method:: list_get_default(request, \**kwargs):
+
+      Default list handler.
+
+      Calls `get_object_list`, `filter_object_list` and `sort_object_list`,
+      then passes the list to `get_page`.  It then uses the object from
+      `get_serialiser` to deflate the object list.
+
+      Returns the resulting data using ``create_response``.
+
+   .. method: object_get_default(request, \**kwargs):
+
+      Defaul object handler.
+      Passes the result of ``get_object`` to ``render_single_object``
 
 Filtering and Sorting
 ~~~~~~~~~~~~~~~~~~~~~
 
 The Publisher class has two methods for sorting and filtering:
 
-    def filter_object_list(self, object_list)
+.. method:: filter_object_list(object_list)
 
-    def sort_object_list(self, object_list)
+.. method:: sort_object_list(object_list)
 
 By default, these simply return the list they are passed.
 
