@@ -41,22 +41,8 @@ can be omitted.
 
 Like a view, every handler is expected to return a proper HttpResponse object.
 
-Custom Patterns
----------------
-
-By overridding the patterns method, you can provide your own url patterns.
-
-One sample is included: nap.publisher.SimplePatternsMixin
-
-It omits the object/ portion of the object urls above, but limits object_ids to
-just digits.
-
-Alternatively, if you just want to change the regex used for each part of the
-URL, you can overrid them using OBJECT_PATTERN, ACTION_PATTERN, and
-ARGUMENT_PATTERN, which default to '[-\w]+', '\w+' and '.*?' respectively.
-
 Publishing
-----------
+==========
 
 In order to add a ``Publisher`` to your URL patterns, you need to include all of
 its patterns.  Fortunately, it provides a handy method to make this simple:
@@ -104,6 +90,20 @@ Base Publisher
       The result will be a dict with two keys: list, and detail.
 
       Each item will contain a list of handlers and the HTTP verbs they accept.
+
+Custom Patterns
+---------------
+
+By overridding the patterns method, you can provide your own url patterns.
+
+One sample is included: nap.publisher.SimplePatternsMixin
+
+It omits the object/ portion of the object urls above, but limits object_ids to
+just digits.
+
+Alternatively, if you just want to change the regex used for each part of the
+URL, you can overrid them using OBJECT_PATTERN, ACTION_PATTERN, and
+ARGUMENT_PATTERN, which default to '[-\w]+', '\w+' and '.*?' respectively.
 
 Publisher
 =========
@@ -255,8 +255,9 @@ typical REST-ful uses.
       Defaul object handler.
       Passes the result of ``get_object`` to ``render_single_object``
 
+
 Filtering and Sorting
-~~~~~~~~~~~~~~~~~~~~~
+---------------------
 
 The Publisher class has two methods for sorting and filtering:
 
