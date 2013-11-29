@@ -9,8 +9,6 @@ class.
 This pattern works well for APIs, where typically a group of views require the
 same functions.
 
-The publisher recognises a small, fixed set of URL patterns, and dispatches to them to methods on the class according to a simple pattern: target, method, action.  The target is either "list" or "object", depending on if an object_id was supplied.  The method is the HTTP method, lower cased (i.e. get, put, post, delete, etc.).  And finally, the action, which defaults to 'default'.
-
 .. code-block:: python
 
     r'^object/(?P<object_id>[-\w]+)/(?P<action>\w+)/(?P<argument>.+?)/?$'
@@ -22,13 +20,26 @@ The publisher recognises a small, fixed set of URL patterns, and dispatches to t
 
 Clearly this list does not permit 'object' to be an action.
 
-Any handler should follow the same definition:
+The publisher recognises a small, fixed set of URL patterns, and dispatches them
+to methods on the class according to a simple pattern: target, method, action.
+The target is either "list" or "object", depending on if an object_id was
+supplied.  The method is the HTTP method, lower cased (i.e. get, put, post,
+delete, etc.).  And finally, the action, which defaults to 'default'.
 
-    def handler(self, request, action, object_id, \**kwargs):
+So, for example, a GET request to /foo would call the ``list_get_foo`` handler.
+Whereas a POST to /object/123/nudge/ would call ``object_post_nudge``, passing
+"123" as the object_id.
 
-Both action and object_id are passed as kwargs, so where they're not needed they can be omitted.
+All handlers should follow the same definition:
 
-Every handler is expected to return a proper HttpResponse object.
+.. code-block:: python
+
+    def handler(self, request, action, object_id, **kwargs):
+
+Both action and object_id are passed as kwargs, so where they're not needed they
+can be omitted.
+
+Like a view, every handler is expected to return a proper HttpResponse object.
 
 Custom Patterns
 ---------------
@@ -37,21 +48,26 @@ By overridding the patterns method, you can provide your own url patterns.
 
 One sample is included: nap.publisher.SimplePatternsMixin
 
-It omits the object/ portion of the object urls above, but limits object_ids to just digits.
+It omits the object/ portion of the object urls above, but limits object_ids to
+just digits.
 
-Alternatively, if you just want to change the regex used for each part of the URL, you can overrid them using OBJECT_PATTERN, ACTION_PATTERN, and ARGUMENT_PATTERN, which default to '[-\w]+', '\w+' and '.*?' respectively.
+Alternatively, if you just want to change the regex used for each part of the
+URL, you can overrid them using OBJECT_PATTERN, ACTION_PATTERN, and
+ARGUMENT_PATTERN, which default to '[-\w]+', '\w+' and '.*?' respectively.
 
 Publishing
 ----------
 
-In order to add a ``Publisher`` to your URL patterns, you need to include all of its own patterns.  Fortunately, it provides a handy method to make this simple:
+In order to add a ``Publisher`` to your URL patterns, you need to include all of
+its patterns.  Fortunately, it provides a handy method to make this simple:
 
     url(r'^myresource/', include(MyPublisher.patterns())),
 
 Publisher
 =========
 
-The Publisher extends the BasePublisher class with some useful methods for typical REST-ful uses.
+The Publisher extends the BasePublisher class with some useful methods for
+typical REST-ful uses.
 
     Publisher(BasePublisher):
         CSRF = True # Set this to False to make this publisher CSRF exempt
@@ -127,20 +143,29 @@ The Publisher class has two methods for sorting and filtering:
 
 By default, these simply return the list they are passed.
 
-Filtering and sorting are not applied by get_object_list.  This lets you apply required filtering [site, security, user, etc] in get_object_list, and optional filtering [query, etc] where it's wanted.  Also, ordering can be an unwanted expense when it's not important to the use.
+Filtering and sorting are not applied by get_object_list.  This lets you apply
+required filtering [site, security, user, etc] in get_object_list, and optional
+filtering [query, etc] where it's wanted.  Also, ordering can be an unwanted
+expense when it's not important to the use.
 
-The default Publisher.list_get_default will pass the result of get_object_list to filter_object_list and sort_object_list in turn before serialising.
+The default Publisher.list_get_default will pass the result of get_object_list
+to filter_object_list and sort_object_list in turn before serialising.
 
 ModelPublisher
 ==============
 
-The ModelPublisher implements some default handlers that are more sensible for a Model.
+The ModelPublisher implements some default handlers that are more sensible for a
+Model.
 
-It includes a default ``model`` property that will return the model from the meta class of self.serialiser.  This way, by default, it will publish the model of its default Serialiser.
+It includes a default ``model`` property that will return the model from the
+meta class of self.serialiser.  This way, by default, it will publish the model
+of its default Serialiser.
 
 ModelFormMixin
 ==============
 
-This class provides ``list_post_default`` and ``object_put_default`` that will use a ModelForm to validate and creat/update objects.  It uses the same methods as a standard Django FormMixin class-based view.
+This class provides ``list_post_default`` and ``object_put_default`` that will
+use a ModelForm to validate and creat/update objects.  It uses the same methods
+as a standard Django FormMixin class-based view.
 
 It also includes an ``object_delete_default`` method.
