@@ -14,6 +14,7 @@ Take a REST with django-nap: APIs for Django
 
 .. image:: https://pypip.in/v/django-nap/badge.png
            :target: https://crate.io/packages/django-nap
+
 Contents:
 
 .. toctree::
