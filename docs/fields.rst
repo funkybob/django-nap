@@ -21,48 +21,76 @@ Finally, there are the two Serialiser Fields, which will generate their value us
 Field
 =====
 
-    class Field(attribute=None, default=None, readonly=False, \*args, \*\*kwargs)
+.. class:: Field(attribute=None, default=None, readonly=False, null=True, \*args, \**kwargs)
 
-    + attribute
-      Used to define the attribute this field sources it value from on the object.  If omitted, the name of this field in its Serialiser class will be used.
+   :param attribute: Define the attribute this field sources it value from on
+                     the object.  If omitted, the name of this field in its
+                     Serialiser class will be used.
+                     This may be in Django template dotted-lookup syntax.
+   :param default: The value to use if the source value is absent.
+   :param readonly: Is this field only for deflating?
+   :param null: Can this value be None when inflating?
 
-    + default
-      The value to use if we can't find a value on the object.
+   .. attribute:: type_class
+
+      For simple fields, type_class is used to restore values.
+
+   .. method:: reduce(value, \**kwargs)
+
+      Reduce the sourced value to a serialisable type.
+
+   .. method:: restore(value, \**kwargs)
+
+      Restore a serialisable form of the value to its Python type.  By default
+      this will use ``type_class`` unless the value is None.
+
+   .. method:: deflate(name, obj, data, \**kwargs)
+
+      Deflate our value from the obj, and store it into data.  The ``name``
+      will be used only if ``self.attribute`` is None.
+
+      This uses ``digattr`` to extract the value from the obj, then calls
+      ``reduce`` if the value is not None.
+
+   .. method:: inflate(name, data, obj, \**kwargs)
+
+      Inflate a value from data into obj.  The ``name`` will be used only if
+      ``self.attribute`` is None.
 
 Deflate Cycle
 =============
 
-    Field.deflate(name, obj, data, \*\*kwargs):
-
-    + Determine if we use name or attribute.
-    + Use nap.utils.digattr to get the value
-    + If the value is not None, call self.reduce
-    + Add our value to the data dict under the key in name
++ Determine if we use name or attribute.
++ Use nap.utils.digattr to get the value
++ If the value is not None, call self.reduce
++ Add our value to the data dict under the key in name
 
 The reduce method is the last stage of casting.  By default, it does nothing.
 
 Inflate Cycle
 =============
 
-    Field.inflate(name, data, obj, \*\*kwargs):
++ If this field is read-only, return immediately.
++ Determine if we use name or attribute
++ Try to get our value from the data dict.  If it's not there, return.
++ Pass the value through self.restore
++ Save the value in the obj dict
 
-    + If this field is read-only, return immediately.
-    + Determine if we use name or attribute
-    + Try to get our value from the data dict.  If it's not there, return.
-    + Pass the value through self.restore
-    + Save the value in the obj dict
-
-By default, restore tries to construct a new self.type_class from the value, unless type_class is None.
+By default, restore tries to construct a new self.type_class from the value,
+unless type_class is None.
 
 StringField
 ===========
 
-StringField is for cases where you want to ensure the value is forced to a string.  Its `reduce` method uses `django.utils.encoding.force_text`.
+StringField is for cases where you want to ensure the value is forced to a
+string.  Its `reduce` method uses `django.utils.encoding.force_text`.
 
 Serialiser Fields
 =================
 
-SerialiserField follows the same pattern as above, but replaces the normal reduce/restore methods with calls to its serialisers object_deflate/object_inflate.
+SerialiserField follows the same pattern as above, but replaces the normal
+reduce/restore methods with calls to its serialisers
+object_deflate/object_inflate.
 
 ManySerialiserField does the same, but uses list_deflate/list_inflate.
 
