@@ -9,11 +9,11 @@ Take a REST with django-nap: APIs for Django
 .. image:: https://travis-ci.org/funkybob/django-nap.png
            :target: https://secure.travis-ci.org/funkybob/django-nap.png?branch=master
 
-.. image:: https://pypip.in/d/PYPI_PKG_NAME/badge.png
-           :target: https://crate.io/packages/PYPI_PKG_NAME
+.. image:: https://pypip.in/d/django-nap/badge.png
+           :target: https://crate.io/packages/django-nap
 
-.. image:: https://pypip.in/v/PYPI_PKG_NAME/badge.png
-           :target: https://crate.io/packages/PYPI_PKG_NAME
+.. image:: https://pypip.in/v/django-nap/badge.png
+           :target: https://crate.io/packages/django-nap
 Contents:
 
 .. toctree::
