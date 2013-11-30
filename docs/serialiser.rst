@@ -25,37 +25,59 @@ A Serialiser class is defined much like a Form or Model:
 
 Without an attribute specified, the field will use its name as the attribute name.
 
-Serialiser methods
-==================
+The Deflate Cycle
+-----------------
 
-def object_deflate(obj, \*\*kwargs):
+For each declared field:
 
-    Returns `obj` reduced to its serialisable format.
+- Call the fields deflate method.  The field is expected to to store its result
+  in the data dict.
+- If there is a deflate_FOO method on the Serialiser, set the value in the data
+  dict to its return value.
 
-    It calls each fields "deflate" method, passing the object, a dict for the resulting data, and kwargs.
+The Inflate Cycle
+-----------------
 
-    Then it checks if the class as a deflate_FOO method, where foo matches the field name.  If so, it sets
-    the fields value in the dict to the result of calling that method, passing it the object, data dict, and kwargs.
+For reach declared field:
 
-    This allows you to customise exactly how field data are retrieved and converted.
+- If the Serialiser has an inflate_FOO method, its result is stored in the
+  obj_data dict.
+- Otherwise, call the fields inflate method.  The field is expected to store its
+  result in the obj_data dict.
+- If there were no ValidationError exceptions raised, pass the obj_data,
+  instance, and kwargs to restore_object.
 
-def list_deflate(obj_list, \*\*kwargs):
+If any ValidationError exceptions are raised during inflation, a
+ValidationErrors exception is raised, containing all the validation errors.
 
-    Calls object_deflate on each item in object_list.
+Serialiser
+==========
 
-def object_inflate(data, instance=None, \*\*kwargs):
+.. class:: Serialiser()
 
-    Turn serialisable data back into an object instance.
+   .. method:: object_deflate(obj, \**kwargs)
 
-    First it builds a dict by performing the following steps on each declared field:
-        - if it's marked readonly, it skips it
-        - if there is an inflate_FOO method, it calls it, passing data, obj, instance, and kwargs
-        - otherwise, it calls the fields inflate method, passing name, data, obj, and kwargs
-    Once this is complete, it calls the `restore_object` method on itself, passing the data dict, instance, and kwargs.
+      Returns `obj` reduced to its serialisable format.
 
-def restore_object(objdata, \*\*kwargs):
+      The kwargs are passed on to field and custom deflate methods.
 
-    Construct an object from the inflated data.
+   .. method:: list_deflate(obj_list, \**kwargs)
 
-    By default, if Serialiser.obj_class has been provided, it will construct a new instance, passing objdata as keyword arguments.  Otherwise, it will raise a NotImplementedError.
+      Return a list made by calling object_deflate on each item in the supplied
+      iterable.
+
+      Passes kwargs to each call to object_deflate.
+
+   .. method:: object_inflate(data, instance=None, \**kwargs)
+
+      Restore data to an object.  If the instance is passed, it is expected to
+      be updated by ``restore_object``.
+
+   .. method:: restore_object(obj_data, \**kwargs)
+
+      Construct an object from the inflated data.
+
+      By default, if Serialiser.obj_class has been provided, it will construct a
+      new instance, passing objdata as keyword arguments.  Otherwise, it will
+      raise a NotImplementedError.
 
