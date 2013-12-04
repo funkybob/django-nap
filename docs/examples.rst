@@ -58,7 +58,7 @@ urls.py
 
 .. code-block:: python
 
-    from .serialiser import PostPublisher
+    from .publishers import PostPublisher
 
     urlpatters = patterns('',
         (r'^api/', include(PostPublisher.patterns())),
