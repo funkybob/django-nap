@@ -15,6 +15,12 @@ Take a REST with django-nap: APIs for Django
 .. image:: https://pypip.in/v/django-nap/badge.png
            :target: https://crate.io/packages/django-nap
 
+Whilst there are many existing RESTful API tools about, many of them are very complex, and [as I found] some are quite slow!
+
+I wanted to take the solid serialising pattern from TastyPie, with the separation of roles of django-rest-framework, and include a Publisher API I developed some time ago.
+
+Nap does not provide the wide range of features you see in tools like Django REST Framework and TastyPie, like rate limiting, token authentication, automatic UI, etc.  Instead, it provides a flexible framework that makes it easy to combine with other specialised apps.
+
 Contents:
 
 .. toctree::
