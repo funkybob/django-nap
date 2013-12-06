@@ -19,7 +19,27 @@ Whilst there are many existing RESTful API tools about, many of them are very co
 
 I wanted to take the solid serialising pattern from TastyPie, with the separation of roles of django-rest-framework, and include a Publisher API I developed some time ago.
 
-Nap does not provide the wide range of features you see in tools like Django REST Framework and TastyPie, like rate limiting, token authentication, automatic UI, etc.  Instead, it provides a flexible framework that makes it easy to combine with other specialised apps.
+In the spirit of the Unix philosophy, Nap provides a few tools which each do one thing, and do it well.  They are:
+
+1. Serialiser
+
+   Declarative style Serialiser definitions for reducing complex Python objects
+   to simple types expressible in JSON.
+
+2. Publisher
+
+   A Class-based view system which merges many related views into a single
+   class, including url routing.
+
+3. API
+
+   Manage many Publishers and API versions with simple auto-discover resource
+   registration.
+
+Nap does not provide the wide range of features you see in tools like Django
+REST Framework and TastyPie, such as rate limiting, token authentication,
+automatic UI, etc.  Instead, it provides a flexible framework that makes it
+easy to combine with other specialised apps.
 
 Contents:
 
