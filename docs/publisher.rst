@@ -71,6 +71,14 @@ Base Publisher
 
       The ``api_name`` argument will be used for naming the url patterns.
 
+   .. classmethod:: index()
+
+      Returns details about handlers available on this publisher.
+
+      The result will be a dict with two keys: list, and detail.
+
+      Each item will contain a list of handlers and the HTTP verbs they accept.
+
    .. method::  dispatch(request, action='default', object_id=None, \**kwargs):
 
       Entry point used by the view function.
@@ -82,14 +90,6 @@ Base Publisher
       exceptions, returning them.
 
       This was originally added to make New Relic support simpler.
-
-   .. classmethod:: index()
-
-      Returns details about handlers available on this publisher.
-
-      The result will be a dict with two keys: list, and detail.
-
-      Each item will contain a list of handlers and the HTTP verbs they accept.
 
 Custom Patterns
 ---------------
