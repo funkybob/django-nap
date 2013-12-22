@@ -296,7 +296,9 @@ class Publisher(BasePublisher):
 
     def get_request_data(self, default=None):
         '''Retrieve data from request'''
-        content_type, _ = self.request._parse_content_type(environ.get('CONTENT_TYPE', ''))
+        content_type, _ = self.request._parse_content_type(
+            self.request.META.get('CONTENT_TYPE', '')
+        )
         if content_type in self.CONTENT_TYPES:
             if not self.request.body:
                 return default
