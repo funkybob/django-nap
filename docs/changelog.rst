@@ -8,6 +8,7 @@ v0.13.7
 Enhancements:
 
 + Added ReadTheDocs, and prettied up the docs
++ Use Django's content-type parsing
 
 v0.13.6
 =======
