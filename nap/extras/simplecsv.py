@@ -50,4 +50,4 @@ class Writer(object):
 
     def write_headers(self):
         '''Write a row of headers.'''
-        return self.write(self.headers or self.fields)
+        return self.write(getattr(self, 'headers', self.fields))
