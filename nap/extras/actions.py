@@ -2,7 +2,7 @@
 from django.http import StreamingHttpResponse
 from django.utils.encoding import force_text
 
-from .models import modelserialiser_factory
+from nap.models import modelserialiser_factory
 from .simplecsv import Writer
 
 
@@ -20,6 +20,7 @@ class ExportCsv(object):
         self.opts = opts
         if label:
             self.short_description = label
+        self.__name__ = label or 'ExportCsv'
 
     def __call__(self, admin, request, queryset):
         if self.serialiser is None:
@@ -32,7 +33,7 @@ class ExportCsv(object):
             ser_class = self.serialiser
 
         def inner(ser):
-            csv = Writer(fields=ser._fields.keys())
+            csv = Writer(fields=self.opts.get('fields', ser._fields.keys()))
             yield csv.write_headers()
             for obj in queryset:
                 data = { 
