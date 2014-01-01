@@ -9,6 +9,7 @@ Enhancements:
 
 + Added ReadTheDocs, and prettied up the docs
 + Use Django's content-type parsing
++ Fixed ExportCsv and simplecsv extras
 
 v0.13.6
 =======
