@@ -62,7 +62,7 @@ class Field(object):
                 value = self.restore(value, **kwargs)
             except ValueError:
                 raise ValidationError(
-                    "Field '%s' received invalid value: %r" % (name, value)
+                    "Field '%s' (%r) received invalid value: %r" % (name, self.__class__.__name__, value)
                 )
         elif not self.null:
             raise ValidationError("Field '%s' must not be None." % name)
@@ -119,10 +119,10 @@ class SerialiserField(Field):
         self.serialiser = kwargs['serialiser']
 
     def reduce(self, value, **kwargs):
-        return self.serialiser.object_deflate(value)
+        return self.serialiser.object_deflate(value, **kwargs)
 
     def restore(self, value, **kwargs):
-        return self.serialiser.object_inflate(value)
+        return self.serialiser.object_inflate(value, **kwargs)
 
 
 class ManySerialiserField(Field):
