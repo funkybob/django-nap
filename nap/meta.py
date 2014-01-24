@@ -8,6 +8,6 @@ class Meta(object):
         attrs = dict(
             (name, getattr(meta, name))
             for name in dir(meta)
-            if not name[0] == '_'
+            if not name[0] == '_' and hasattr(cls, name)
         )
         return object.__new__(type(str('Meta'), (cls,), attrs))
