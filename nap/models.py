@@ -65,7 +65,16 @@ class MetaModelSerialiser(MetaSerialiser):
         return new_class
 
 
+class ModelMeta(Meta):
+    model = None
+    fields = []
+    exclude = []
+    read_only_fields = []
+    related_fields = []
+
+ 
 class ModelSerialiser(with_metaclass(MetaModelSerialiser, Serialiser)):
+    __meta = ModelMeta
 
     def restore_object(self, obj, instance, **kwargs):
         if instance:
