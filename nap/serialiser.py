@@ -15,6 +15,7 @@ class MetaSerialiser(type):
 
         # Remove from attrs
         meta = attrs.pop('Meta', None)
+        meta_class = attrs.pop('__meta', Meta)
 
         # Field declared on this new class
         declared_fields = {}
@@ -33,7 +34,7 @@ class MetaSerialiser(type):
         new_class._fields = base_fields
 
         # Handle class Meta
-        new_class._meta = Meta(meta)
+        new_class._meta = meta_class(meta)
 
         return new_class
 
