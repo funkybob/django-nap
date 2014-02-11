@@ -1,13 +1,26 @@
 from __future__ import unicode_literals
 
-class Meta(object):
+from six import with_metaclass
+
+class DeclarativeMetaclass(type):
+    '''
+    Mangle a class so any properties defined on it are stashed in _defaults
+    '''
+    def __new__(mcs, name, bases, attrs):
+        defaults = {
+            key: attrs.pop(key)
+            for key in list(attrs.keys())
+            if not key.startswith('_')
+        }
+        new_class = super(DeclarativeMetaclass, mcs).__new__(mcs, name, bases, attrs)
+        new_class._defaults = defaults
+        return new_class
+
+
+class Meta(with_metaclass(DeclarativeMetaclass, object)):
     '''Generic container for Meta classes'''
 
-    def __new__(cls, meta=None):
-        # Return a new class base on ourselves
-        attrs = dict(
-            (name, getattr(meta, name))
-            for name in dir(meta)
-            if not name[0] == '_' and hasattr(cls, name)
-        )
-        return object.__new__(type(str('Meta'), (cls,), attrs))
+    def __init__(self, meta):
+        ''' Copy value values onto ourself '''
+        for key, value in self._defaults.items():
+            setattr(self, key, getattr(meta, key, value))
