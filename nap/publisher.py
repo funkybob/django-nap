@@ -6,6 +6,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 
+from cgi import parse_header
 from collections import defaultdict
 try:
     import ujson as json
@@ -296,9 +297,7 @@ class Publisher(BasePublisher):
 
     def get_request_data(self, default=None):
         '''Retrieve data from request'''
-        content_type, _ = self.request._parse_content_type(
-            self.request.META.get('CONTENT_TYPE', '')
-        )
+        content_type, _ = parse_header(self.request.META.get('CONTENT_TYPE', ''))
         if content_type in self.CONTENT_TYPES:
             if not self.request.body:
                 return default
