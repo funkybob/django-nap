@@ -5,7 +5,8 @@ Serialisers
 Quick Overview
 ==============
 
-Serialisers define how to turn a Python object into a collection of JSON compatible types.
+Serialisers define how to turn a Python object into a collection of JSON
+compatible types.
 
 They are defined using the familiar declarative syntax, like Models and Forms.
 
@@ -50,8 +51,41 @@ For reach declared field:
 If any ValidationError exceptions are raised during inflation, a
 ValidationErrors exception is raised, containing all the validation errors.
 
-Serialiser
-==========
+Custom Deflaters
+----------------
+
+.. method:: deflate_FOO(obj=obj, data=data, \**kwargs)
+
+    After the ``Field``'s deflate method is called, if a matching deflate_FOO
+    method exists on the class it will be passed the source object ``obj``, the
+    updated data dict ``data``, and any additional keyword arguments as passed
+    to ``object_deflate``.
+
+    .. note::
+
+       The custom deflate methods are called after all Field deflate methods
+       have been called.
+
+Custom Inflaters
+----------------
+
+.. method:: inflate_FOO(data, obj, instance, \**kwargs)
+
+    If an inflate_FOO method exists on the class, it will be called instead of
+    the ``Field``'s inflate method.  It is passed the source data, the inflated
+    object data, the instance (which defaults to None), and any keyword
+    arguments as passed to object_inflate.
+
+    .. note::
+
+       The custom inflate methods are called after all Field inflate methods
+       have been called.
+
+    The custom inflater may raise a ``nap.exceptions.ValidationException`` to
+    indicate the data are invalid.
+
+Serialiser API
+==============
 
 .. class:: Serialiser()
 
