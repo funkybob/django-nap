@@ -12,7 +12,8 @@ class DeclarativeMetaclass(type):
             for key in list(attrs.keys())
             if not key.startswith('_')
         }
-        new_class = super(DeclarativeMetaclass, mcs).__new__(mcs, name, bases, attrs)
+        new_class = super(DeclarativeMetaclass, mcs).__new__(mcs, name, bases,
+            attrs)
         new_class._defaults = defaults
         return new_class
 
@@ -22,5 +23,10 @@ class Meta(with_metaclass(DeclarativeMetaclass, object)):
 
     def __init__(self, meta):
         ''' Copy value values onto ourself '''
+        for key in dir(meta):
+            if key.startswith('_'):
+                continue
+            if key not in self._defaults:
+                raise ValueError('Property "%s" not supported by %s' % (key, self.__class__.__name__))
         for key, value in self._defaults.items():
             setattr(self, key, getattr(meta, key, value))
