@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
 
+from functools import partial
+
 from django.conf.urls import url, include
 from django.core.urlresolvers import reverse
 
@@ -56,6 +58,12 @@ APIS = {}
 
 
 def register(name, *args):
+    if not args:
+        # We've been called as a decorator
+        def wrapper(cls, name=name):
+            register(name, cls)
+            return cls
+        return wrapper
     try:
         api = APIS[name]
     except KeyError:
