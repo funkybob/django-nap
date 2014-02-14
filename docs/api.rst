@@ -43,12 +43,20 @@ In your publishers.py use:
 
     api.register('apiname', Publisher,....)
 
+If you're only registering a single Publisher, you can use api.register as a decorator.
+
+.. code-block:: python
+
+   @api.register('apiname')
+   class JoyPublisher(Publisher):
+
 An Api instance with that name will be created, if it hasn't already, and put
 into api.APIS.  Then the publisher(s) you pass will be registered with it.
 
 .. note::
 
-   Publishers registered this way *must* have an ``api_name`` property defined.
+   The publisher will be registered as the lower-cased version of its class
+   name.  You can control this by setting an ``api_name`` property.
 
 Then, in your urls.py, just add:
 
