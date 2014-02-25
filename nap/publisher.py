@@ -66,7 +66,7 @@ class BasePublisher(object):
         if api_name:
             name = '%s_%s' % (api_name, cls.api_name)
         else:
-            name = cls.api_name
+            name = getattr(cls, 'api_name', cls.__name__.lower())
 
         return [
             url(r'^object/(?P<object_id>%s)/(?P<action>%s)/(?P<argument>%s)/?$' % (cls.OBJECT_PATTERN, cls.ACTION_PATTERN, cls.ARGUMENT_PATTERN),
