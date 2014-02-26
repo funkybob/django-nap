@@ -26,6 +26,7 @@ class ModelMeta(Meta):
     model = None
     # Fields to include from the Model
     fields = []
+    field_types = {}
     # Fields to exclude from the Model
     exclude = []
     # Fields from the model to flag as read-only
@@ -79,7 +80,10 @@ class MetaModelSerialiser(MetaSerialiser):
                 if not field.default is NOT_PROVIDED:
                     kwargs['default'] = field.default
 
-                field_class = FIELD_MAP.get(field.__class__.__name__, fields.Field)
+                try:
+                    field_class = new_class._meta.field_types[field.name]
+                except KeyError:
+                    field_class = FIELD_MAP.get(field.__class__.__name__, fields.Field)
                 model_fields[field.name ] = field_class(**kwargs)
 
         new_class._fields.update(model_fields)
