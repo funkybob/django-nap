@@ -36,53 +36,58 @@ The ``ModelSerialiser`` supports additional ``Meta`` properties:
 
 .. class:: ModelMeta
 
-    .. attribute:: model
+   .. attribute:: model
 
-        Default: None
-        The model this ``Serialiser`` is for
+      Default: None
+      The model this ``Serialiser`` is for
 
-    .. attribute:: fields
+   .. attribute:: fields
 
-        Default: ()
-        The list of fields to use from the Model
+      Default: ()
+      The list of fields to use from the Model
 
-    .. attribute:: exclude
+   .. attribute:: exclude
 
-        Default: ()
-        The list of fields to ignore from the Model
+      Default: ()
+      The list of fields to ignore from the Model
 
-    .. attribute:: read_only_fields
+   .. attribute:: read_only_fields
 
-        Default: ()
-        The list of fields from the Model to mark as read-only
+      Default: ()
+      The list of fields from the Model to mark as read-only
 
-    .. attribute:: related_fields
+   .. attribute:: field_types
 
-        Default: ()
+      Default {}
+      A map of field names to Field class overrides.
 
-    .. attribute:: ignore_fields
+   .. attribute:: related_fields
 
-        Default: ()
-        When restoring an object, the fields which should not be passed to the
-        instance.
+      Default: ()
 
-    .. attribute:: key_fields
+   .. attribute:: ignore_fields
 
-        Default: ('id',)
-        When trying to ``get_or_create`` a model instance, which fields from
-        the inflated data should be used to match the model.
+      Default: ()
+      When restoring an object, the fields which should not be passed to the
+      instance.
 
-    .. attribute:: defaults
+   .. attribute:: key_fields
 
-        Default: {}
-        When trying to ``get_or_create`` a model instance, additional default
-        values to pass.
+      Default: ('id',)
+      When trying to ``get_or_create`` a model instance, which fields from the
+      inflated data should be used to match the model.
 
-    .. attribute:: core_fields
+   .. attribute:: defaults
 
-        Default: ()
-        When trying to ``get_or_create`` a model instance, additional fields to
-        include in the defaults dict.
+      Default: {}
+      When trying to ``get_or_create`` a model instance, additional default
+      values to pass.
+
+   .. attribute:: core_fields
+
+      Default: ()
+      When trying to ``get_or_create`` a model instance, additional fields to
+      include in the defaults dict.
 
 ModelPublisher sub-classes
 --------------------------
