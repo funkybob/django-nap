@@ -42,11 +42,14 @@ class FieldTestCase(TestCase):
         self.assertEqual(data['value'], dest['value'])
 
     def test_000_field_default(self):
+        '''
+        With no default set, we can't deflate a field with no value.
+        '''
         data = {}
         field = fields.Field()
 
-        field.deflate('value', Mock(), data)
-        self.assertNotIn('value', data)
+        self.assertRaises(AttributeError):
+            field.deflate('value', Mock(), data)
 
     def test_000_readonly(self):
         data = {'value': 1}
