@@ -10,6 +10,7 @@ Enhancements:
 + Added ReadTheDocs, and prettied up the docs
 + Use Django's content-type parsing
 + Fixed ExportCsv and simplecsv extras
+- Raise AttributeError if a deflating a field with no default set would result in using its default. [Fixes #28]
 
 v0.13.6
 =======
