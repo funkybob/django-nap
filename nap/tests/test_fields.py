@@ -48,7 +48,7 @@ class FieldTestCase(TestCase):
         data = {}
         field = fields.Field()
 
-        self.assertRaises(AttributeError):
+        with self.assertRaises(AttributeError):
             field.deflate('value', Mock(), data)
 
     def test_000_readonly(self):
