@@ -285,11 +285,3 @@ It includes a default ``model`` property that will return the model from the
 meta class of self.serialiser.  This way, by default, it will publish the model
 of its default Serialiser.
 
-ModelFormMixin
-==============
-
-This class provides ``list_post_default`` and ``object_put_default`` that will
-use a ModelForm to validate and creat/update objects.  It uses the same methods
-as a standard Django FormMixin class-based view.
-
-It also includes an ``object_delete_default`` method.
