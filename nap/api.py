@@ -45,7 +45,7 @@ class Api(object):
 
     def register(self, child, name=None):
         if name is None:
-            name = getattr(child, 'api_name', child.__class__.__name__.lower())
+            name = getattr(child, 'api_name', child.__name__.lower())
         if name in self.children:
             raise Warning(
                 'Publisher with name "%s" already registered: %r -> %r' % (
