@@ -11,6 +11,10 @@ Enhancements:
 + Use Django's content-type parsing
 + Fixed ExportCsv and simplecsv extras
 - Raise AttributeError if a deflating a field with no default set would result in using its default. [Fixes #28]
++ Added RPC publisher [WIP]
++ Allow api.register to be used as a decorator
++ Make Meta classes more proscriptive
+
 
 v0.13.6
 =======
