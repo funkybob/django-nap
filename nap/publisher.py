@@ -31,8 +31,6 @@ class BasePublisher(object):
     OBJECT_PATTERN = r'[-\w]+'
     ARGUMENT_PATTERN = r'.+?'
 
-    OBJECT_LIST_PROPERTY = 'objects'
-
     def __init__(self, request, *args, **kwargs):
         self.request = request
         self.args = args
@@ -245,25 +243,13 @@ class Publisher(BasePublisher):
         return object_list
 
     # Pagination
-    def add_metadata(self, data, page):
-        data['meta'] = {
-            'offset': page.start_index() - 1,
-            'page': page.number,
-            'total_pages': page.paginator.num_pages,
-            'limit': page.paginator.per_page,
-            'count': page.paginator.count,
-            'has_next': page.has_next(),
-            'has_prev': page.has_previous(),
-        }
-        return data
-
     def get_page(self, object_list):
         '''Return a paginated object list, along with some metadata'''
         page_size = getattr(self, 'page_size', None)
         if page_size is None:
             return {
                 'meta': {},
-                self.OBJECT_LIST_PROPERTY: object_list,
+                'objects': object_list,
             }
         max_page_size = getattr(self, 'max_page_size', page_size)
         page_size = int(self.request.GET.get(self.LIMIT_PARAM, page_size))
@@ -291,8 +277,20 @@ class Publisher(BasePublisher):
             page = paginator.page(page_num + 1)
         except EmptyPage:
             raise http.NotFound()
+        data['meta'] = {
+        }
+        return data
         data = {
-            self.OBJECT_LIST_PROPERTY: page.object_list,
+            'objects': page.object_list,
+            'meta': {
+                'offset': page.start_index() - 1,
+                'page': page.number,
+                'total_pages': page.paginator.num_pages,
+                'limit': page.paginator.per_page,
+                'count': page.paginator.count,
+                'has_next': page.has_next(),
+                'has_prev': page.has_previous(),
+            }
         }
         return self.add_metadata(data, page, paginator)
 
@@ -338,7 +336,7 @@ class Publisher(BasePublisher):
 
         serialiser = self.get_serialiser()
         serialiser_kwargs = self.get_serialiser_kwargs()
-        data[self.OBJECT_LIST_PROPERTY] = serialiser.list_deflate(data[self.OBJECT_LIST_PROPERTY], **serialiser_kwargs)
+        data['objects'] = serialiser.list_deflate(data['objects'], **serialiser_kwargs)
         return self.create_response(data)
 
     def object_get_default(self, request, object_id, **kwargs):
