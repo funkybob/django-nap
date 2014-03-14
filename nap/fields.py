@@ -41,7 +41,7 @@ class Field(object):
         src = self._get_attrname(name)
         value = digattr(obj, src, self.default)
         if value is NoDefault:
-            raise AttributeError
+            raise AttributeError('No attribute "%s" found on %r' % (src, obj,))
         if value is not None:
             value = self.reduce(value, **kwargs)
         data[name] = value
