@@ -8,13 +8,16 @@ v0.13.7
 Enhancements:
 
 + Added ReadTheDocs, and prettied up the docs
-+ Use Django's content-type parsing
++ Use Pythons content-type parsing
 + Fixed ExportCsv and simplecsv extras
 - Raise AttributeError if a deflating a field with no default set would result in using its default. [Fixes #28]
 + Added RPC publisher [WIP]
 + Allow api.register to be used as a decorator
 + Make Meta classes more proscriptive
-
+- Fixed auto-generated api_names.
++ Allow ModelSerialiser to override Field type used for fields.
++ Added ModelReadSerialiser and ModelCreateUpdateSerialiser to support more complex inflate scenarios [WIP]
+- Purged under-developed ModelFormMixin class
 
 v0.13.6
 =======
