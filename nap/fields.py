@@ -19,11 +19,12 @@ class Field(object):
     type_class = None
 
     def __init__(self, attribute=None, default=NoDefault, readonly=False,
-                 null=True, **kwargs):
+                 null=True, virtual=False, **kwargs):
         self.attribute = attribute
         self.default = default
         self.readonly = readonly
         self.null = null
+        self.virtual = virtual
         self.kwargs = kwargs
 
     def _get_attrname(self, name):
@@ -41,6 +42,8 @@ class Field(object):
         src = self._get_attrname(name)
         value = digattr(obj, src, self.default)
         if value is NoDefault:
+            if self.virtual:
+                return
             raise AttributeError('No attribute "%s" found on %r' % (src, obj,))
         if value is not None:
             value = self.reduce(value, **kwargs)
