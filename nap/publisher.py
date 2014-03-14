@@ -277,22 +277,18 @@ class Publisher(BasePublisher):
             page = paginator.page(page_num + 1)
         except EmptyPage:
             raise http.NotFound()
-        data['meta'] = {
-        }
-        return data
-        data = {
-            'objects': page.object_list,
+        return {
             'meta': {
                 'offset': page.start_index() - 1,
-                'page': page.number,
-                'total_pages': page.paginator.num_pages,
-                'limit': page.paginator.per_page,
-                'count': page.paginator.count,
+                'page': page_num,
+                'total_pages': paginator.num_pages,
+                'limit': page_size,
+                'count': paginator.count,
                 'has_next': page.has_next(),
                 'has_prev': page.has_previous(),
-            }
+            },
+            'objects': page.object_list,
         }
-        return self.add_metadata(data, page, paginator)
 
     # Get the parsed request data
 
