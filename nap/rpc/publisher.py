@@ -1,5 +1,8 @@
 
+from django.conf.urls import url
+
 from nap.publisher import Publisher
+from nap import http
 
 class RpcPublisher(Publisher):
     '''
@@ -19,13 +22,13 @@ class RpcPublisher(Publisher):
             name = cls.api_name
 
         return [
-            url(r'^$', view, name='%s_endpoint' % name
+            url(r'^$', view, name='%s_endpoint' % name),
         ]
 
     def dispatch(self, request):
         self.action = request.HTTP['X-RPC-ACTION']
         try:
-            handler = getattr(self, 'do_%s' % action, None)
+            handler = getattr(self, 'do_%s' % self.action, None)
         except AttributeError:
             return http.NotFound()
 
