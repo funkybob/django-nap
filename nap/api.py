@@ -1,7 +1,5 @@
 from __future__ import unicode_literals
 
-from functools import partial
-
 from django.conf.urls import url, include
 from django.core.urlresolvers import reverse
 
