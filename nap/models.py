@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 
-from . import fields, http
+from . import fields
 from .meta import Meta
 from .publisher import Publisher
 from .serialiser import MetaSerialiser, Serialiser
@@ -90,7 +90,7 @@ class MetaModelSerialiser(MetaSerialiser):
 
         return new_class
 
- 
+
 class ModelSerialiser(with_metaclass(MetaModelSerialiser, Serialiser)):
 
     def restore_object(self, obj, instance, **kwargs):
