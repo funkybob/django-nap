@@ -32,6 +32,13 @@ class ExportCsv(object):
         else:
             ser_class = self.serialiser
 
+        select_related = self.opts.get('select_related', None)
+        if select_related:
+            queryset = queryset.select_related(*select_related)
+        prefetch_related = self.opts.get('prefetch_related', None)
+        if prefetch_related:
+            queryset = queryset.prefetch_related(*prefetch_related)
+
         def inner(ser):
             csv = Writer(fields=self.opts.get('fields', ser._fields.keys()))
             yield csv.write_headers()
