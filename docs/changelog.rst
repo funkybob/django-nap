@@ -2,6 +2,14 @@
 Changelog
 =========
 
+v0.13.8
+=======
+
+Enhancements:
+
++ Added prefetch_related and select_related support to ExportCsv action
++ Added Field.virtual to smooth changes to Field now raising AttributeError, and support optional fields
+
 v0.13.7
 =======
 
