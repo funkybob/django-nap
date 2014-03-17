@@ -9,6 +9,7 @@ from six import with_metaclass
 
 from django.db.models import Manager
 from django.db.models.fields import NOT_PROVIDED
+from django.db import transaction
 from django.shortcuts import get_object_or_404
 
 FIELD_MAP = {}
@@ -175,6 +176,18 @@ class ModelPublisher(Publisher):
 
     def get_object(self, object_id):
         return get_object_or_404(self.get_object_list(), pk=object_id)
+
+    def list_post_default(self, request, **kwargs):
+        data = self.get_request_data()
+
+        serialiser = self.get_serialiser()
+        serialiser_kwargs = self.get_serialiser_kwargs()
+        try:
+            with transaction.atomic():
+                obj = serialiser.object_inflate(data, **serialiser_kwargs)
+        except ValueError as e:
+            return http.BadRequest(str(e))
+        return self.render_single_object(obj, serialiser)
 
 
 def modelserialiser_factory(name, model, **kwargs):
