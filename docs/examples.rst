@@ -28,8 +28,7 @@ serialiser.py
 
 .. code-block:: python
 
-    from nap.serialiser import ModelSerialiser
-    from nap.publisher import ModelPublisher
+    from nap.models import ModelSerialiser
     from nap import fields
 
     class PostSerialiser(ModelSerialiser):
@@ -47,7 +46,8 @@ publishers.py
 -------------
 
 .. code-block:: python
-
+    
+    from nap.models import ModelPublisher
     from .serialiser import PostSerialiser
 
     class PostPublisher(ModelPublisher):
