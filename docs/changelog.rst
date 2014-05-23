@@ -2,6 +2,14 @@
 Changelog
 =========
 
+v0.13.9
+=======
+
+Enhancements:
+
++ Added Django 1.7 AppConfig, which will auto-discover on ready
++ Added a default implementation of ModelPublsiher.list_post_default
+
 v0.13.8
 =======
 
