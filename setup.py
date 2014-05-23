@@ -18,7 +18,7 @@ setup(
         'Programming Language :: Python',
     ],
     requires = [
-        'Django (>=1.4)',
+        'Django (>=1.6)',
         'six (>=1.3)',
     ],
     install_requires = [
