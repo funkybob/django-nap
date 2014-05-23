@@ -10,4 +10,4 @@ class NapConfig(AppConfig):
 
     def ready(self):
         super(NapConfig, self).ready()
-        autodiscover_modlues('publishers')
+        autodiscover_modules('publishers')
