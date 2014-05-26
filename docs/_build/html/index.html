@@ -1,0 +1,273 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Take a REST with django-nap: APIs for Django &mdash; django-nap 0.13.6 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.13.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="django-nap 0.13.6 documentation" href="#" />
+    <link rel="next" title="Serialisers" href="serialiser.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="serialiser.html" title="Serialisers"
+             accesskey="N">next</a> |</li>
+        <li><a href="#">django-nap 0.13.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="take-a-rest-with-django-nap-apis-for-django">
+<h1>Take a REST with django-nap: APIs for Django<a class="headerlink" href="#take-a-rest-with-django-nap-apis-for-django" title="Permalink to this headline">¶</a></h1>
+<a class="reference external image-reference" href="https://secure.travis-ci.org/funkybob/django-nap.png?branch=master"><img alt="https://travis-ci.org/funkybob/django-nap.png" src="https://travis-ci.org/funkybob/django-nap.png" /></a>
+<a class="reference external image-reference" href="https://crate.io/packages/django-nap"><img alt="https://pypip.in/d/django-nap/badge.png" src="https://pypip.in/d/django-nap/badge.png" /></a>
+<a class="reference external image-reference" href="https://crate.io/packages/django-nap"><img alt="https://pypip.in/v/django-nap/badge.png" src="https://pypip.in/v/django-nap/badge.png" /></a>
+<p>Whilst there are many existing RESTful API tools about, many of them are very complex, and [as I found] some are quite slow!</p>
+<p>I wanted to take the solid serialising pattern from TastyPie, with the separation of roles of django-rest-framework, and include a Publisher API I developed some time ago.</p>
+<p>In the spirit of the Unix philosophy, Nap provides a few tools which each do one thing, and do it well.  They are:</p>
+<ol class="arabic">
+<li><p class="first">Serialiser</p>
+<p>Declarative style Serialiser definitions for reducing complex Python objects
+to simple types expressible in JSON.</p>
+</li>
+<li><p class="first">Publisher</p>
+<p>A Class-based view system which merges many related views into a single
+class, including url routing.</p>
+</li>
+<li><p class="first">API</p>
+<p>Manage many Publishers and API versions with simple auto-discover resource
+registration.</p>
+</li>
+</ol>
+<p>Nap does not provide the wide range of features you see in tools like Django
+REST Framework and TastyPie, such as rate limiting, token authentication,
+automatic UI, etc.  Instead, it provides a flexible framework that makes it
+easy to combine with other specialised apps.</p>
+<p>Contents:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="serialiser.html">Serialisers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="serialiser.html#quick-overview">Quick Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="serialiser.html#serialiser-objects">Serialiser objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="serialiser.html#serialiser-api">Serialiser API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fields.html">Fields</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fields.html#field">Field</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fields.html#deflate-cycle">Deflate Cycle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fields.html#inflate-cycle">Inflate Cycle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fields.html#stringfield">StringField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fields.html#serialiser-fields">Serialiser Fields</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="publisher.html">Publishers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="publisher.html#publishing">Publishing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="publisher.html#base-publisher">Base Publisher</a></li>
+<li class="toctree-l2"><a class="reference internal" href="publisher.html#publisher">Publisher</a></li>
+<li class="toctree-l2"><a class="reference internal" href="publisher.html#modelpublisher">ModelPublisher</a></li>
+<li class="toctree-l2"><a class="reference internal" href="publisher.html#modelformmixin">ModelFormMixin</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="auth.html">Authorisation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">APIs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#auto-discover">Auto-discover</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">Model Classes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="models.html#modelserialiser">ModelSerialiser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#modelpublisher">ModelPublisher</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#modelserialiser-factory">modelserialiser_factory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#modelserialiserfield-modelmanyserialiserfield">ModelSerialiserField &amp; ModelManySerialiserField</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="http.html">HTTP Utilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="http.html#status">Status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="http.html#basehttpresponse">BaseHttpResponse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="http.html#http404-versus-http-notfound">Http404 versus http.NotFound</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="newrelic.html">New Relic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#case-1-simple-blog-api">Case 1: Simple Blog API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-13-7">v0.13.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-13-6">v0.13.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-13-5-1">v0.13.5.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-13-5">v0.13.5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-13-4">v0.13.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-13-3">v0.13.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-13-2-1">v0.13.2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-13-2">v0.13.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-13-1">v0.13.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-13-0">v0.13.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-12-5-1">v0.12.5.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-12-5">v0.12.5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-12-4">v0.12.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-12-3">v0.12.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-12-2">v0.12.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-12-1">v0.12.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-12">v0.12</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-11-6-1">v0.11.6.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-11-6">v0.11.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-11-5-1">v0.11.5.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-11-5">v0.11.5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-11-4">v0.11.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-11-3">v0.11.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-11-2">v0.11.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-11-1">v0.11.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-11">v0.11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-10-3">v0.10.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-10-2">v0.10.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-10-1">v0.10.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-10">v0.10</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-9-1">v0.9.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-9">v0.9</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-8">v0.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-7-1">v0.7.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-7">v0.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-6">v0.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-5">v0.5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-4">v0.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-3">v0.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-2">v0.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-1">v0.1</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="quick-start">
+<h1>Quick Start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h1>
+<ol class="arabic simple">
+<li>Create a Serialiser for your Model in serialisers.py</li>
+</ol>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">nap</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">myapp.models</span> <span class="kn">import</span> <span class="n">MyModel</span>
+
+<span class="k">class</span> <span class="nc">MyModelSerialiser</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">ModelSerialiser</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">MyModel</span>
+        <span class="n">exclude</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;user&#39;</span><span class="p">,]</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li>Create a Publisher in publishers.py, and register it.</li>
+</ol>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">nap</span> <span class="kn">import</span> <span class="n">api</span><span class="p">,</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">myapp.serialisers</span> <span class="kn">import</span> <span class="n">MyModelSerialiser</span>
+
+<span class="k">class</span> <span class="nc">MyModelPublisher</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">ModelPublisher</span><span class="p">):</span>
+    <span class="n">serialiser</span> <span class="o">=</span> <span class="n">MyModelSerialiser</span><span class="p">()</span>
+
+<span class="n">api</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s">&#39;api&#39;</span><span class="p">,</span> <span class="n">MyModelPublisher</span><span class="p">)</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li>Auto-discover publishers, and add your APIs to your URLs:</li>
+</ol>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">nap</span> <span class="kn">import</span> <span class="n">api</span>
+
+<span class="n">api</span><span class="o">.</span><span class="n">autodiscover</span><span class="p">()</span>
+
+<span class="n">urlpatterns</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+    <span class="p">(</span><span class="s">r&#39;&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">api</span><span class="o">.</span><span class="n">patterns</span><span class="p">())</span>
+    <span class="o">...</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
+<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
+<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Take a REST with django-nap: APIs for Django</a></li>
+<li><a class="reference internal" href="#quick-start">Quick Start</a></li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+  <h4>Next topic</h4>
+  <p class="topless"><a href="serialiser.html"
+                        title="next chapter">Serialisers</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="serialiser.html" title="Serialisers"
+             >next</a> |</li>
+        <li><a href="#">django-nap 0.13.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Curtis Maloney.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

@@ -2,46 +2,14 @@
 Changelog
 =========
 
-v0.13.9
-=======
-
-Enhancements:
-
-+ Added Django 1.7 AppConfig, which will auto-discover on ready
-+ Added a default implementation of ModelPublsiher.list_post_default
-+ Tidied code with flake8
-
-Bug Fixes:
-
-+ Fixed use of wrong argument in auth.permit_groups
-
-v0.13.8
-=======
-
-Enhancements:
-
-+ Added prefetch_related and select_related support to ExportCsv action
-+ Added Field.virtual to smooth changes to Field now raising AttributeError, and support optional fields
-
 v0.13.7
 =======
 
 Enhancements:
 
 + Added ReadTheDocs, and prettied up the docs
-+ Use Pythons content-type parsing
-+ Added RPC publisher [WIP]
-+ Allow api.register to be used as a decorator
-+ Make Meta classes more proscriptive
-+ Allow ModelSerialiser to override Field type used for fields.
-+ Added ModelReadSerialiser and ModelCreateUpdateSerialiser to support more complex inflate scenarios [WIP]
-
-Bug Fixes:
-
-- Fixed ExportCsv and simplecsv extras
-- Raise AttributeError if a deflating a field with no default set would result in using its default. [Fixes #28]
-- Fixed auto-generated api_names.
-- Purged under-developed ModelFormMixin class
++ Use Django's content-type parsing
++ Fixed ExportCsv and simplecsv extras
 
 v0.13.6
 =======

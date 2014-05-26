@@ -9,6 +9,7 @@ from six import with_metaclass
 
 import inspect
 
+
 class MetaSerialiser(type):
     meta_class = Meta
 
@@ -108,7 +109,7 @@ class Serialiser(with_metaclass(MetaSerialiser, object)):
             for data in data_list
         ]
 
-    def restore_object(self, objdata, **kwargs): # pragma: no cover
+    def restore_object(self, objdata, **kwargs):  # pragma: no cover
         if not self.obj_class:
             raise NotImplementedError
         return self.obj_class(objdata)

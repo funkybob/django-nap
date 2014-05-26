@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 from six import with_metaclass
 
+
 class DeclarativeMetaclass(type):
     '''
     Mangle a class so any properties defined on it are stashed in _defaults

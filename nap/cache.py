@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from django.core.cache import get_cache, cache as default_cache
 from six import string_types
 
+
 class CachedSerialiser(object):
     '''Mixin to cache per-object serialised data'''
     def __init__(self, *args, **kwargs):
@@ -21,4 +22,3 @@ class CachedSerialiser(object):
             timeout = getattr(self._meta, 'timeout', None)
             self._meta.cache.set(data, timeout=timeout)
         return data
-

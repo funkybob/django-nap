@@ -5,6 +5,7 @@ from .models import ModelPublisher
 
 from django.template.response import TemplateResponse
 
+
 class ViewPublisherMixin(object):
     '''
     A Publisher for non-API views.
@@ -22,6 +23,7 @@ class ViewPublisherMixin(object):
             **response_kwargs
         )
 
+
 class ViewPublisher(SimplePatternsMixin, Publisher):
     def get_template_name(self):
         return self.template_name % {
@@ -29,6 +31,7 @@ class ViewPublisher(SimplePatternsMixin, Publisher):
             'method': self.method,
             'mode': self.mode,
         }
+
 
 class ModelViewPublisher(SimplePatternsMixin, ModelPublisher):
     model = None

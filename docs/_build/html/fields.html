@@ -1,0 +1,229 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Fields &mdash; django-nap 0.13.6 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.13.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="django-nap 0.13.6 documentation" href="index.html" />
+    <link rel="next" title="Publishers" href="publisher.html" />
+    <link rel="prev" title="Serialisers" href="serialiser.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="publisher.html" title="Publishers"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="serialiser.html" title="Serialisers"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">django-nap 0.13.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="fields">
+<h1>Fields<a class="headerlink" href="#fields" title="Permalink to this headline">¶</a></h1>
+<p>Fields are declared on Serialisers to pluck values from the object for deflation, as well as to cast them back when inflating.</p>
+<p>The basic Field class can be used for any value that has a matching JSON counterpart; i.e. bools, strings, floats, dicts, lists.</p>
+<p>There are also some for common types:</p>
+<ul class="simple">
+<li>BooleanField</li>
+<li>IntegerField</li>
+<li>DecimalField</li>
+<li>DateTimeField</li>
+<li>DateField</li>
+<li>TimeField</li>
+<li>StringField</li>
+</ul>
+<p>Finally, there are the two Serialiser Fields, which will generate their value using a serialiser class.  They are the SerialiserField, and ManySerialiserField.</p>
+<div class="section" id="field">
+<h2>Field<a class="headerlink" href="#field" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Field">
+<em class="property">class </em><tt class="descname">Field</tt><big>(</big><em>attribute=None</em>, <em>default=None</em>, <em>readonly=False</em>, <em>null=True</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#Field" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>attribute</strong> &#8211; Define the attribute this field sources it value from on
+the object.  If omitted, the name of this field in its
+Serialiser class will be used.
+This may be in Django template dotted-lookup syntax.</li>
+<li><strong>default</strong> &#8211; The value to use if the source value is absent.</li>
+<li><strong>readonly</strong> &#8211; Is this field only for deflating?</li>
+<li><strong>null</strong> &#8211; Can this value be None when inflating?</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="Field.type_class">
+<tt class="descname">type_class</tt><a class="headerlink" href="#Field.type_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>For simple fields, type_class is used to restore values.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Field.reduce">
+<tt class="descname">reduce</tt><big>(</big><em>value</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#Field.reduce" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reduce the sourced value to a serialisable type.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Field.restore">
+<tt class="descname">restore</tt><big>(</big><em>value</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#Field.restore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restore a serialisable form of the value to its Python type.  By default
+this will use <tt class="docutils literal"><span class="pre">type_class</span></tt> unless the value is None.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Field.deflate">
+<tt class="descname">deflate</tt><big>(</big><em>name</em>, <em>obj</em>, <em>data</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#Field.deflate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deflate our value from the obj, and store it into data.  The <tt class="docutils literal"><span class="pre">name</span></tt>
+will be used only if <tt class="docutils literal"><span class="pre">self.attribute</span></tt> is None.</p>
+<p>This uses <tt class="docutils literal"><span class="pre">digattr</span></tt> to extract the value from the obj, then calls
+<tt class="docutils literal"><span class="pre">reduce</span></tt> if the value is not None.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Field.inflate">
+<tt class="descname">inflate</tt><big>(</big><em>name</em>, <em>data</em>, <em>obj</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#Field.inflate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inflate a value from data into obj.  The <tt class="docutils literal"><span class="pre">name</span></tt> will be used only if
+<tt class="docutils literal"><span class="pre">self.attribute</span></tt> is None.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="deflate-cycle">
+<h2>Deflate Cycle<a class="headerlink" href="#deflate-cycle" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Determine if we use name or attribute.</li>
+<li>Use nap.utils.digattr to get the value</li>
+<li>If the value is not None, call self.reduce</li>
+<li>Add our value to the data dict under the key in name</li>
+</ul>
+<p>The reduce method is the last stage of casting.  By default, it does nothing.</p>
+</div>
+<div class="section" id="inflate-cycle">
+<h2>Inflate Cycle<a class="headerlink" href="#inflate-cycle" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>If this field is read-only, return immediately.</li>
+<li>Determine if we use name or attribute</li>
+<li>Try to get our value from the data dict.  If it&#8217;s not there, return.</li>
+<li>Pass the value through self.restore</li>
+<li>Save the value in the obj dict</li>
+</ul>
+<p>By default, restore tries to construct a new self.type_class from the value,
+unless type_class is None.</p>
+</div>
+<div class="section" id="stringfield">
+<h2>StringField<a class="headerlink" href="#stringfield" title="Permalink to this headline">¶</a></h2>
+<p>StringField is for cases where you want to ensure the value is forced to a
+string.  Its <cite>reduce</cite> method uses <cite>django.utils.encoding.force_text</cite>.</p>
+</div>
+<div class="section" id="serialiser-fields">
+<h2>Serialiser Fields<a class="headerlink" href="#serialiser-fields" title="Permalink to this headline">¶</a></h2>
+<p>SerialiserField follows the same pattern as above, but replaces the normal
+reduce/restore methods with calls to its serialisers
+object_deflate/object_inflate.</p>
+<p>ManySerialiserField does the same, but uses list_deflate/list_inflate.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Fields</a><ul>
+<li><a class="reference internal" href="#field">Field</a></li>
+<li><a class="reference internal" href="#deflate-cycle">Deflate Cycle</a></li>
+<li><a class="reference internal" href="#inflate-cycle">Inflate Cycle</a></li>
+<li><a class="reference internal" href="#stringfield">StringField</a></li>
+<li><a class="reference internal" href="#serialiser-fields">Serialiser Fields</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="serialiser.html"
+                        title="previous chapter">Serialisers</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="publisher.html"
+                        title="next chapter">Publishers</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/fields.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="publisher.html" title="Publishers"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="serialiser.html" title="Serialisers"
+             >previous</a> |</li>
+        <li><a href="index.html">django-nap 0.13.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Curtis Maloney.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

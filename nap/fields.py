@@ -12,8 +12,10 @@ except ImportError:
     # For Django1.4
     from django.utils.encoding import force_unicode as force_text
 
+
 class NoDefault(object):
     '''Indicates no default value was provided.'''
+
 
 class Field(object):
     type_class = None
@@ -56,7 +58,7 @@ class Field(object):
         try:
             value = data[name]
         except KeyError:
-            if self.default is not NoDefault and not 'instance' in kwargs:
+            if self.default is not NoDefault and 'instance' not in kwargs:
                 obj[dest] = self.default
             return
 
@@ -65,7 +67,9 @@ class Field(object):
                 value = self.restore(value, **kwargs)
             except ValueError:
                 raise ValidationError(
-                    "Field '%s' (%r) received invalid value: %r" % (name, self.__class__.__name__, value)
+                    "Field '%s' (%r) received invalid value: %r" % (
+                        name, self.__class__.__name__, value
+                        )
                 )
         elif not self.null:
             raise ValidationError("Field '%s' must not be None." % name)

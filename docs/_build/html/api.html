@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>APIs &mdash; django-nap 0.13.6 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.13.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="django-nap 0.13.6 documentation" href="index.html" />
+    <link rel="next" title="Model Classes" href="models.html" />
+    <link rel="prev" title="Authorisation" href="auth.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="models.html" title="Model Classes"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="auth.html" title="Authorisation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">django-nap 0.13.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="apis">
+<h1>APIs<a class="headerlink" href="#apis" title="Permalink to this headline">¶</a></h1>
+<p>When you have multiple Publishers collected together, it can be handy to
+publish them under the same path.  This is where the Api class comes in.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">api</span> <span class="o">=</span> <span class="n">Api</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">)</span>
+
+<span class="n">api</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">MyPublisher</span><span class="p">)</span>
+<span class="n">api</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">OtherPublisher</span><span class="p">,</span> <span class="s">&#39;friendlyname&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If not overridden by being passed in the call to register, the Publisher will
+be registered with the name in its <tt class="docutils literal"><span class="pre">api_name</span></tt> property.  This is used as the
+root of its URL within the Api.</p>
+<p>Once registered, you can get a list of URL patterns to include:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="s">r&#39;^api/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">api</span><span class="o">.</span><span class="n">patterns</span><span class="p">())),</span>
+</pre></div>
+</div>
+<p>When you add the patterns, you can optionally pass a &#8216;flat&#8217; argument, which
+will omit the Api&#8217;s name from the url patterns.</p>
+<p>Also, the Api class provides an introspection view that will list all its
+Publishers, as well as their handlers and methods supported.</p>
+<div class="section" id="auto-discover">
+<h2>Auto-discover<a class="headerlink" href="#auto-discover" title="Permalink to this headline">¶</a></h2>
+<p>Just like Django&#8217;s Admin, Api supports auto-discover.</p>
+<p>In your publishers.py use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">nap</span> <span class="kn">import</span> <span class="n">api</span>
+
+<span class="o">...</span>
+
+<span class="n">api</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s">&#39;apiname&#39;</span><span class="p">,</span> <span class="n">Publisher</span><span class="p">,</span><span class="o">....</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If you&#8217;re only registering a single Publisher, you can use api.register as a decorator.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@api.register</span><span class="p">(</span><span class="s">&#39;apiname&#39;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">JoyPublisher</span><span class="p">(</span><span class="n">Publisher</span><span class="p">):</span>
+</pre></div>
+</div>
+<p>An Api instance with that name will be created, if it hasn&#8217;t already, and put
+into api.APIS.  Then the publisher(s) you pass will be registered with it.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The publisher will be registered as the lower-cased version of its class
+name.  You can control this by setting an <tt class="docutils literal"><span class="pre">api_name</span></tt> property.</p>
+</div>
+<p>Then, in your urls.py, just add:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">nap</span> <span class="kn">import</span> <span class="n">api</span>
+<span class="n">api</span><span class="o">.</span><span class="n">autodiscover</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Which will trigger it to import $APP.serialiser from each of your
+INSTALLED_APPS.  Then you can just include the urls:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="s">r&#39;^apis/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">api</span><span class="o">.</span><span class="n">patterns</span><span class="p">()))</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">APIs</a><ul>
+<li><a class="reference internal" href="#auto-discover">Auto-discover</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="auth.html"
+                        title="previous chapter">Authorisation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="models.html"
+                        title="next chapter">Model Classes</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/api.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="models.html" title="Model Classes"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="auth.html" title="Authorisation"
+             >previous</a> |</li>
+        <li><a href="index.html">django-nap 0.13.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Curtis Maloney.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

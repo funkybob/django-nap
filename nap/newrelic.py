@@ -9,6 +9,7 @@ from __future__ import absolute_import
 from newrelic.agent import (current_transaction, set_transaction_name,
     FunctionTrace, callable_name, ObjectWrapper)
 
+
 def instrument_django_nap_publisher(module):
 
     def execute_wrapper(wrapped, instance, args, kwargs):

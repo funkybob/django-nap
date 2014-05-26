@@ -1,0 +1,221 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>HTTP Utilities &mdash; django-nap 0.13.6 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.13.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="django-nap 0.13.6 documentation" href="index.html" />
+    <link rel="next" title="New Relic" href="newrelic.html" />
+    <link rel="prev" title="Model Classes" href="models.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="newrelic.html" title="New Relic"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="models.html" title="Model Classes"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">django-nap 0.13.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="http-utilities">
+<h1>HTTP Utilities<a class="headerlink" href="#http-utilities" title="Permalink to this headline">¶</a></h1>
+<p>In nap.http is a set of tools to go one step further than Django&#8217;s existing
+HttpResponse.</p>
+<div class="section" id="status">
+<h2>Status<a class="headerlink" href="#status" title="Permalink to this headline">¶</a></h2>
+<p>Firstly, there is STATUS_CODES, which is a list of two-tuples of HTTP Status
+codes and their descriptions.</p>
+<p>Also, and more usefully, there is the STATUS object.  Accessing it as a dict,
+you can look up HTTP status code descriptions by code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">STATUS</span><span class="p">[</span><span class="mi">401</span><span class="p">]</span>
+<span class="go">&#39;Unauthorized&#39;</span>
+</pre></div>
+</div>
+<p>However, you can also look up attributes to find out the status code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">STATUS</span><span class="o">.</span><span class="n">UNAUTHORIZED</span>
+<span class="go">401</span>
+</pre></div>
+</div>
+<p>This lets it act as a two-way constant.</p>
+</div>
+<div class="section" id="basehttpresponse">
+<h2>BaseHttpResponse<a class="headerlink" href="#basehttpresponse" title="Permalink to this headline">¶</a></h2>
+<p>This class blends Django&#8217;s HttpResponse with Python&#8217;s Exception.  Why?  Because
+then, when you&#8217;re nested who-knows how deep in your code, it can raise a
+response, instead of having to return one and hope everyone bubbles it all the
+way up.</p>
+<ul>
+<li><p class="first">BaseHttpResponse</p>
+<ul>
+<li><p class="first">HttpResponseSuccess</p>
+<ul class="simple">
+<li>OK</li>
+<li>Created</li>
+<li>Accepted</li>
+<li>NoContent</li>
+<li>ResetContent</li>
+<li>PartialContent</li>
+</ul>
+</li>
+<li><p class="first">HttpResponseRedirect</p>
+<ul class="simple">
+<li>MultipleChoices</li>
+<li>MovedPermanently*</li>
+<li>Found*</li>
+<li>SeeOther*</li>
+<li>NotModified</li>
+<li>UseProxy*</li>
+<li>TemporaryRedirect</li>
+<li>PermanentRedirect</li>
+</ul>
+<p>Items marked with a * require a location passed as their first argument.
+It will be set as the <tt class="docutils literal"><span class="pre">Location</span></tt> header in the response.</p>
+</li>
+<li><p class="first">HttpResponseError</p>
+<ul class="simple">
+<li>BadRequest</li>
+<li>Unauthorized</li>
+<li>PaymentRequired</li>
+<li>Forbidden</li>
+<li>NotFound</li>
+<li>MethodNotAllowed</li>
+<li>NotAcceptable</li>
+<li>ProxyAuthenticationRequired</li>
+<li>RequestTimeout</li>
+<li>Conflict</li>
+<li>Gone</li>
+<li>LengthRequired</li>
+<li>PreconditionFailed</li>
+<li>RequestEntityTooLarge</li>
+<li>RequestURITooLong</li>
+<li>UnsupportedMediaType</li>
+<li>RequestedRangeNotSatisfiable</li>
+<li>ExpectationFailed</li>
+</ul>
+</li>
+<li><p class="first">HttpResponseServerError</p>
+<ul class="simple">
+<li>InternalServerError</li>
+<li>NotImplemented</li>
+<li>BadGateway</li>
+<li>ServiceUnavailable</li>
+<li>GatewayTimeout</li>
+<li>HttpVersiontNotSupported</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>It will be clear that, unlike Django, these mostly do not start with
+HttpResponse.  This is a personal preference, in that typically you&#8217;d use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">nap</span> <span class="kn">import</span> <span class="n">http</span>
+
+<span class="o">...</span>
+    <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="n">Accept</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="http404-versus-http-notfound">
+<h2>Http404 versus http.NotFound<a class="headerlink" href="#http404-versus-http-notfound" title="Permalink to this headline">¶</a></h2>
+<p>Generally in your API, you&#8217;ll want to prefer http.NotFound for returning a 404
+response.  This avoids being caught by the normal 404 handling, so it won&#8217;t invoke your handler404.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">HTTP Utilities</a><ul>
+<li><a class="reference internal" href="#status">Status</a></li>
+<li><a class="reference internal" href="#basehttpresponse">BaseHttpResponse</a></li>
+<li><a class="reference internal" href="#http404-versus-http-notfound">Http404 versus http.NotFound</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="models.html"
+                        title="previous chapter">Model Classes</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="newrelic.html"
+                        title="next chapter">New Relic</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/http.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="newrelic.html" title="New Relic"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="models.html" title="Model Classes"
+             >previous</a> |</li>
+        <li><a href="index.html">django-nap 0.13.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Curtis Maloney.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 
-from . import fields
+from . import fields, http
 from .meta import Meta
 from .publisher import Publisher
 from .serialiser import MetaSerialiser, Serialiser
@@ -67,7 +67,7 @@ class MetaModelSerialiser(MetaSerialiser):
                     continue
 
                 # If we have a whitelist, and it's not in it, skip
-                if include and not field.name in include:
+                if include and field.name not in include:
                     continue
 
                 # If it's blacklisted, skip
@@ -78,14 +78,14 @@ class MetaModelSerialiser(MetaSerialiser):
                     'readonly': field.name in read_only,
                     'null': field.null,
                 }
-                if not field.default is NOT_PROVIDED:
+                if field.default is not NOT_PROVIDED:
                     kwargs['default'] = field.default
 
                 try:
                     field_class = new_class._meta.field_types[field.name]
                 except KeyError:
                     field_class = FIELD_MAP.get(field.__class__.__name__, fields.Field)
-                model_fields[field.name ] = field_class(**kwargs)
+                model_fields[field.name] = field_class(**kwargs)
 
         new_class._fields.update(model_fields)
 
@@ -206,7 +206,7 @@ def modelserialiser_factory(name, model, **kwargs):
 
 class ModelSerialiserField(fields.SerialiserField):
     def __init__(self, *args, **kwargs):
-        if not 'serialiser' in kwargs:
+        if 'serialiser' not in kwargs:
             model = kwargs.pop('model')
             kwargs['serialiser'] = modelserialiser_factory(model.__name__ + 'Serialiser', model, **kwargs)()
         super(ModelSerialiserField, self).__init__(*args, **kwargs)
@@ -214,7 +214,7 @@ class ModelSerialiserField(fields.SerialiserField):
 
 class ModelManySerialiserField(fields.ManySerialiserField):
     def __init__(self, *args, **kwargs):
-        if not 'serialiser' in kwargs:
+        if 'serialiser' not in kwargs:
             model = kwargs.pop('model')
             kwargs['serialiser'] = modelserialiser_factory(model.__name__ + 'Serialiser', model, **kwargs)()
         super(ModelManySerialiserField, self).__init__(*args, **kwargs)

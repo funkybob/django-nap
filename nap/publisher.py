@@ -15,6 +15,7 @@ except ImportError:
 
 from . import http
 
+
 def accepts(*verbs):
     '''Annotate a method with the HTTP verbs it accepts, and enforce it.'''
     def _inner(method):
@@ -23,6 +24,7 @@ def accepts(*verbs):
             require_http_methods([x.upper() for x in verbs])
         )(method)
     return _inner
+
 
 class BasePublisher(object):
     CSRF = True
@@ -93,7 +95,6 @@ class BasePublisher(object):
                 name='%s_list_default' % name
             ),
         ]
-
 
     def dispatch(self, request, action='default', object_id=None, **kwargs):
         '''View dispatcher called by Django'''
@@ -206,6 +207,7 @@ class Publisher(BasePublisher):
     def dumps(self, data):
         '''How to parse content that matches our content types list.'''
         return json.dumps(data)
+
     def loads(self, data):
         '''Serialise data for responses.'''
         return json.loads(data)
@@ -224,11 +226,11 @@ class Publisher(BasePublisher):
 
     # Object access
 
-    def get_object_list(self): # pragma: no cover
+    def get_object_list(self):  # pragma: no cover
         '''Return the object list appropriate for this request'''
         raise NotImplementedError
 
-    def get_object(self, object_id): # pragma: no cover
+    def get_object(self, object_id):  # pragma: no cover
         '''Return the object for the given id'''
         raise NotImplementedError
 
