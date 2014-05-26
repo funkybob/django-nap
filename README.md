@@ -6,6 +6,8 @@ django-nap
 
 Read The Docs: http://django-nap.readthedocs.org/en/latest/
 
+Change log: http://django-nap.readthedocs.org/en/latest/changelog.html
+
 A light REST library for Django.
 
 Whilst there are many existing RESTful API tools about, many of them are very complex, and [as I found] some are quite slow!
