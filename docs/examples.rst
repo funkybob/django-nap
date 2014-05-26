@@ -46,7 +46,7 @@ publishers.py
 -------------
 
 .. code-block:: python
-    
+
     from nap.models import ModelPublisher
     from .serialiser import PostSerialiser
 
