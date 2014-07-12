@@ -178,6 +178,7 @@ class HttpResponseError(BaseHttpResponse):
 class BadRequest(HttpResponseError):
     status_code = STATUS.BAD_REQUEST
 
+
 # XXX Auth-Realm ?
 class Unauthorized(HttpResponseError):
     status_code = STATUS.UNAUTHORIZED

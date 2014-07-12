@@ -43,7 +43,7 @@ class ExportCsv(object):
             csv = Writer(fields=self.opts.get('fields', ser._fields.keys()))
             yield csv.write_headers()
             for obj in queryset:
-                data = { 
+                data = {
                     key: force_text(val)
                     for key, val in ser.object_deflate(obj).items()
                 }
