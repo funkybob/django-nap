@@ -1,13 +1,15 @@
 
 from django.test import TestCase
 
-from nap import fields
+from nap.serialiser import fields
 from nap.exceptions import ValidationError
+
 
 class Mock(object):
     def __init__(self, **kwargs):
         for k, v in kwargs.items():
             setattr(self, k, v)
+
 
 class FieldTestCase(TestCase):
     '''

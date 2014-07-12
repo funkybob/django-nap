@@ -10,7 +10,7 @@ from .fields import (
     FileField,
 )
 
-from .model import (
+from .models import (
     modelserialiser_factory,
     ModelSerialiser, ModelReadSerialiser, ModelCreateUpdateSerialiser,
     ModelSerialiserField, ModelManySerialiserField,

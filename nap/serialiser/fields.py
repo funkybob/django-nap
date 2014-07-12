@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 
-from .exceptions import ValidationError
-from .utils import digattr
+from ..exceptions import ValidationError
+from ..utils import digattr
 
 from decimal import Decimal
 from datetime import datetime

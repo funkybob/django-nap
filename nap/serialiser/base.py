@@ -1,8 +1,8 @@
 from __future__ import unicode_literals
 
 from . import fields
-from .exceptions import ValidationError, ValidationErrors
-from .meta import Meta
+from ..exceptions import ValidationError, ValidationErrors
+from ..meta import Meta
 
 from collections import defaultdict
 from six import with_metaclass

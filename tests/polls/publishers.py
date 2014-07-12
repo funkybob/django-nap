@@ -1,12 +1,11 @@
 
-from nap import fields, api
-from nap.models import ModelPublisher
+from nap import rest
+from nap.rest import api
 
-from .models import Choice
 from .serialiser import PollSerialiser
 
-class PollPublisher(models.ModelPublisher)
+
+@api.register('api')
+class PollPublisher(rest.ModelPublisher):
     api_name = 'poll'
     serialiser = PollSerialiser()
-
-api.register('api', PollPublisher)
