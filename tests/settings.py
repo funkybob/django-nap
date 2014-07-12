@@ -2,6 +2,7 @@ import os.path
 
 INSTALLED_APPS = [
     'polls',
+    'nap',
 ]
 
 SITE_ID = 1
