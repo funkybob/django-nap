@@ -4,9 +4,9 @@ import six
 from django.db.models.fields import NOT_PROVIDED
 from django.db.models.manager import Manager
 
-from nap.meta import Meta
 from . import fields
 from .base import MetaSerialiser, Serialiser
+from .meta import Meta
 
 FIELD_MAP = {}
 # Auto-construct the field map
