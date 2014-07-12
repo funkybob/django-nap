@@ -2,7 +2,7 @@
 from django.http import StreamingHttpResponse
 from django.utils.encoding import force_text
 
-from nap.models import modelserialiser_factory
+from nap.serialiser.models import modelserialiser_factory
 from .simplecsv import Writer
 
 

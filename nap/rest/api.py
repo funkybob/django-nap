@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.conf.urls import url, include
 from django.core.urlresolvers import reverse
 
-from . import http
+from .. import http
 
 
 class Api(object):

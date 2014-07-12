@@ -8,12 +8,9 @@ from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 
 from cgi import parse_header
 from collections import defaultdict
-try:
-    import ujson as json
-except ImportError:
-    import json
+import json
 
-from . import http
+from .. import http
 
 
 def accepts(*verbs):
