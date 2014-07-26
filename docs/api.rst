@@ -37,11 +37,11 @@ In your publishers.py use:
 
 .. code-block:: python
 
-    from nap import api
+    from nap import rest
 
     ...
 
-    api.register('apiname', Publisher,....)
+    rest.api.register('apiname', Publisher,....)
 
 If you're only registering a single Publisher, you can use api.register as a decorator.
 
@@ -62,8 +62,8 @@ Then, in your urls.py, just add:
 
 .. code-block:: python
 
-    from nap import api
-    api.autodiscover()
+    from nap import rest
+    rest.api.autodiscover()
 
 Which will trigger it to import $APP.serialiser from each of your
 INSTALLED_APPS.  Then you can just include the urls:

@@ -64,10 +64,10 @@ Quick Start
 
 .. code-block:: python
 
-    from nap import models
+    from nap import rest
     from myapp.models import MyModel
 
-    class MyModelSerialiser(models.ModelSerialiser):
+    class MyModelSerialiser(rest.ModelSerialiser):
         class Meta:
             model = MyModel
             exclude = ['user',]
@@ -76,24 +76,24 @@ Quick Start
 
 .. code-block:: python
 
-    from nap import api, models
+    from nap import rest
     from myapp.serialisers import MyModelSerialiser
 
-    class MyModelPublisher(models.ModelPublisher):
+    class MyModelPublisher(rest.ModelPublisher):
         serialiser = MyModelSerialiser()
 
-    api.register('api', MyModelPublisher)
+    rest.api.register('api', MyModelPublisher)
 
 3. Auto-discover publishers, and add your APIs to your URLs:
 
 .. code-block:: python
 
-    from nap import api
+    from nap import rest
 
-    api.autodiscover()
+    rest.api.autodiscover()
 
     urlpatterns('',
-        (r'', include(api.patterns())
+        (r'', include(rest.api.patterns())
         ...
     )
 
