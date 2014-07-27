@@ -48,10 +48,8 @@ Contents:
 
    serialiser
    fields
-   publisher
-   auth
-   api
-   models
+   rest
+   rpc
    http
    newrelic
    examples
