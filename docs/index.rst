@@ -43,12 +43,9 @@ Contents:
    :maxdepth: 2
 
    serialiser
-   fields
    rest
    rpc
-   http
-   newrelic
-   examples
+   extras
    changelog
 
 Quick Start
