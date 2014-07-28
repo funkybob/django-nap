@@ -13,3 +13,6 @@ Simply add the following lines to your newrelic.ini
     enabled = true
     execute = nap.newrelic:instrument_django_nap_publisher
 
+    [import-hook:nap.rpc.RPCView]
+    enabled = true
+    execute = nap.newrelic:instrument_django_nap_publisher
