@@ -33,60 +33,22 @@ In the spirit of the Unix philosophy, Nap provides a few tools which each do one
    multiple RPC methods.
 
 Nap does not provide the wide range of features you see in tools like Django
-REST Framework and TastyPie, such as rate limiting, token authentication,
-automatic UI, etc.  Instead, it provides a flexible framework that makes it
-easy to combine with other specialised apps.
+REST Framework, such as rate limiting, token authentication, automatic UI, etc.
+Instead, it provides a flexible framework that makes it easy to combine with
+other specialised apps.
 
 Contents:
 
 .. toctree::
    :maxdepth: 2
 
-   serialiser
-   rest
-   rpc
-   extras
+   quickstart
+   serialiser/index
+   rest/index
+   rpc/index
+   extras/index
+   api/index
    changelog
-
-Quick Start
-===========
-
-1. Create a Serialiser for your Model in serialisers.py
-
-.. code-block:: python
-
-    from nap import rest
-    from myapp.models import MyModel
-
-    class MyModelSerialiser(rest.ModelSerialiser):
-        class Meta:
-            model = MyModel
-            exclude = ['user',]
-
-2. Create a Publisher in publishers.py, and register it.
-
-.. code-block:: python
-
-    from nap import rest
-    from myapp.serialisers import MyModelSerialiser
-
-    class MyModelPublisher(rest.ModelPublisher):
-        serialiser = MyModelSerialiser()
-
-    rest.api.register('api', MyModelPublisher)
-
-3. Auto-discover publishers, and add your APIs to your URLs:
-
-.. code-block:: python
-
-    from nap import rest
-
-    rest.api.autodiscover()
-
-    urlpatterns('',
-        (r'', include(rest.api.patterns())
-        ...
-    )
 
 Indices and tables
 ==================

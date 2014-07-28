@@ -2,13 +2,12 @@
 Model Classes
 =============
 
-Of course, there are classes to support dealing with Models.
+Just as there is ModelForm for Forms, there is ModelSerialiser for Serialiser.
 
 ModelSerialiser
 ===============
 
-This class will, like a ModelForm, inspect a Model and generate appropriate
-fields for it.
+This class will inspect a Model and generate appropriate fields for it.
 
 .. code-block:: python
 
@@ -89,8 +88,6 @@ The ``ModelSerialiser`` supports additional ``Meta`` properties:
       When trying to ``get_or_create`` a model instance, additional fields to
       include in the defaults dict.
 
-ModelPublisher sub-classes
---------------------------
 
 There are two extra sub-classes to help building complex cases when restoring
 instances.
@@ -108,34 +105,5 @@ infalted values listed in ``Meta.core_fields``.
 Then, the instance will be updated for all fields not listed in
 ``Meta.related_fields`` or ``Meta.ignored_fields``.
 
-Finally, all ``Meta.related_fields`` will be set by calling their ``add`` method.
-
-ModelPublisher
-==============
-
-A ModelPublisher adds a model property to a publisher, which by default yields
-the model of the serialiser class.
-
-It also adds ``get_object_list`` and ``get_object``, where ``get_object``
-assumes object_id is the pk of the model.
-
-This gives basic read-only access to your model through the API.
-
-modelserialiser_factory
-=======================
-
-This utility class allows you to programmatically generate a ModelSerialiser.
-
-.. code-block:: python
-
-    myser = modelserialiser_factory(name, model, [fields=], [exclude=], [read_only=], **kwargs)
-
-The optional arguments will be treated the same as if passed in the Meta of a
-ModelSerialiser.  Additional deflate/inflate methods may be passed in kwargs.
-
-ModelSerialiserField & ModelManySerialiserField
-===============================================
-
-Model counterparts to SerialiserField and ManySerialiserField.  If not passed a
-serialiser, they will generate one from the model provided.
-
+Finally, all ``Meta.related_fields`` will be set by calling their ``add``
+method.
