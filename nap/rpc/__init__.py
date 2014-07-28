@@ -1,2 +1,2 @@
 
-from .views import RPCMixin, RPCView, rpc
+from .views import RPCMixin, RPCView, method

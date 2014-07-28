@@ -7,16 +7,17 @@ The RPC View allows your application to provide APIs that don't mate up with RES
 How does it work?
 =================
 
-Any POST request with a ``X-RPC-Action`` header will be intercepted and treated as a RPC request.  If there is a method on the view class which matches the name in the header, and it's been decorated as ``@rpc`` accessible, the request data will be parsed, passed as keyword arguments to the method, and the result JSON encoded and returned.
+Any POST request with a ``X-RPC-Action`` header will be intercepted and treated as a RPC request.  If there is a method on the view class which matches the name in the header, and it's been decorated as ``@method`` accessible, the request data will be parsed, passed as keyword arguments to the method, and the result JSON encoded and returned.
 
 Usage
 =====
 
 .. code-block:: python
+   from nap import rpc
 
-   class MathView(RPCView):
+   class MathView(rpc.RPCView):
 
-       @rpc
+       @rpc.method
        def add(self, a, b):
            return a + b
 

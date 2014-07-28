@@ -51,7 +51,7 @@ class RPCView(RPCMixin, View):
     pass
 
 
-def rpc(view):
+def method(view):
     '''Mark a view as accessible via RPC'''
     setattr(view, RPC_MARKER, True)
     return view
