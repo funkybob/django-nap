@@ -2,9 +2,9 @@
 from django.test import TestCase
 from django.test.client import RequestFactory
 
-from nap import publisher
+from nap import rest
 
-class TestPublisher(publisher.Publisher):
+class TestPublisher(rest.Publisher):
     pass
 
 

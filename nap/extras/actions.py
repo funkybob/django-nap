@@ -2,7 +2,7 @@
 from django.http import StreamingHttpResponse
 from django.utils.encoding import force_text
 
-from nap.models import modelserialiser_factory
+from nap.serialiser.models import modelserialiser_factory
 from .simplecsv import Writer
 
 
@@ -43,7 +43,7 @@ class ExportCsv(object):
             csv = Writer(fields=self.opts.get('fields', ser._fields.keys()))
             yield csv.write_headers()
             for obj in queryset:
-                data = { 
+                data = {
                     key: force_text(val)
                     for key, val in ser.object_deflate(obj).items()
                 }

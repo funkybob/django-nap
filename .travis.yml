@@ -1,15 +1,19 @@
 language: python
 python:
-  #- "2.6"
   - "2.7"
   - "3.3"
 env:
-  - DJANGO=1.4
-  - DJANGO=1.5
-  - DJANGO=1.6
+  - DJANGO=Django==1.4.13
+  - DJANGO=Django==1.5.8
+  - DJANGO=Django==1.6.5
+  - DJANGO=https://github.com/django/django/archive/stable/1.7.x.zip
 install:
-  #- if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then pip install -q ordereddict --use-mirrors; fi
-  - if [[ $TRAVIS_PYTHON_VERSION == 2* ]]; then pip install -q Django==$DJANGO --use-mirrors; fi
+  - pip install -q $DJANGO --use-mirrors
   - pip install -r requirements.txt --use-mirrors
 script:
   - python tests/manage.py test nap --settings=settings
+
+matrix:
+  exclude:
+    - env: DJANGO=Django==1.4.13
+      python: "3.3"

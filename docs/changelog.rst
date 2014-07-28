@@ -2,6 +2,23 @@
 Changelog
 =========
 
+v0.14.0
+=======
+
+.. admonition:: WARNING: API breakage
+
+   A large reorganisation of the code was undertaken.
+
+   Now there are 3 major top-level modules:
+   - serialiser
+   - rest
+   - rpc
+
+Enhancements:
+
++ Added functional RPC system [merged from django-marionette]
++ Made most things accessible in top-level module
+
 v0.13.9
 =======
 

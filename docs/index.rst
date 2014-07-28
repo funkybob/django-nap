@@ -15,10 +15,6 @@ Take a REST with django-nap: APIs for Django
 .. image:: https://pypip.in/v/django-nap/badge.png
            :target: https://crate.io/packages/django-nap
 
-Whilst there are many existing RESTful API tools about, many of them are very complex, and [as I found] some are quite slow!
-
-I wanted to take the solid serialising pattern from TastyPie, with the separation of roles of django-rest-framework, and include a Publisher API I developed some time ago.
-
 In the spirit of the Unix philosophy, Nap provides a few tools which each do one thing, and do it well.  They are:
 
 1. Serialiser
@@ -26,15 +22,15 @@ In the spirit of the Unix philosophy, Nap provides a few tools which each do one
    Declarative style Serialiser definitions for reducing complex Python objects
    to simple types expressible in JSON.
 
-2. Publisher
+2. RESTful Publisher
 
    A Class-based view system which merges many related views into a single
    class, including url routing.
 
-3. API
+3. RPC Views
 
-   Manage many Publishers and API versions with simple auto-discover resource
-   registration.
+   A mixin for Django's class-based views which allows a single url to provide
+   multiple RPC methods.
 
 Nap does not provide the wide range of features you see in tools like Django
 REST Framework and TastyPie, such as rate limiting, token authentication,
@@ -47,14 +43,9 @@ Contents:
    :maxdepth: 2
 
    serialiser
-   fields
-   publisher
-   auth
-   api
-   models
-   http
-   newrelic
-   examples
+   rest
+   rpc
+   extras
    changelog
 
 Quick Start
@@ -64,10 +55,10 @@ Quick Start
 
 .. code-block:: python
 
-    from nap import models
+    from nap import rest
     from myapp.models import MyModel
 
-    class MyModelSerialiser(models.ModelSerialiser):
+    class MyModelSerialiser(rest.ModelSerialiser):
         class Meta:
             model = MyModel
             exclude = ['user',]
@@ -76,24 +67,24 @@ Quick Start
 
 .. code-block:: python
 
-    from nap import api, models
+    from nap import rest
     from myapp.serialisers import MyModelSerialiser
 
-    class MyModelPublisher(models.ModelPublisher):
+    class MyModelPublisher(rest.ModelPublisher):
         serialiser = MyModelSerialiser()
 
-    api.register('api', MyModelPublisher)
+    rest.api.register('api', MyModelPublisher)
 
 3. Auto-discover publishers, and add your APIs to your URLs:
 
 .. code-block:: python
 
-    from nap import api
+    from nap import rest
 
-    api.autodiscover()
+    rest.api.autodiscover()
 
     urlpatterns('',
-        (r'', include(api.patterns())
+        (r'', include(rest.api.patterns())
         ...
     )
 
