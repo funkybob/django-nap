@@ -10,7 +10,7 @@ Change log: http://django-nap.readthedocs.org/en/latest/changelog.html
 
 An API library for Django
 
-A minimalist approach to object de/serailisers, RESTful views, and RPC views.
+A minimalist approach to object de/serialiser, RESTful views, and RPC views.
 
 Benefits
 ========
