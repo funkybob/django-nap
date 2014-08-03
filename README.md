@@ -1,7 +1,7 @@
 django-nap
 ==========
-[![Downloads](https://pypip.in/d/django-nap/badge.png)](https://crate.io/package/django-nap)
-[![Version](https://pypip.in/v/django-nap/badge.png)](https://crate.io/package/django-nap)
+[![Downloads](https://pypip.in/d/django-nap/badge.png)](https://pypi.python.org/pypi/django-nap)
+[![Version](https://pypip.in/v/django-nap/badge.png)](https://pypi.python.org/pypi/django-nap)
 [![Build Status](https://secure.travis-ci.org/funkybob/django-nap.png?branch=master)](http://travis-ci.org/funkybob/django-nap)
 
 Read The Docs: http://django-nap.readthedocs.org/en/latest/
@@ -10,7 +10,7 @@ Change log: http://django-nap.readthedocs.org/en/latest/changelog.html
 
 An API library for Django
 
-A minimalist approach to object de/serialiser, RESTful views, and RPC views.
+A minimalist approach to object de/serialisers, RESTful views, and RPC views.
 
 Benefits
 ========
