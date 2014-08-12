@@ -88,12 +88,21 @@ class Serialiser(with_metaclass(MetaSerialiser, object)):
         errors = defaultdict(list)
         for name, method in self._field_inflaters:
             try:
-                method(name, data=data, obj=objdata, instance=instance, **kwargs)
+                method(
+                    name,
+                    data=data,
+                    obj=objdata,
+                    instance=instance,
+                    **kwargs
+                )
             except ValidationError as exc:
                 errors[name].append(exc)
         for name, method in self._custom_inflaters:
             try:
-                objdata[name] = method(data=data, obj=objdata, instance=instance,
+                objdata[name] = method(
+                    data=data,
+                    obj=objdata,
+                    instance=instance,
                     **kwargs
                 )
             except ValidationError as exc:
