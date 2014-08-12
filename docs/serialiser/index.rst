@@ -3,22 +3,15 @@ Serialisers
 ===========
 
 Serialisers define how to turn a Python object into a collection of JSON
-compatible types.
+compatible types, and back again.
 
 They are defined using the familiar declarative syntax, like Models and Forms.
-
-.. toctree::
-   :maxdepth: 2
-
-   fields
-   models
-   api
-
 
 Serialiser objects
 ==================
 
-A Serialiser class is defined much like a Form or Model:
+A Serialiser class is defined much like a Form or Model, as a class with a list
+of fields.
 
 .. code-block:: python
 
@@ -27,6 +20,9 @@ A Serialiser class is defined much like a Form or Model:
         foo = fields.Field()
         bar = fields.Field('foo.bar')
         baz = fields.IntegerField()
+
+Fields define what values will be output in the serialised format, their type,
+and where to get them from the object being serialised.
 
 Without an attribute specified, the field will use its name as the attribute name.
 

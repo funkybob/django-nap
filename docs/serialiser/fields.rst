@@ -2,9 +2,12 @@
 Fields
 ======
 
-Fields are declared on Serialisers to pluck values from the object for deflation, as well as to cast them back when inflating.
+Fields are declared on ``Serialisers`` to pluck values from the object for
+deflation, as well as to cast them back when inflating.
 
-The basic Field class can be used for any value that has a matching JSON counterpart; i.e. bools, strings, floats, dicts, lists.
+The basic ``Field`` class can be used for any value that has a matching JSON
+counterpart; i.e. bools, strings, floats, dicts, lists.  Note, howerver, there
+is no type validation on de-serialising.
 
 There are also some for common types:
 
@@ -16,7 +19,9 @@ There are also some for common types:
 - TimeField
 - StringField
 
-Finally, there are the two Serialiser Fields, which will generate their value using a serialiser class.  They are the SerialiserField, and ManySerialiserField.
+Finally, there are the two Serialiser Fields, which will generate their value
+using a serialiser class.  They are the SerialiserField, and
+ManySerialiserField.
 
 Field
 =====
@@ -64,6 +69,8 @@ Field
 Deflate Cycle
 =============
 
+When deflating an object for serialising, the following steps are followed:
+
 + Determine if we use name or attribute.
 + Use nap.utils.digattr to get the value
 + If the value is not None, call self.reduce
@@ -73,6 +80,9 @@ The reduce method is the last stage of casting.  By default, it does nothing.
 
 Inflate Cycle
 =============
+
+When deserialising values to restore an object, the following steps are
+followed:
 
 + If this field is read-only, return immediately.
 + Determine if we use name or attribute
