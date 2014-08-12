@@ -2,7 +2,7 @@ from __future__ import absolute_import
 
 # In agent configuration file add:
 #
-# [import-hook:nap.publisher]
+# [import-hook:nap.rest.publisher]
 # enabled = true
 # execute = nap.newrelic:instrument_django_nap_publisher
 
