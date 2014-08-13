@@ -1,5 +1,6 @@
 
 from cgi import parse_header
+import inspect
 import json
 
 from django.http import HttpResponse
@@ -29,6 +30,17 @@ class RPCMixin(object):
         serialised_resp = json.dumps(resp, cls=DjangoJSONEncoder)
 
         return HttpResponse(serialised_resp, content_type='application/json')
+
+    def _introspect(self):
+        methods = {}
+        for name, prop in inspect.getmembers(self, lambda m: getattr(m, RPC_MARKER, False)):
+            argspec = inspect.getargspec(prop)
+            methods[name] = {
+                'args': argspec.args,
+                'doc': inspect.getdoc(prop),
+                'defaults': argspec.defaults,
+            }
+        return methods
 
     def execute(self, handler, data):
         '''Helpful hook to ease wrapping the handler'''
