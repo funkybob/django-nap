@@ -12,6 +12,10 @@ from django.views.generic import View
 RPC_MARKER = '_rpc'
 
 
+def is_rpc_method(m):
+    return getattr(m, RPC_MARKER, False)
+
+
 class RPCMixin(object):
     '''Mix in to a standard View to provide RPC actions'''
 
@@ -21,7 +25,7 @@ class RPCMixin(object):
             return super(RPCMixin, self).dispatch(request, *args, **kwargs)
 
         func = getattr(self, method, None)
-        if not getattr(func, RPC_MARKER, False):
+        if not is_rpc_method(func):
             return HttpResponse(status=412)
 
         data = self.get_request_data(request)
@@ -33,7 +37,7 @@ class RPCMixin(object):
 
     def _introspect(self):
         methods = {}
-        for name, prop in inspect.getmembers(self, lambda m: getattr(m, RPC_MARKER, False)):
+        for name, prop in inspect.getmembers(self, is_rpc_method):
             argspec = inspect.getargspec(prop)
             methods[name] = {
                 'args': argspec.args,
