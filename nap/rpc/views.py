@@ -40,7 +40,7 @@ class RPCMixin(object):
         for name, prop in inspect.getmembers(self, is_rpc_method):
             argspec = inspect.getargspec(prop)
             methods[name] = {
-                'args': argspec.args,
+                'args': argspec.args[1:],
                 'doc': inspect.getdoc(prop),
                 'defaults': argspec.defaults,
             }
