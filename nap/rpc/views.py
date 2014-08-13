@@ -12,6 +12,12 @@ from django.views.generic import View
 RPC_MARKER = '_rpc'
 
 
+def method(view):
+    '''Mark a view as accessible via RPC'''
+    setattr(view, RPC_MARKER, True)
+    return view
+
+
 def is_rpc_method(m):
     return getattr(m, RPC_MARKER, False)
 
@@ -65,9 +71,3 @@ class RPCMixin(object):
 class RPCView(RPCMixin, View):
     '''courtesy class to avoid having to mix it yourself.'''
     pass
-
-
-def method(view):
-    '''Mark a view as accessible via RPC'''
-    setattr(view, RPC_MARKER, True)
-    return view
