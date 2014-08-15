@@ -24,6 +24,7 @@ def is_rpc_method(m):
 
 class RPCMixin(object):
     '''Mix in to a standard View to provide RPC actions'''
+    permit_introspect = False
 
     def dispatch(self, request, *args, **kwargs):
         method = request.META.get('HTTP_X_RPC_ACTION', None)
@@ -40,6 +41,13 @@ class RPCMixin(object):
         serialised_resp = json.dumps(resp, cls=DjangoJSONEncoder)
 
         return HttpResponse(serialised_resp, content_type='application/json')
+
+    def options(self, request, *args, **kwargs):
+        response = super(RPCMixin, self).options(request, *args, **kwargs)
+        if self.permit_introspect:
+            response['Content-Type'] = 'application/json'
+            response.write(json.dumps(self._introspect()))
+        return response
 
     def _introspect(self):
         methods = {}
