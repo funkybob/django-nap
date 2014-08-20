@@ -2,6 +2,13 @@
 Changelog
 =========
 
+v0.14.1
+=======
+
+Bug Fixes:
+
++ Cope with blank content encoding values in RPC Views
+
 v0.14.0
 =======
 
