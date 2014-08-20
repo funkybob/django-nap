@@ -71,7 +71,7 @@ class RPCMixin(object):
             if not self.request.body:
                 return default
             return json.loads(self.request.body.decode(
-                getattr(self.request, 'encoding', ISO_8859_1)
+                getattr(self.request, 'encoding', None) or ISO_8859_1
             ))
         return self.request.POST
 
