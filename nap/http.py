@@ -57,6 +57,7 @@ STATUS_CODES = (
     (415, 'Unsupported Media Type'),
     (416, 'Requested Range Not Satisfiable'),
     (417, 'Expectation Failed'),
+    (427, 'Bad Geolocation'),
 
     (500, 'Internal Server Error'),
     (501, 'Not Implemented'),
@@ -250,6 +251,10 @@ class RequestedRangeNotSatisfiable(HttpResponseError):
 
 class ExpectationFailed(HttpResponseError):
     status_code = STATUS.EXPECTATION_FAILED
+
+
+class BadGeolocation(HttpResponseError):
+    status_code = STATUS.BAG_GEOLOCATION
 
 #
 # Server Error (5xx)
