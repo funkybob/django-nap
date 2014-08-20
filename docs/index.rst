@@ -6,6 +6,8 @@
 Take a REST with django-nap: APIs for Django
 ============================================
 
+.. rubric:: Web APIs you can do in your sleep...
+
 .. image:: https://travis-ci.org/funkybob/django-nap.png
            :target: https://secure.travis-ci.org/funkybob/django-nap.png?branch=master
 
