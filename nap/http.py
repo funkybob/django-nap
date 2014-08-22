@@ -254,7 +254,7 @@ class ExpectationFailed(HttpResponseError):
 
 
 class BadGeolocation(HttpResponseError):
-    status_code = STATUS.BAG_GEOLOCATION
+    status_code = STATUS.BAD_GEOLOCATION
 
 #
 # Server Error (5xx)
