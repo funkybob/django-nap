@@ -1,4 +1,5 @@
 *.py[cod]
+.*.swp
 
 # C extensions
 *.so
@@ -40,4 +41,3 @@ htmlcov
 
 # vim swap files
 .*.swp
-
