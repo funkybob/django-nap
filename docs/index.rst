@@ -46,6 +46,8 @@ Contents:
 
    quickstart
    serialiser/index
+   serialiser/fields
+   serialiser/models
    rest/index
    rpc/index
    extras/index
