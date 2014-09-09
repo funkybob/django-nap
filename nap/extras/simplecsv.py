@@ -2,6 +2,12 @@
 class Writer(object):
     '''
     A generator friendly, unicode aware CSV encoder class built for speed.
+
+    >>> csv = Writer(fields=['a', 'b', 'c'])
+    >>> csv.write_headers()
+    u'a,b,c\n'
+    >>> csv.write([1, '2,', 'c'])
+    u'1,"2,",c\n'
     '''
 
     # What to put between fields
