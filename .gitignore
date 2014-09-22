@@ -41,3 +41,6 @@ htmlcov
 
 # vim swap files
 .*.swp
+
+# sphinx build dir
+docs/_build
