@@ -19,6 +19,7 @@ import json
 import re
 
 REASON_PHRASES.update({
+    308: 'PERMANENT REDIRECT',  # Not in 1.6
     427: 'BAD GEOLOCATION',
 })
 
