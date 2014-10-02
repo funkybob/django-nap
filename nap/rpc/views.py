@@ -1,12 +1,12 @@
 
-from cgi import parse_header
 import inspect
 import json
 
 from django.http import HttpResponse
-from django.core.handlers.wsgi import ISO_8859_1
 from django.core.serializers.json import DjangoJSONEncoder
 from django.views.generic import View
+
+from nap.utils import JsonMixin
 
 
 RPC_MARKER = '_rpc'
@@ -22,7 +22,7 @@ def is_rpc_method(m):
     return getattr(m, RPC_MARKER, False)
 
 
-class RPCMixin(object):
+class RPCMixin(JsonMixin):
     '''Mix in to a standard View to provide RPC actions'''
     permit_introspect = False
 
@@ -63,17 +63,6 @@ class RPCMixin(object):
     def execute(self, handler, data):
         '''Helpful hook to ease wrapping the handler'''
         return handler(**data)
-
-    def get_request_data(self, default=None):
-        '''Retrieve data from request'''
-        c_type, _ = parse_header(self.request.META.get('CONTENT_TYPE', ''))
-        if c_type in ['application/json', 'text/json']:
-            if not self.request.body:
-                return default
-            return json.loads(self.request.body.decode(
-                getattr(self.request, 'encoding', None) or ISO_8859_1
-            ))
-        return self.request.POST
 
 
 class RPCView(RPCMixin, View):

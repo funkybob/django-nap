@@ -6,11 +6,10 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 
-from cgi import parse_header
 from collections import defaultdict
-import json
 
 from .. import http
+from ..utils import JsonMixin
 
 
 def accepts(*verbs):
@@ -188,7 +187,7 @@ class SimplePatternsMixin(object):
         ]
 
 
-class Publisher(BasePublisher):
+class Publisher(JsonMixin, BasePublisher):
     '''Default API-style publisher'''
     LIMIT_PARAM = 'limit'
     OFFSET_PARAM = 'offset'
@@ -199,15 +198,6 @@ class Publisher(BasePublisher):
     # De/Serialising
     # Which content types will we attempt to parse?
     # The first in the list will be used for responses.
-    CONTENT_TYPES = ['application/json', 'text/json']
-
-    def dumps(self, data):
-        '''How to parse content that matches our content types list.'''
-        return json.dumps(data)
-
-    def loads(self, data):
-        '''Serialise data for responses.'''
-        return json.loads(data)
 
     # Hooks for controlling which serialiser to use
 
@@ -288,19 +278,6 @@ class Publisher(BasePublisher):
             },
             'objects': page.object_list,
         }
-
-    # Get the parsed request data
-
-    def get_request_data(self, default=None):
-        '''Retrieve data from request'''
-        content_type, _ = parse_header(self.request.META.get('CONTENT_TYPE', ''))
-        if content_type in self.CONTENT_TYPES:
-            if not self.request.body:
-                return default
-            return self.loads(self.request.body)
-        if self.request.method == 'GET':
-            return self.request.GET
-        return self.request.POST
 
     # Response helpers
 
