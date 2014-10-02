@@ -8,6 +8,7 @@ v0.14.1
 Bug Fixes:
 
 + Cope with blank content encoding values in RPC Views
++ Unify all json handling functions into utils.JsonMixin
 
 v0.14.0
 =======
