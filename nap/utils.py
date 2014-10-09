@@ -3,7 +3,10 @@ from __future__ import unicode_literals
 from cgi import parse_header
 import json
 
-from django.core.handlers.wsgi import ISO_8859_1
+try:
+    from django.core.handlers.wsgi import ISO_8859_1
+except ImportError:  # pre-1.7
+    ISO_8859_1 = str('iso-8859-1')
 
 
 def digattr(obj, attr, default=None):
