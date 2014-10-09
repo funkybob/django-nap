@@ -2,10 +2,9 @@
 import inspect
 import json
 
-from django.http import HttpResponse
-from django.core.serializers.json import DjangoJSONEncoder
 from django.views.generic import View
 
+from nap import http
 from nap.utils import JsonMixin
 
 
@@ -33,14 +32,13 @@ class RPCMixin(JsonMixin):
 
         func = getattr(self, method, None)
         if not is_rpc_method(func):
-            return HttpResponse(status=412)
+            return http.PreconditionFailed()
 
         data = self.get_request_data(request)
 
         resp = self.execute(func, data)
-        serialised_resp = json.dumps(resp, cls=DjangoJSONEncoder)
 
-        return HttpResponse(serialised_resp, content_type='application/json')
+        return http.JsonResponse(resp)
 
     def options(self, request, *args, **kwargs):
         response = super(RPCMixin, self).options(request, *args, **kwargs)
