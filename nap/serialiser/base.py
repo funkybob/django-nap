@@ -1,13 +1,13 @@
 from __future__ import unicode_literals
 
+from collections import defaultdict
+from django.utils.six import with_metaclass
+
+import inspect
+
 from . import fields
 from .meta import Meta
 from ..exceptions import ValidationError, ValidationErrors
-
-from collections import defaultdict
-from six import with_metaclass
-
-import inspect
 
 
 class MetaSerialiser(type):

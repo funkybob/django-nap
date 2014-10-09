@@ -1,8 +1,7 @@
 
-import six
-
 from django.db.models.fields import NOT_PROVIDED
 from django.db.models.manager import Manager
+from django.utils.six import with_metaclass
 
 from . import fields
 from .base import MetaSerialiser, Serialiser
@@ -88,7 +87,7 @@ class MetaModelSerialiser(MetaSerialiser):
         return new_class
 
 
-class ModelSerialiser(six.with_metaclass(MetaModelSerialiser, Serialiser)):
+class ModelSerialiser(with_metaclass(MetaModelSerialiser, Serialiser)):
 
     def restore_object(self, obj, instance, **kwargs):
         if instance:
