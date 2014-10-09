@@ -35,7 +35,11 @@ class RPCMixin(JsonMixin):
         if not is_rpc_method(func):
             return HttpResponse(status=412)
 
-        data = self.get_request_data({})
+        try:
+            data = self.get_request_data({})
+            (lambda **kwargs: None)(**data)
+        except (ValueError, TypeError):
+            return HttpResponse(status=400)
 
         resp = self.execute(func, data)
         serialised_resp = json.dumps(resp, cls=DjangoJSONEncoder)

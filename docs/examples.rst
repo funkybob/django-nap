@@ -28,10 +28,10 @@ serialiser.py
 
 .. code-block:: python
 
-    from nap import rest
+    from nap import serialiser
     from nap.serialiser import fields
 
-    class PostSerialiser(rest.ModelSerialiser):
+    class PostSerialiser(serialiser.ModelSerialiser):
         class Meta:
             model = models.Post
 

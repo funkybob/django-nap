@@ -17,7 +17,8 @@ if not settings.configured:
         },
         INSTALLED_APPS=(
             'tests',
-        )
+        ),
+        ROOT_URLCONF='tests.urls',
     )
 
 

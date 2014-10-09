@@ -5,10 +5,10 @@ Quick Start
 
 .. code-block:: python
 
-    from nap import rest
+    from nap import serialiser
     from myapp.models import MyModel
 
-    class MyModelSerialiser(rest.ModelSerialiser):
+    class MyModelSerialiser(serialiser.ModelSerialiser):
         class Meta:
             model = MyModel
             exclude = ['user',]
