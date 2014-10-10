@@ -16,10 +16,13 @@ setup(
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: Implementation :: PyPy',
     ],
     requires = [
-        'Django (>=1.6)',
-        'six (>=1.3)',
+        'Django (>=1.4)',
     ],
     install_requires = [
         'Django>=1.4',
