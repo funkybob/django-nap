@@ -34,7 +34,12 @@ class RPCMixin(JsonMixin):
         if not is_rpc_method(func):
             return http.PreconditionFailed()
 
-        data = self.get_request_data(request)
+        try:
+            data = self.get_request_data({})
+            # Ensure data is valid for passing as **kwargs
+            (lambda **kwargs: None)(**data)
+        except (ValueError, TypeError):
+            return HttpResponse(status=400)
 
         resp = self.execute(func, data)
 
