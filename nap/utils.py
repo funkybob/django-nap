@@ -40,7 +40,7 @@ class JsonMixin(object):
         if c_type in self.CONTENT_TYPES:
             if not self.request.body:
                 return default
-            return json.loads(self.request.body.decode(
+            return self.loads(self.request.body.decode(
                 getattr(self.request, 'encoding', None) or ISO_8859_1
             ))
         return self.request.POST
