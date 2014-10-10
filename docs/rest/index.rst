@@ -14,3 +14,4 @@ This is managed using a Publisher pattern.
    api
    auth
    models
+   views
