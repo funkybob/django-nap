@@ -241,7 +241,10 @@ class Publisher(JsonMixin, BasePublisher):
                 'objects': object_list,
             }
         max_page_size = getattr(self, 'max_page_size', page_size)
-        page_size = int(self.request.GET.get(self.LIMIT_PARAM, page_size))
+        try:
+            page_size = int(self.request.GET.get(self.LIMIT_PARAM, page_size))
+        except ValueError:
+            raise http.NotFound('Invalid page size')
         page_size = max(0, min(page_size, max_page_size))
         page_num = 0
         try:
@@ -252,11 +255,7 @@ class Publisher(JsonMixin, BasePublisher):
         except KeyError:
             try:
                 offset = int(self.request.GET[self.OFFSET_PARAM])
-            except ValueError:
-                # Bad page - default to 0
-                pass
-            except KeyError:
-                # No value - default to 0
+            except (ValueError, KeyError):
                 pass
             else:
                 page_num = offset // page_size
