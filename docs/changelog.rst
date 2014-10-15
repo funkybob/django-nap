@@ -5,10 +5,21 @@ Changelog
 v0.14.1
 =======
 
+Enhancements:
+
++ Import REASON_CODES from Django
++ Use Django's JsonResponse if available, or our own copy of it.
++ Unify all json handling functions into utils.JsonMixin
++ Add RPCView introspection
++ Use Django's vendored copy of 'six'
++ Add new runtests script
+
 Bug Fixes:
 
 + Cope with blank content encoding values in RPC Views
-+ Unify all json handling functions into utils.JsonMixin
++ Raise a 404 on invalid page_size value
++ Validate the data we got in RPC View is passable as \**kwargs
++ ISO_8859_1 isn't defined in older Django versions
 
 v0.14.0
 =======
