@@ -139,7 +139,7 @@ class ManySerialiserField(Field):
         self.serialiser = kwargs['serialiser']
 
     def reduce(self, value, **kwargs):
-        return self.serialiser.list_deflate(iter(value), **kwargs)
+        return self.serialiser.list_deflate(value, **kwargs)
 
     def restore(self, value, **kwargs):
         return self.serialiser.list_inflate(value, **kwargs)
