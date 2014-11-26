@@ -65,6 +65,20 @@ Base Publisher
 
       Used by the ``patterns`` method to control the URL patterns generated.
 
+   .. attribute:: PATTERNS
+
+      A list of (regex, view name) pairs to generate the URL patterns.
+      They will be called with format() applied, passed the following keys:
+
+      name
+        The generated name for this Publisher.
+      action
+        ACTION_PATTERN
+      object
+        OBJECT_PATTERN
+      argument
+        ARGUMENT_PATTERN
+
    .. classmethod:: patterns(api_name=None)
 
       Builds a list of URL patterns for this Publisher.

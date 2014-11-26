@@ -78,6 +78,7 @@ Enhancements:
 + Add RPCView introspection
 + Use Django's vendored copy of 'six'
 + Add new runtests script
++ Reworked Publisher URLs to be easier to customise, and more consistent
 
 Bug Fixes:
 

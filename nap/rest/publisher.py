@@ -61,13 +61,10 @@ class BasePublisher(object):
     @classmethod
     def patterns(cls, api_name=None):
         '''
+        Yields a list of URL patterns for this Publisher.
+
         Add this to your url patterns like:
-            ( '^foo/', include(mypublisher.patterns()), ),
-        /                       default object list
-        /(action)/              list operation
-        /(action)/(option)/     list operation with extra argument
-        /object/(id)/           instance view
-        /object/(id)/(action)/  custom action on instance
+            ('^foo/', include(mypublisher.patterns()),),
         '''
         view = cls.build_view()
 
@@ -76,13 +73,14 @@ class BasePublisher(object):
             name = '%s_%s' % (api_name, name)
 
         fmt = {
+            'name': name,
             'object': cls.OBJECT_PATTERN,
             'action': cls.ACTION_PATTERN,
-            'argument': cls.ARGUMENT_PATTERN
+            'argument': cls.ARGUMENT_PATTERN,
         }
 
         return [
-            url(url_pattern.format(**fmt), view, name=view_name.format(name=name))
+            url(url_pattern.format(**fmt), view, name=view_name.format(**fmt))
             for url_pattern, view_name in cls.PATTERNS
         ]
 
