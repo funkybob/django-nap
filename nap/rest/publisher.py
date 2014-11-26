@@ -82,8 +82,8 @@ class BasePublisher(object):
         }
 
         return [
-            url(url_pattern.fmt(fmt), view, view_name.format(name=name))
-            for url_pattern, view_name in self.PATTERNS
+            url(url_pattern.format(**fmt), view, name=view_name.format(name=name))
+            for url_pattern, view_name in cls.PATTERNS
         ]
 
     def dispatch(self, request, action='default', object_id=None, **kwargs):
