@@ -2,7 +2,7 @@ from django.test import TestCase
 from nap.serialiser import ModelSerialiser
 from nap import rest
 
-from .. import models
+from . import models
 
 
 class PollSerialiser(ModelSerialiser):

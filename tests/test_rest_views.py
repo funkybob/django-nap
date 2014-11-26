@@ -2,7 +2,7 @@ from django.test import TestCase, Client
 import json
 from nap.http import STATUS
 
-from ..models import Poll
+from .models import Poll
 
 
 class SingleObjectRestViewTest(TestCase):

@@ -30,6 +30,15 @@ class BasePublisher(object):
     OBJECT_PATTERN = r'[-\w]+'
     ARGUMENT_PATTERN = r'.+?'
 
+    PATTERNS = [
+        (r'^object/(?P<object_id>{object})/(?P<action>{action})/(?P<argument>{argument})/?$', '{name}_object_action_arg'),
+        (r'^object/(?P<object_id>{object})/(?P<action>{action})/?$', '{name}_object_action'),
+        (r'^object/(?P<object_id>{object})/?$', '{name}_object_default'),
+        (r'^(?P<action>{action})/(?P<argument>{argument})/?$', '{name}_list_action_arg'),
+        (r'^(?P<action>{action})/?$', '{name}_list_action'),
+        (r'^$', '{name}_list_default'),
+    ]
+
     def __init__(self, request, *args, **kwargs):
         self.request = request
         self.args = args
@@ -52,13 +61,10 @@ class BasePublisher(object):
     @classmethod
     def patterns(cls, api_name=None):
         '''
+        Yields a list of URL patterns for this Publisher.
+
         Add this to your url patterns like:
-            ( '^foo/', include(mypublisher.patterns()), ),
-        /                       default object list
-        /(action)/              list operation
-        /(action)/(option)/     list operation with extra argument
-        /object/(id)/           instance view
-        /object/(id)/(action)/  custom action on instance
+            ('^foo/', include(mypublisher.patterns()),),
         '''
         view = cls.build_view()
 
@@ -66,31 +72,16 @@ class BasePublisher(object):
         if api_name:
             name = '%s_%s' % (api_name, name)
 
+        fmt = {
+            'name': name,
+            'object': cls.OBJECT_PATTERN,
+            'action': cls.ACTION_PATTERN,
+            'argument': cls.ARGUMENT_PATTERN,
+        }
+
         return [
-            url(r'^object/(?P<object_id>%s)/(?P<action>%s)/(?P<argument>%s)/?$' % (cls.OBJECT_PATTERN, cls.ACTION_PATTERN, cls.ARGUMENT_PATTERN),
-                view,
-                name='%s_object_action_arg' % name
-            ),
-            url(r'^object/(?P<object_id>%s)/(?P<action>%s)/?$' % (cls.OBJECT_PATTERN, cls.ACTION_PATTERN),
-                view,
-                name='%s_object_action' % name
-            ),
-            url(r'^object/(?P<object_id>%s)/?$' % (cls.OBJECT_PATTERN,),
-                view,
-                name='%s_object_default' % name
-            ),
-            url(r'^(?P<action>%s)/(?P<argument>%s)/?$' % (cls.ACTION_PATTERN, cls.ARGUMENT_PATTERN),
-                view,
-                name='%s_list_action_arg' % name
-            ),
-            url(r'^(?P<action>%s)/?$' % (cls.ACTION_PATTERN,),
-                view,
-                name='%s_list_action' % name
-            ),
-            url(r'^$',
-                view,
-                name='%s_list_default' % name
-            ),
+            url(url_pattern.format(**fmt), view, name=view_name.format(**fmt))
+            for url_pattern, view_name in cls.PATTERNS
         ]
 
     def dispatch(self, request, action='default', object_id=None, **kwargs):
@@ -149,40 +140,18 @@ class SimplePatternsMixin(object):
     A "flatter" set of url patterns for when your object IDs are numbers only.
     '''
 
-    @classmethod
-    def patterns(cls, api_name=None):
-        view = cls.build_view()
+    ACTION_PATTERN = r'\w+'
+    OBJECT_PATTERN = r'\d+'
+    ARGUMENT_PATTERN = r'.+?'
 
-        name = getattr(cls, 'api_name', cls.__name__.lower())
-        if api_name:
-            name = '%s_%s' % (api_name, name)
-
-        return [
-            url(r'^(?P<object_id>\d+)/(?P<action>\w+)/(?P<argument>.+?)/?$',
-                view,
-                name='%s_object_action_arg' % name
-            ),
-            url(r'^(?P<object_id>\d+)/(?P<action>\w+)/?$',
-                view,
-                name='%s_object_action' % name
-            ),
-            url(r'^(?P<object_id>\d+)/?$',
-                view,
-                name='%s_object_default' % name
-            ),
-            url(r'^(?P<action>\w+)/(?P<argument>.+?)/?$',
-                view,
-                name='%s_list_action_arg' % name
-            ),
-            url(r'^(?P<action>\w+)/?$',
-                view,
-                name='%s_list_action' % name
-            ),
-            url(r'^$',
-                view,
-                name='%s_list_default' % name
-            ),
-        ]
+    PATTERNS = [
+        (r'^(?P<object_id>{object})/(?P<action>{action})/(?P<argument>{argument})/?$', '{name}_object_action_arg'),
+        (r'^(?P<object_id>{object})/(?P<action>{action})/?$', '{name}_object_action'),
+        (r'^(?P<object_id>{object})/?$', '{name}_object_default'),
+        (r'^(?P<action>{action})/(?P<argument>{argument})/?$', '{name}_list_action_arg'),
+        (r'^(?P<action>{action})/?$', '{name}_list_action'),
+        (r'^$', '{name}_list_default'),
+    ]
 
 
 class Publisher(JsonMixin, BasePublisher):
