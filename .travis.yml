@@ -16,7 +16,7 @@ install:
   - pip install -q $DJANGO
   - pip install -r requirements.txt
 script:
-  - python runtsets.py
+  - python runtests.py
 
 before_script:
   - sh -c "if [ '$DJANGO' = 'Django<1.5' -o '$DJANGO' = 'Django<1.6' ]; then pip install django-discover-runner; fi"
