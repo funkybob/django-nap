@@ -3,7 +3,7 @@ from . import rpc_views
 from . import rest_views
 
 from nap.rest import api
-api.autodiscover()
+#api.autodiscover()
 
 urlpatterns = patterns('',
     (r'^api/', include(api.patterns(True))),
