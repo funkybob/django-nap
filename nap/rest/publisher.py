@@ -27,13 +27,13 @@ class BasePublisher(object):
     CSRF = True
 
     ACTION_PATTERN = r'\w+'
-    OBJECT_PATTERN = r'[-\w]+'
+    OBJECT_PATTERN = r'\d+'
     ARGUMENT_PATTERN = r'.+?'
 
     PATTERNS = [
-        (r'^object/(?P<object_id>{object})/(?P<action>{action})/(?P<argument>{argument})/?$', '{name}_object_action_arg'),
-        (r'^object/(?P<object_id>{object})/(?P<action>{action})/?$', '{name}_object_action'),
-        (r'^object/(?P<object_id>{object})/?$', '{name}_object_default'),
+        (r'^(?P<object_id>{object})/(?P<action>{action})/(?P<argument>{argument})/?$', '{name}_object_action_arg'),
+        (r'^(?P<object_id>{object})/(?P<action>{action})/?$', '{name}_object_action'),
+        (r'^(?P<object_id>{object})/?$', '{name}_object_default'),
         (r'^(?P<action>{action})/(?P<argument>{argument})/?$', '{name}_list_action_arg'),
         (r'^(?P<action>{action})/?$', '{name}_list_action'),
         (r'^$', '{name}_list_default'),
@@ -135,19 +135,17 @@ class BasePublisher(object):
         }
 
 
-class SimplePatternsMixin(object):
+class SlugPatternsMixin(object):
     '''
-    A "flatter" set of url patterns for when your object IDs are numbers only.
+    A set of url patterns for when your object IDs are slugs.
     '''
 
-    ACTION_PATTERN = r'\w+'
-    OBJECT_PATTERN = r'\d+'
-    ARGUMENT_PATTERN = r'.+?'
+    OBJECT_PATTERN = r'[-\w]+'
 
     PATTERNS = [
-        (r'^(?P<object_id>{object})/(?P<action>{action})/(?P<argument>{argument})/?$', '{name}_object_action_arg'),
-        (r'^(?P<object_id>{object})/(?P<action>{action})/?$', '{name}_object_action'),
-        (r'^(?P<object_id>{object})/?$', '{name}_object_default'),
+        (r'^object/(?P<object_id>{object})/(?P<action>{action})/(?P<argument>{argument})/?$', '{name}_object_action_arg'),
+        (r'^object/(?P<object_id>{object})/(?P<action>{action})/?$', '{name}_object_action'),
+        (r'^object/(?P<object_id>{object})/?$', '{name}_object_default'),
         (r'^(?P<action>{action})/(?P<argument>{argument})/?$', '{name}_list_action_arg'),
         (r'^(?P<action>{action})/?$', '{name}_list_action'),
         (r'^$', '{name}_list_default'),
