@@ -11,14 +11,12 @@ same functions.
 
 .. code-block:: python
 
-    r'^object/(?P<object_id>[-\w]+)/(?P<action>\w+)/(?P<argument>.+?)/?$'
-    r'^object/(?P<object_id>[-\w]+)/(?P<action>\w+)/?$'
-    r'^object/(?P<object_id>[-\w]+)/?$'
+    r'^(?P<object_id>\d+)/(?P<action>\w+)/(?P<argument>.+?)/?$'
+    r'^(?P<object_id>\d+)/(?P<action>\w+)/?$'
+    r'^(?P<object_id>\d+)/?$'
     r'^(?P<action>\w+)/(?P<argument>.+?)/$'
     r'^(?P<action>\w+)/?$'
     r'^$'
-
-Clearly this list does not permit 'object' to be an action.
 
 The publisher recognises a small, fixed set of URL patterns, and dispatches them
 to methods on the class according to a simple pattern: target, method, action.
@@ -27,25 +25,24 @@ supplied.  The method is the HTTP method, lower cased (i.e. get, put, post,
 delete, etc.).  And finally, the action, which defaults to 'default'.
 
 So, for example, a GET request to /foo would call the ``list_get_foo`` handler.
-Whereas a POST to /object/123/nudge/ would call ``object_post_nudge``, passing
+Whereas a POST to /123/nudge/ would call ``object_post_nudge``, passing
 "123" as the object_id.
 
 All handlers should follow the same definition:
 
 .. code-block:: python
 
-    def handler(self, request, action, object_id, **kwargs):
-
-Both action and object_id are passed as kwargs, so where they're not needed they
-can be omitted.
+    def handler(self, request, action, object_id):
 
 Like a view, every handler is expected to return a proper HttpResponse object.
+Since they have the same prototype as a view, standard view decorators can be
+applied, like with Django CBV.
 
 Publishing
 ==========
 
-In order to add a ``Publisher`` to your URL patterns, you need to include all of
-its patterns.  Fortunately, it provides a handy method to make this simple:
+In order to add a ``Publisher`` to your URL patterns, you need to include all
+of its patterns.  Fortunately, it provides a handy method to make this simple:
 
     url(r'^myresource/', include(MyPublisher.patterns())),
 
@@ -57,7 +54,8 @@ Base Publisher
 
    .. attribute:: CSRF = True
 
-      Determines if CSRF protection is applied to the view function used in ``patterns``
+      Determines if CSRF protection is applied to the view function used in
+      ``patterns``
 
    .. attribute:: ACTION_PATTERN
    .. attribute:: OBJECT_PATTERN
@@ -100,20 +98,37 @@ Base Publisher
    .. method:: execute(handler):
 
       Call hook for intercepting handlers.  ``dispatch`` passes the handler
-      method here to invoke.  It will call the handler, and catch any ``BaseHttpResponse``
-      exceptions, returning them.
+      method here to invoke.  It will call the handler, and catch any
+      ``BaseHttpResponse`` exceptions, returning them.
 
       This was originally added to make New Relic support simpler.
 
 Custom Patterns
 ---------------
 
-By overridding the patterns method, you can provide your own url patterns.
+.. note::
 
-One sample is included: nap.publisher.SimplePatternsMixin
+   Prior to 0.15.0 this was the default pattern format.
 
-It omits the object/ portion of the object urls above, but limits object_ids to
-just digits.
+You can customise the URL patterns by overriding the PATTERNS property.
+
+This is a list of two-tuples of regex and pattern name pairs.  These will have
+format called upon them with the following named values passed:
+
+  name
+    The API name of this Publisher
+  object
+    OBJECT_PATTERN on this Publisher
+  action
+    ACTION_PATTERN on this Publisher
+  argument
+    ARGUMENT_PATTERN on this Publisher
+
+One sample is included: nap.publisher.SlugPatternsMixin
+
+It helps when you want to look up your objects by slug instead of pk.  To
+avoid the possible conflict of actions with object_is, the object patterns are
+prefixed with 'object/'
 
 Alternatively, if you just want to change the regex used for each part of the
 URL, you can overrid them using OBJECT_PATTERN, ACTION_PATTERN, and
