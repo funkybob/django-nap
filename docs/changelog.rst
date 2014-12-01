@@ -2,6 +2,30 @@
 Changelog
 =========
 
+v0.15.0
+=======
+
+.. admonition:: WARNING: API Breakage
+
+   Many methods in the REST Publisher have been renamed to more closely match
+   those in Djangos CBGV.
+
+.. admonition:: WARNING: Default URL Patterns Change
+
+   The default URL patterns for a Publisher are now what used to be the
+   SimplePatternsMixin.
+
+   The old patterns can now be used by including the SlugPatternsMixin.
+
+Enhancements:
+
++ Simplified replacing URL patterns with the PATTERNS property.
++ Changed default URL patterns to work by pk, not slug.
++ Renamed Publisher.create_response to render_to_response
++ Changed Publisher.response_class to default to JsonResponse
++ Renamed Publisher.render_single_object to render_object
++ Added Publisher.render_object_list method
+
 v0.14.5.1
 =========
 
