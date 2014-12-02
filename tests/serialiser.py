@@ -1,6 +1,5 @@
 
 from nap import serialiser
-from nap.serialiser import fields
 
 from .models import Choice
 
@@ -9,9 +8,9 @@ class ChoiceSerialiser(serialiser.ModelSerialiser):
         model = Choice
         exclude = ('poll,')
 
+    votes = serialiser.Field('vote_count')
 
 class PollSerialiser(serialiser.Serialiser):
-    question = fields.Field()
-    published = fields.DateTimeField('pub_date')
-    choices = fields.ManySerialiserField(serialiser=ChoiceSerialiser())
-
+    question = serialiser.Field()
+    published = serialiser.DateTimeField('pub_date')
+    choices = serialiser.ManySerialiserField(serialiser=ChoiceSerialiser())
