@@ -103,9 +103,9 @@ class BasePublisher(object):
         '''This allows wrapping calls to handler functions'''
         try:
             return handler(self.request,
-                action=self.action,
-                object_id=self.object_id,
-            )
+                           action=self.action,
+                           object_id=self.object_id,
+                           )
         except http.BaseHttpResponse as response:
             return response
 
@@ -117,17 +117,15 @@ class BasePublisher(object):
         for name, fnc in inspect.getmembers(cls, inspect.ismethod):
             parts = name.split('_')
 
-            if parts[0] == 'list':
-                if len(parts) == 2:
-                    list_handlers[parts[1]].extend(getattr(fnc, '_accepts', ['ALL']))
-                else:
-                    list_handlers[parts[2]].append(parts[1])
+            if len(parts) == 2:
+                accepts = getattr(fnc, '_accepts', ['ALL'])
+            else:
+                accepts = parts[1:2]
 
-            elif parts[0] == 'object':
-                if len(parts) == 2:
-                    object_handlers[parts[1]].extend(getattr(fnc, '_accepts', ['ALL']))
-                else:
-                    object_handlers[parts[2]].append(parts[1])
+            if parts[0] == 'list':
+                list_handlers[parts[-1]].extend(accepts)
+            else:
+                object_handlers[parts[-1]].extend(accepts)
 
         return {
             'list': list_handlers,
@@ -196,7 +194,6 @@ class Publisher(JsonMixin, BasePublisher):
         '''Hook to allow custom sorting of object lists'''
         return object_list
 
-
     # Pagination
     def paginate_object_list(self, object_list):
         '''Paginate an object list.
@@ -208,9 +205,10 @@ class Publisher(JsonMixin, BasePublisher):
             return object_list, {}
         page_number = self.get_page_number(page_size)
 
-        paginator = Paginator(object_list, page_size, allow_empty_first_page=True)
+        paginator = Paginator(object_list, page_size,
+                              allow_empty_first_page=True)
         try:
-            page = paginator.page(page_num + 1)
+            page = paginator.page(page_number + 1)
         except EmptyPage:
             raise http.NotFound()
 
@@ -243,12 +241,14 @@ class Publisher(JsonMixin, BasePublisher):
                 pass
             else:
                 page_num = offset // page_size
+        return page_num
 
     # Response helpers
 
     def render_to_response(self, content, **response_kwargs):
         '''Return a response, serialising the content'''
-        response_class = response_kwargs.pop('response_class', self.response_class)
+        response_class = response_kwargs.pop('response_class',
+                                             self.response_class)
         response_kwargs.setdefault('content_type', self.CONTENT_TYPES[0])
         return response_class(content, **response_kwargs)
 
@@ -265,7 +265,7 @@ class Publisher(JsonMixin, BasePublisher):
     def render_object_list(self, objs, serialiser=None, **response_kwargs):
         '''Helper to return a list of objects serialised.'''
         if serialiser is None:
-            serliaser = self.get_serialiser()
+            serialiser = self.get_serialiser()
         serialiser_kwargs = response_kwargs.pop('serialiser_kwargs', None)
         if serialiser_kwargs is None:
             serialiser_kwargs = self.get_serialiser_kwargs()
@@ -283,7 +283,7 @@ class Publisher(JsonMixin, BasePublisher):
 
         serialiser = self.get_serialiser()
         serialiser_kwargs = self.get_serialiser_kwargs()
-        data['objects'] = serialiser.list_deflate(data['objects'], **serialiser_kwargs)
+        data = serialiser.list_deflate(object_list, **serialiser_kwargs)
 
         return self.render_to_response(data)
 
