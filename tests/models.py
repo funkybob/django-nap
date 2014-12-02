@@ -15,5 +15,5 @@ class Choice(models.Model):
 
 
 class Votes(models.Model):
-    choice = models.ForeignKey('Choice', related_name='votes'))
+    choice = models.ForeignKey('Choice', related_name='votes')
     weight = models.IntegerField(default=1)
