@@ -206,6 +206,15 @@ class Publisher(JsonMixin, BasePublisher):
         page_size = self.get_page_size()
         if not page_size:
             return object_list, {}
+        page_number = self.get_page_number(page_size)
+
+        paginator = Paginator(object_list, page_size, allow_empty_first_page=True)
+        try:
+            page = paginator.page(page_num + 1)
+        except EmptyPage:
+            raise http.NotFound()
+
+        return page.object_list, page
 
     def get_page_size(self):
         '''Hook to control the pagination page size.'''
@@ -220,9 +229,7 @@ class Publisher(JsonMixin, BasePublisher):
             raise http.NotFound('Invalid page size')
         page_size = max(1, min(page_size, max_page_size))
 
-    def get_page(self, object_list):
-        '''Return a paginated object list, along with some metadata'''
-        page_size = self.get_page_size()
+    def get_page_number(self, page_size):
         page_num = 0
         try:
             page_num = int(self.request.GET[self.PAGE_PARAM])
@@ -236,24 +243,6 @@ class Publisher(JsonMixin, BasePublisher):
                 pass
             else:
                 page_num = offset // page_size
-
-        paginator = Paginator(object_list, page_size, allow_empty_first_page=True)
-        try:
-            page = paginator.page(page_num + 1)
-        except EmptyPage:
-            raise http.NotFound()
-        return {
-            'meta': {
-                'offset': page.start_index() - 1,
-                'page': page_num,
-                'total_pages': paginator.num_pages,
-                'limit': page_size,
-                'count': paginator.count,
-                'has_next': page.has_next(),
-                'has_prev': page.has_previous(),
-            },
-            'objects': page.object_list,
-        }
 
     # Response helpers
 
@@ -290,11 +279,12 @@ class Publisher(JsonMixin, BasePublisher):
         object_list = self.filter_object_list(object_list)
         object_list = self.sort_object_list(object_list)
 
-        data = self.get_page(object_list)
+        object_list, meta = self.paginate_object_list(object_list)
 
         serialiser = self.get_serialiser()
         serialiser_kwargs = self.get_serialiser_kwargs()
         data['objects'] = serialiser.list_deflate(data['objects'], **serialiser_kwargs)
+
         return self.render_to_response(data)
 
     def object_get_default(self, request, object_id, **kwargs):
