@@ -9,4 +9,11 @@ class Poll(models.Model):
 class Choice(models.Model):
     poll = models.ForeignKey(Poll)
     choice_text = models.CharField(max_length=200)
-    votes = models.IntegerField()
+
+    def vote_count(self):
+        return self.aggregate(vote_sum=models.Sum('votes__weight'))
+
+
+class Votes(models.Model):
+    choice = models.ForeignKey('Choice', related_name='votes'))
+    weight = models.IntegerField(default=1)
