@@ -212,7 +212,17 @@ class Publisher(JsonMixin, BasePublisher):
         except EmptyPage:
             raise http.NotFound()
 
-        return page.object_list, page
+        meta = {
+            'offset': page.start_index() - 1,
+            'page': page_num,
+            'total_pages': paginator.num_pages,
+            'limit': page_size,
+            'count': paginator.count,
+            'has_next': page.has_next(),
+            'has_prev': page.has_previous(),
+        }
+
+        return page.object_list, meta
 
     def get_page_size(self):
         '''Hook to control the pagination page size.'''
@@ -242,6 +252,18 @@ class Publisher(JsonMixin, BasePublisher):
             else:
                 page_num = offset // page_size
         return page_num
+
+    def apply_pagination_data(self, data, meta):
+        '''
+        Update the data with information about pagination
+        '''
+        if not meta:
+            return data
+
+        return {
+            'objects': data,
+            'meta': meta,
+        }
 
     # Response helpers
 
@@ -284,6 +306,8 @@ class Publisher(JsonMixin, BasePublisher):
         serialiser = self.get_serialiser()
         serialiser_kwargs = self.get_serialiser_kwargs()
         data = serialiser.list_deflate(object_list, **serialiser_kwargs)
+
+        data = self.apply_pagination_data(data, meta)
 
         return self.render_to_response(data)
 
