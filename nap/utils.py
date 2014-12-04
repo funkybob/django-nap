@@ -23,7 +23,7 @@ def digattr(obj, attr, default=None):
                     obj = obj[int(step)]
                 except (IndexError, ValueError, KeyError, TypeError):
                     return default
-        if callable(obj):
+        if callable(obj) and not getattr(obj, 'do_not_call_in_templates', False):
             obj = obj()
     return obj
 
