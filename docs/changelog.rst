@@ -25,6 +25,7 @@ Enhancements:
 + Changed Publisher.response_class to default to JsonResponse
 + Renamed Publisher.render_single_object to render_object
 + Added Publisher.render_object_list method
++ Decomposed handling of pagination to ease customisation
 
 v0.14.5.1
 =========
