@@ -20,6 +20,7 @@ Bug Fixes:
 + Raise a 404 on invalid page_size value
 + Validate the data we got in RPC View is passable as \**kwargs
 + ISO_8859_1 isn't defined in older Django versions
++ Emulate django template lookups in digattr by ignoring callables flagged 'do_not_call_in_templates'
 
 v0.14.0
 =======
