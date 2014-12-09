@@ -38,3 +38,12 @@ Quick Start
         ...
     )
 
+or if you're using Django 1.7, use the AppConfig:
+
+.. code-block:: python
+
+   INSTALLED_APPS = [
+       ...
+       'nap.apps.NapConfig',
+   ]
+
