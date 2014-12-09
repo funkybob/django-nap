@@ -2,6 +2,13 @@
 Changelog
 =========
 
+v0.14.1.1
+=========
+
+Bug Fixes:
+
++ Add required `name` attribute to AppConfig [thanks bobobo1618]
+
 v0.14.1
 =======
 

@@ -233,7 +233,21 @@ class Publisher(JsonMixin, BasePublisher):
 
     # Pagination
     def get_page(self, object_list):
-        '''Return a paginated object list, along with some metadata'''
+        '''
+        Return a paginated object list, along with some metadata
+
+        If self.page_size is not None, pagination is enabled.
+
+        The page_size can be overridden by passing it in the requst, but it is
+        limited to 1 < page_size < max_page_size.
+
+        max_page_size defaults to self.page_size.
+
+        If a page_num is passed, it is fed to regular Django pagination
+        If an offset is passed, page_num is derived from it by dividing it by
+        page_size.
+
+        '''
         page_size = getattr(self, 'page_size', None)
         if page_size is None:
             return {
@@ -241,11 +255,13 @@ class Publisher(JsonMixin, BasePublisher):
                 'objects': object_list,
             }
         max_page_size = getattr(self, 'max_page_size', page_size)
+
         try:
             page_size = int(self.request.GET.get(self.LIMIT_PARAM, page_size))
         except ValueError:
             raise http.NotFound('Invalid page size')
-        page_size = max(0, min(page_size, max_page_size))
+        page_size = max(1, min(page_size, max_page_size))
+
         page_num = 0
         try:
             page_num = int(self.request.GET[self.PAGE_PARAM])
