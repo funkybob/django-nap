@@ -1,0 +1,7 @@
+
+- Form-like is_valid
+    - Need whole-model validation
+
+    - dry-run flag?
+
+    - Need "create" and "update" modes
