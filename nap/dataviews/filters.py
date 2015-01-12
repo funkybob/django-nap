@@ -16,6 +16,8 @@ class Filter(object):
 
 class _CastFilter(Filter):
     def to_python(self, value):
+        if value is None:
+            return value
         return self.type_class(value)
 
 
@@ -30,28 +32,34 @@ class FloatFilter(_CastFilter):
 class TimeFilter(object):
     @staticmethod
     def to_python(value):
-        datetime.strptime(value, '%H:%M:%S').time()
+        return datetime.strptime(value, '%H:%M:%S').time()
 
     @staticmethod
     def from_python(value):
+        if value is None:
+            return value
         return value.isoformat()
 
 
 class DateFilter(object):
     @staticmethod
     def to_python(value):
-        datetime.strptime(value, '%Y-%m-%d').date()
+        return datetime.strptime(value, '%Y-%m-%d').date()
 
     @staticmethod
     def from_python(value):
+        if value is None:
+            return value
         return value.isoformat()
 
 
 class DateTimeFilter(object):
     @staticmethod
     def to_python(value):
-        datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
+        return datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
 
     @staticmethod
     def from_python(value):
+        if value is None:
+            return value
         return value.isoformat(' ')
