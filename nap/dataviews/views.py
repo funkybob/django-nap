@@ -29,6 +29,15 @@ class DataView(object):
     def _field_names(self):
         return tuple(self._fields.keys())
 
+    def __lshift__(self, other):
+        '''
+        Allow implicit reduction using:
+
+        >>> data = view << obj
+        '''
+        self._obj = other
+        return self._reduce()
+
     def _reduce(self):
         '''
         Reduce our instance to its serialisable state.
@@ -44,7 +53,7 @@ class DataView(object):
         '''
         Update an instance from supplied data.
 
-        If update is False, all fields not tagged as ._required=False MUST be
+        If update is False, all fields not tagged as .required=False MUST be
         supplied in the data dict.
         '''
         errors = defaultdict(list)
@@ -52,9 +61,9 @@ class DataView(object):
             try:
                 setattr(self, name, data[name])
             except KeyError:
-                if self.update:
+                if update:
                     pass
-                if getattr(self._fields[name], '_required', True):
+                elif getattr(self._fields[name], 'required', True):
                     errors[name].append(
                         ValidationError('This field is required')
                     )
