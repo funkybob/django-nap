@@ -21,10 +21,11 @@ class Field(field):
     class V(DataView):
         foo = Field('bar', default=1)
     '''
-    def __init__(self, name, default=NOT_PROVIDED, filters=None):
+    def __init__(self, name, default=NOT_PROVIDED, filters=None, required=True):
         self.name = name
         self.default = default
         self.filters = filters or []
+        self.required = required
 
     def __get__(self, instance, cls=None):
         if instance is None:
@@ -50,5 +51,21 @@ class DigField(Field):
             return self
         return digattr(instance._obj, self.name, self.default)
 
-    def __set__(self, instance):
+    def __set__(self, instance, value):
         raise NotImplementedError
+
+
+class ViewField(Field):
+    def __init__(self, *args, **kwargs):
+        self.view = kwargs.pop('view')
+        super(ViewField, self).__init__(*args, **kwargs)
+
+    def __get__(self, instance, cls=None):
+        if instance is None:
+            return self
+        value = super(ViewField, self).__get__(instance, cls)
+        return self.view(value)._reduce()
+
+    def __set__(self, instance, value):
+        view = self.view()
+        view._update(instance)
