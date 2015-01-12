@@ -1,5 +1,6 @@
 
 from django.db.models.fields import NOT_PROVIDED
+from django.forms import ValidationError
 
 from nap.utils import digattr
 
@@ -30,7 +31,10 @@ class Field(field):
             return self
         value = getattr(instance._obj, self.name, self.default)
         for filt in self.filters:
-            value = filt.from_python(value)
+            try:
+                value = filt.from_python(value)
+            except (TypeError, ValueError):
+                raise ValidationError('Invalid value')
         return value
 
     def __set__(self, instance, value):
