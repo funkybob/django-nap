@@ -1,23 +1,42 @@
 
-from .fields import field, Field
+from .fields import Field
 from .views import DataView
 
+from django.utils.six import with_metaclass
 
-def modelview_factory(model, fields=None, exclude=None):
 
-    if fields is None:
-        fields = model._meta.get_all_field_names()
+class MetaView(type):
 
-    exclude = exclude or []
+    def __new__(mcs, name, bases, attrs):
+        meta = attrs.get('Meta', None)
 
-    props = {}
-    for field_name in fields:
+        try:
+            model = meta.model
+        except AttributeError:
+            if name != 'ModelDataView':
+                raise
+        else:
+            include = getattr(meta, 'fields', None)
+            exclude = getattr(meta, 'exclude', [])
 
-        if field_name in exclude:
-            continue
+            # XXX Does the top base have all fields?
 
-        field = model._meta.get_field(field)
+            for model_field in model._meta.fields:
+                if model_field.name in attrs:
+                    continue
+                if model_field.name in exclude:
+                    continue
+                if include != '__all__' and model_field.name not in include:
+                    continue
 
-        props[field.name] = Field(field.name)
+                # XXX Magic for field types
+                attrs[model_field.name] = Field(model_field.name)
 
-    return type('%sView' % model._meta.model_name, (DataView,), props)
+        attrs['_meta'] = meta
+
+        return super(MetaView, mcs).__new__(mcs, name, bases, attrs)
+
+
+class ModelDataView(with_metaclass(MetaView, DataView)):
+
+    pass
