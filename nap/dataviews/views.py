@@ -1,6 +1,8 @@
 
+from collections import defaultdict
 from inspect import classify_class_attrs
 
+from django.forms import ValidationError
 from django.utils.functional import cached_property
 
 from .fields import field
@@ -34,17 +36,19 @@ class DataView(object):
             for name in self._field_names
         }
 
-    def _restore(self, data):
+    def _update(self, data):
         '''
-        Restore data from reduced state to a full instance.
+        Update an instance from supplied data.
         '''
+        errors = defaultdict(list)
         for name in self._field_names:
             if name in data:
-                setattr(self, name, data[name])
-        return self._obj
+                try:
+                    setattr(self, name, data[name])
+                except ValidationError as e:
+                    errors[name].append(e.message)
+        self._errors = dict(errors)
+        if errors:
+            raise ValidationError(self._errors)
 
-    def _construct(self, data):
-        '''
-        Any follow up work required to turn our raised data into an instance.
-        '''
         return self._obj
