@@ -48,10 +48,12 @@ Contents:
    serialiser/index
    serialiser/fields
    serialiser/models
+   dataviews/index
    rest/index
    rpc/index
    extras/index
    api/index
+   examples
    changelog
 
 Indices and tables
