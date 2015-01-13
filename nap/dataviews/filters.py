@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from django.forms import ValidationError
+
 
 class Filter(object):
     '''
@@ -14,11 +16,28 @@ class Filter(object):
         return value
 
 
+class NotNullFilter(Filter):
+    @staticmethod
+    def to_python(value):
+        if value is None:
+            raise ValidationError('May not be null')
+        return value
+
+
 class _CastFilter(Filter):
+    @classmethod
     def to_python(self, value):
         if value is None:
             return value
         return self.type_class(value)
+
+
+class BooleanFilter(_CastFilter):
+    @staticmethod
+    def to_python(value):
+        if value is None:
+            return value
+        return value.lower() in (1, '1', 't', 'y', 'true', True)
 
 
 class IntegerFilter(_CastFilter):
