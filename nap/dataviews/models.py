@@ -12,6 +12,8 @@ FIELD_FILTERS = {
     'DateField': [filters.DateFilter],
     'TimeField': [filters.TimeFilter],
     'DateTimeField': [filters.DateTimeFilter],
+
+    'IntegerField': [filters.IntegerFilter],
 }
 
 
@@ -45,11 +47,13 @@ class MetaView(type):
                 # XXX Magic for field types
                 kwargs = {}
                 kwargs['default'] = model_field.default
-                kwargs['required'] = any([
-                    not model_field.blank,
-                    model_field.default is not NOT_PROVIDED,
-                ])
+                kwargs['required'] = meta.required.get(
+                    model_field.name,
+                    any([not model_field.blank, model_field.default is not NOT_PROVIDED])
+                )
                 kwargs['filters'] = FIELD_FILTERS.get(model_field.__class__.__name__, [])
+                if model_field.null is False:
+                    kwargs['filters'].insert(0, filters.NotNullFilter)
                 attrs[model_field.name] = Field(model_field.name, **kwargs)
 
         attrs['_meta'] = meta
