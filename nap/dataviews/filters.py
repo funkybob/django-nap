@@ -37,7 +37,9 @@ class BooleanFilter(_CastFilter):
     def to_python(value):
         if value is None:
             return value
-        return value.lower() in (1, '1', 't', 'y', 'true', True)
+        if isinstance(value, bool):
+            return value
+        return value.lower() in (1, '1', 't', 'y', 'true')
 
 
 class IntegerFilter(_CastFilter):
@@ -57,7 +59,7 @@ class TimeFilter(object):
     def from_python(value):
         if value is None:
             return value
-        return value.isoformat()
+        return value.replace(microsecond=0).isoformat()
 
 
 class DateFilter(object):
@@ -81,4 +83,4 @@ class DateTimeFilter(object):
     def from_python(value):
         if value is None:
             return value
-        return value.isoformat(' ')
+        return value.replace(microsecond=0).isoformat(' ')
