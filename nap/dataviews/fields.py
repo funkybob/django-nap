@@ -13,6 +13,8 @@ class field(property):
         return self.fget(instance._obj)
 
     def __set__(self, instance, value):
+        if self.fset is None:
+            return
         self.fset(instance._obj, value)
 
 
