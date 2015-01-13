@@ -13,6 +13,7 @@ FIELD_FILTERS = {
     'TimeField': [filters.TimeFilter],
     'DateTimeField': [filters.DateTimeFilter],
 
+    'BooleanField': [filters.BooleanFilter],
     'IntegerField': [filters.IntegerFilter],
 }
 
