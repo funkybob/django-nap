@@ -2,6 +2,7 @@
 from collections import defaultdict
 from inspect import classify_class_attrs
 
+from django.db.models.fields import NOT_PROVIDED
 from django.forms import ValidationError
 from django.utils.functional import cached_property
 
@@ -57,16 +58,19 @@ class DataView(object):
         supplied in the data dict.
         '''
         errors = defaultdict(list)
+
         for name in self._field_names:
-            try:
-                setattr(self, name, data[name])
-            except KeyError:
-                if update:
-                    pass
-                elif getattr(self._fields[name], 'required', True):
+            required = getattr(self._fields[name], 'required', True)
+            default = getattr(self._fields[name], 'default', NOT_PROVIDED)
+            value = data.get(name, default)
+            if value is NOT_PROVIDED:
+                if required and not update:
                     errors[name].append(
                         ValidationError('This field is required')
                     )
+                continue
+            try:
+                setattr(self, name, value)
             except ValidationError as e:
                 errors[name].append(e.message)
 
