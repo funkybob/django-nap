@@ -1,7 +1,3 @@
 
-- Form-like is_valid
-    - Need whole-model validation
-
-    - dry-run flag?
-
-    - Need "create" and "update" modes
+- change apply to default to update
+  - rename update to full?
