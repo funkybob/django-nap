@@ -19,13 +19,13 @@ All properties and methods are prefixed with _ to avoid polluting the namespace 
       Returns a dict containing all the field values on the currently bound
       object.
 
-   .. method:: _apply(data, update=False)
+   .. method:: _apply(data, full=False)
 
       Update all properties on this view from the dict ``data``.
 
       All ValidationErrors raised by fields and their filters will be collected
-      in a single ValidationError.  You can access this dict via the
-      exception's `error_dict` property.
+      in a single ValidationError. You can access this dict via the exception's
+      `error_dict` property.
 
-      If the ``update`` argument is set True, omitted fields will be skipped.
-      Otherwise they would raise ValidationErrors.
+      If the `full` argument is True, all fields will be validated, even if no
+      value is supplied for them. Otherwise they would raise ValidationErrors.
