@@ -41,13 +41,11 @@ class DataView(object):
 
     def __rlshift__(self, other):
         '''
-        Allow implicit apply(update) using:
+        Allow implicit apply using:
 
         >>> obj = data >> view
-
-        Note: sets update=True
         '''
-        return self._apply(other, update=True)
+        return self._apply(other)
 
     def _reduce(self):
         '''
@@ -60,11 +58,11 @@ class DataView(object):
             for name in self._field_names
         }
 
-    def _apply(self, data, update=False):
+    def _apply(self, data, full=False):
         '''
         Update an instance from supplied data.
 
-        If update is False, all fields not tagged as .required=False MUST be
+        If full is True, all fields not tagged as .required=False MUST be
         supplied in the data dict.
         '''
         errors = defaultdict(list)
@@ -74,7 +72,7 @@ class DataView(object):
             default = getattr(self._fields[name], 'default', NOT_PROVIDED)
             value = data.get(name, default)
             if value is NOT_PROVIDED:
-                if required and not update:
+                if full and required:
                     errors[name].append(
                         ValidationError('This field is required')
                     )
