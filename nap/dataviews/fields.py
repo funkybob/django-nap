@@ -23,7 +23,8 @@ class Field(field):
     class V(DataView):
         foo = Field('bar', default=1)
     '''
-    def __init__(self, name, default=NOT_PROVIDED, filters=None, required=True):
+    def __init__(self, name, default=NOT_PROVIDED, filters=None,
+                 required=True):
         self.name = name
         self.default = default
         self.filters = filters or []

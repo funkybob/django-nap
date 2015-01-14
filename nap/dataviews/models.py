@@ -42,7 +42,8 @@ class MetaView(type):
                     continue
                 if model_field.name in meta.exclude:
                     continue
-                if meta.fields != '__all__' and model_field.name not in meta.fields:
+                if meta.fields != '__all__' and \
+                   model_field.name not in meta.fields:
                     continue
 
                 # XXX Magic for field types
@@ -50,9 +51,15 @@ class MetaView(type):
                 kwargs['default'] = model_field.default
                 kwargs['required'] = meta.required.get(
                     model_field.name,
-                    any([not model_field.blank, model_field.default is not NOT_PROVIDED])
+                    any([
+                        not model_field.blank,
+                        model_field.default is not NOT_PROVIDED
+                    ])
                 )
-                kwargs['filters'] = FIELD_FILTERS.get(model_field.__class__.__name__, [])
+                kwargs['filters'] = FIELD_FILTERS.get(
+                    model_field.__class__.__name__,
+                    []
+                )
                 if model_field.null is False:
                     kwargs['filters'].insert(0, filters.NotNullFilter)
                 attrs[model_field.name] = Field(model_field.name, **kwargs)
