@@ -1,8 +1,8 @@
 
+from django.forms import ValidationError
 from django.test import TestCase
 
 from nap.serialiser import fields
-from nap.exceptions import ValidationError
 
 
 class Mock(object):

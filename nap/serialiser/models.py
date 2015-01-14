@@ -1,6 +1,7 @@
 
 from django.db.models.fields import NOT_PROVIDED
 from django.db.models.manager import Manager
+from django.forms import ValidationError
 from django.utils.six import with_metaclass
 
 from . import fields
@@ -111,7 +112,7 @@ class ModelReadSerialiser(ModelSerialiser):
         try:
             return self._meta.model.objects.get(**objdata)
         except self._meta.model.DoesNotExist:
-            raise fields.ValidationError('%s with values %r does not exist.' % (
+            raise ValidationError('%s with values %r does not exist.' % (
                 self._meta.model.__name__,
                 objdata,
             ))

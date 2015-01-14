@@ -1,13 +1,14 @@
 from __future__ import unicode_literals
 
 from collections import defaultdict
+
+from django.forms import ValidationError
 from django.utils.six import with_metaclass
 
 import inspect
 
 from . import fields
 from .meta import Meta
-from ..exceptions import ValidationError, ValidationErrors
 
 
 class MetaSerialiser(type):
@@ -108,7 +109,7 @@ class Serialiser(with_metaclass(MetaSerialiser, object)):
             except ValidationError as exc:
                 errors[name].append(exc)
         if errors:
-            raise ValidationErrors(errors)
+            raise ValidationError(errors)
         return self.restore_object(objdata, instance=instance, **kwargs)
 
     def list_inflate(self, data_list, **kwargs):

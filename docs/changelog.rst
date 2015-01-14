@@ -2,6 +2,13 @@
 Changelog
 =========
 
+v0.14.2
+=======
+
+Enhancements:
+
++ Switched custom ValidationError / ValidationErrors to django's ValidationError
+
 v0.14.1.1
 =========
 
