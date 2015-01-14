@@ -66,8 +66,9 @@ class ViewField(Field):
         if instance is None:
             return self
         value = super(ViewField, self).__get__(instance, cls)
-        return self.view(value)._reduce()
+        view = self.view()
+        return view << value
 
     def __set__(self, instance, value):
-        view = self.view()
-        view._update(instance)
+        view = self.view(instance)
+        view._update(value, update=True)
