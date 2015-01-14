@@ -5,6 +5,10 @@ Changelog
 v0.14.2
 =======
 
+.. admonition:: WARNING: Removed module
+
+   The module nap.exceptions has been completely removed.
+
 Enhancements:
 
 + Switched custom ValidationError / ValidationErrors to django's ValidationError
