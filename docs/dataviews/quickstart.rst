@@ -3,7 +3,7 @@ Quick Start
 
 .. code-block:: python
 
-   from nap.dataviews import DataView, Field, BooleanFilter
+   from nap.dataviews import DataView, field, Field, BooleanFilter
 
    class UserView(DataView):
        @field
