@@ -39,6 +39,16 @@ class DataView(object):
         self._obj = other
         return self._reduce()
 
+    def __rlshift__(self, other):
+        '''
+        Allow implicit apply(update) using:
+
+        >>> obj = data >> view
+
+        Note: sets update=True
+        '''
+        return self._apply(other, update=True)
+
     def _reduce(self):
         '''
         Reduce our instance to its serialisable state.
