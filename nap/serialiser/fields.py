@@ -1,10 +1,11 @@
 from __future__ import unicode_literals
 
-from django.forms import ValidationError
-from ..utils import digattr
-
 from decimal import Decimal
 from datetime import datetime
+
+from django.core.exceptions import ValidationError
+
+from ..utils import digattr
 
 try:
     from django.utils.encoding import force_text

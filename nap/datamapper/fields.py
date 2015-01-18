@@ -1,6 +1,6 @@
 
+from django.core.exceptions import ValidationError
 from django.db.models.fields import NOT_PROVIDED
-from django.forms import ValidationError
 
 from nap.utils import digattr
 

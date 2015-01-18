@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from django.forms import ValidationError
+from django.core.exceptions import ValidationError
 
 
 class Filter(object):

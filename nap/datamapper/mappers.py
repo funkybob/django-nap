@@ -2,8 +2,8 @@
 from collections import defaultdict
 from inspect import classify_class_attrs
 
+from django.core.exceptions import ValidationError
 from django.db.models.fields import NOT_PROVIDED
-from django.forms import ValidationError
 from django.utils.functional import cached_property
 
 from .fields import field

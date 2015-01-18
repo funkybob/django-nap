@@ -1,7 +1,7 @@
 
+from django.core.exceptions import ValidationError
 from django.db.models.fields import NOT_PROVIDED
 from django.db.models.manager import Manager
-from django.forms import ValidationError
 from django.utils.six import with_metaclass
 
 from . import fields
