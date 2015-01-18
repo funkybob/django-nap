@@ -1,2 +1,2 @@
 
-from .views import RPCMixin, RPCView, method
+from .views import RPCMixin, RPCView, method  # NOQA
