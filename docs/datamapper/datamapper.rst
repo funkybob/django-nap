@@ -1,10 +1,10 @@
-============
-DataView API
-============
+==============
+DataMapper API
+==============
 
 All properties and methods are prefixed with _ to avoid polluting the namespace for your public fields.
 
-.. class:: DataView(obj=None, \**kwargs)
+.. class:: DataMapper(obj=None, \**kwargs)
 
    .. attribute:: _fields
 
