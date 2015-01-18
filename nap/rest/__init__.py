@@ -1,4 +1,4 @@
 
-from . import api
-from .models import ModelPublisher
-from .publisher import Publisher
+from . import api  # NOQA
+from .publisher import Publisher  # NOQA
+from .models import ModelPublisher  # NOQA
