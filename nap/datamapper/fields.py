@@ -20,7 +20,7 @@ class field(property):
 
 class Field(field):
     '''
-    class V(DataView):
+    class V(DataMapper):
         foo = Field('bar', default=1)
     '''
     def __init__(self, name, default=NOT_PROVIDED, filters=None,
@@ -58,18 +58,18 @@ class DigField(Field):
         raise NotImplementedError
 
 
-class ViewField(Field):
+class MapperField(Field):
     def __init__(self, *args, **kwargs):
-        self.view = kwargs.pop('view')
-        super(ViewField, self).__init__(*args, **kwargs)
+        self.mapper = kwargs.pop('mapper')
+        super(MapperField, self).__init__(*args, **kwargs)
 
     def __get__(self, instance, cls=None):
         if instance is None:
             return self
-        value = super(ViewField, self).__get__(instance, cls)
-        view = self.view()
-        return view << value
+        value = super(MapperField, self).__get__(instance, cls)
+        mapper = self.mapper()
+        return mapper << value
 
     def __set__(self, instance, value):
-        view = self.view(instance)
-        view._update(value, update=True)
+        mapper = self.mapper(instance)
+        mapper._update(value, update=True)
