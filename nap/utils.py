@@ -52,3 +52,13 @@ class JsonMixin(object):
     def loads(self, data):
         '''Serialise data for responses.'''
         return json.loads(data)
+
+
+def flatten_errors(errors):
+    '''
+    Utility function to turn an ErrorDict into a dict of lists of strings.
+    '''
+    return {
+        field: [error.message for error in errors]
+        for field, errors in errors.items()
+    }
