@@ -4,7 +4,7 @@ from django.utils.six import with_metaclass
 
 from . import filters
 from .fields import Field
-from .views import DataView
+from .mappers import DataMapper
 
 
 # Map of ModelField name -> list of filters
@@ -26,13 +26,13 @@ class Options(object):
         self.required = getattr(meta, 'required', {})
 
 
-class MetaView(type):
+class MetaMapper(type):
 
     def __new__(mcs, name, bases, attrs):
         meta = Options(attrs.get('Meta', None))
 
         if meta.model is None:
-            if name != 'ModelDataView':
+            if name != 'ModelDataMapper':
                 raise ValueError('model not defined on class Meta')
         else:
             # XXX Does the top base have all fields?
@@ -66,9 +66,9 @@ class MetaView(type):
 
         attrs['_meta'] = meta
 
-        return super(MetaView, mcs).__new__(mcs, name, bases, attrs)
+        return super(MetaMapper, mcs).__new__(mcs, name, bases, attrs)
 
 
-class ModelDataView(with_metaclass(MetaView, DataView)):
+class ModelDataMapper(with_metaclass(MetaMapper, DataMapper)):
 
     pass

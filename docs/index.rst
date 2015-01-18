@@ -48,7 +48,7 @@ Contents:
    serialiser/index
    serialiser/fields
    serialiser/models
-   dataviews/index
+   datamapper/index
    rest/index
    rpc/index
    extras/index

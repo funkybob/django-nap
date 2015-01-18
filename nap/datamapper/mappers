@@ -10,7 +10,7 @@ from .fields import field
 from .utils import DictObject
 
 
-class DataView(object):
+class DataMapper(object):
     def __init__(self, obj=None, **kwargs):
 
         if obj is None:
@@ -34,7 +34,7 @@ class DataView(object):
         '''
         Allow implicit reduction using:
 
-        >>> data = view << obj
+        >>> data = mapper << obj
         '''
         self._obj = other
         return self._reduce()
@@ -43,7 +43,7 @@ class DataView(object):
         '''
         Allow implicit apply using:
 
-        >>> obj = data >> view
+        >>> obj = data >> mapper
         '''
         return self._apply(other)
 
