@@ -59,6 +59,9 @@ def flatten_errors(errors):
     Utility function to turn an ErrorDict into a dict of lists of strings.
     '''
     return {
-        field: [error.message for error in errors]
+        field: [
+            error if isinstance(error, str) else error.message
+            for error in errors
+        ]
         for field, errors in errors.items()
     }
