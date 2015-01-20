@@ -48,7 +48,10 @@ class MetaMapper(type):
 
                 # XXX Magic for field types
                 kwargs = {}
-                kwargs['default'] = model_field.default
+                if model_field.null is True and model_field.default is NOT_PROVIDED:
+                    kwargs['default'] = None
+                else:
+                    kwargs['default'] = model_field.default
                 kwargs['required'] = meta.required.get(
                     model_field.name,
                     any([
@@ -70,5 +73,4 @@ class MetaMapper(type):
 
 
 class ModelDataMapper(with_metaclass(MetaMapper, DataMapper)):
-
     pass
