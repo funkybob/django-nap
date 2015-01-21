@@ -34,7 +34,7 @@ Quick Start
     rest.api.autodiscover()
 
     urlpatterns('',
-        (r'', include(rest.api.patterns())
+        (r'', include(rest.api.patterns())),
         ...
     )
 
