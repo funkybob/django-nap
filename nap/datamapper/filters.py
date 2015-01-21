@@ -53,6 +53,8 @@ class FloatFilter(_CastFilter):
 class TimeFilter(object):
     @staticmethod
     def to_python(value):
+        if value is None:
+            return value
         return datetime.strptime(value, '%H:%M:%S').time()
 
     @staticmethod
@@ -65,6 +67,8 @@ class TimeFilter(object):
 class DateFilter(object):
     @staticmethod
     def to_python(value):
+        if value is None:
+            return value
         return datetime.strptime(value, '%Y-%m-%d').date()
 
     @staticmethod
@@ -77,6 +81,8 @@ class DateFilter(object):
 class DateTimeFilter(object):
     @staticmethod
     def to_python(value):
+        if value is None:
+            return value
         return datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
 
     @staticmethod
