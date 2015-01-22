@@ -45,7 +45,7 @@ class MapperMixin(JsonMixin):
     def deleted_response(self):
         return self.response_class(
             self.mapper << self.object,
-            status = self.deleted_status,
+            status=self.deleted_status,
         )
 
     def error_response(self, errors):
@@ -84,7 +84,7 @@ class ListPostMixin(object):
         except ValidationError as e:
             return self.post_invalid(e.error_dict)
 
-        return self.post_valid(data)
+        return self.post_valid()
 
     def post_invalid(self, errors):
         return self.error_response(errors)
@@ -94,7 +94,7 @@ class ListPostMixin(object):
 
         return self.created_response()
 
-#
+
 class ObjectMixin(MapperMixin, SingleObjectMixin):
     pass
 
@@ -143,4 +143,3 @@ class ObjectDeleteMixin(object):
         self.object.delete()
 
         return self.deleted_response()
-
