@@ -3,7 +3,7 @@
 A wrapper for django shortcuts that adapts responses to be from nap.http
 '''
 
-from django.shortcuts import *
+from django.shortcuts import _get_queryset
 
 from nap import http
 
