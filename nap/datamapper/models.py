@@ -54,16 +54,13 @@ class MetaMapper(type):
                     kwargs['default'] = model_field.default
                 kwargs['required'] = meta.required.get(
                     model_field.name,
-                    any([
-                        not model_field.blank,
-                        model_field.default is not NOT_PROVIDED
-                    ])
+                    not model_field.blank,
                 )
                 kwargs['filters'] = FIELD_FILTERS.get(
                     model_field.__class__.__name__,
                     []
-                )
-                if model_field.null is False:
+                )[:]
+                if not model_field.null:
                     kwargs['filters'].insert(0, filters.NotNullFilter)
                 attrs[model_field.name] = Field(model_field.name, **kwargs)
 
