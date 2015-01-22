@@ -12,6 +12,9 @@ v0.14.2
 Enhancements:
 
 + Switched custom ValidationError / ValidationErrors to django's ValidationError
++ Added DataMapper library
++ Added CBV mixins for composing API Views that use DataMappers
+
 
 v0.14.1.1
 =========
