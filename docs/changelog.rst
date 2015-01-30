@@ -2,6 +2,13 @@
 Changelog
 =========
 
+v0.14.3
+=======
+
+Ehancements
+
++ JsonMixin.get_request_data will now handle form encoded data for PUT
+
 v0.14.2
 =======
 
