@@ -24,15 +24,7 @@ class NotNullFilter(Filter):
         return value
 
 
-class _CastFilter(Filter):
-    @classmethod
-    def to_python(self, value):
-        if value is None:
-            return value
-        return self.type_class(value)
-
-
-class BooleanFilter(_CastFilter):
+class BooleanFilter(Filter):
     @staticmethod
     def to_python(value):
         if value is None:
@@ -40,6 +32,14 @@ class BooleanFilter(_CastFilter):
         if isinstance(value, bool):
             return value
         return value.lower() in (1, '1', 't', 'y', 'true')
+
+
+class _CastFilter(Filter):
+    @classmethod
+    def to_python(self, value):
+        if value is None:
+            return value
+        return self.type_class(value)
 
 
 class IntegerFilter(_CastFilter):
