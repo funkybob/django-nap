@@ -39,7 +39,10 @@ class _CastFilter(Filter):
     def to_python(self, value):
         if value is None:
             return value
-        return self.type_class(value)
+        try:
+            return self.type_class(value)
+        except ValueError as e:
+            raise ValidationError(e.args[0])
 
 
 class IntegerFilter(_CastFilter):
