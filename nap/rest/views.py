@@ -17,6 +17,7 @@ class SerialisedResponseMixin(object):
 
     def render_to_response(self, context, **response_kwargs):
         response_class = response_kwargs.pop('response_class', self.response_class)
+        response_kwargs.setdefault('content_type', self.content_type)
         return response_class(context, **response_kwargs)
 
 
@@ -70,13 +71,13 @@ class ListGetMixin(object):
         return self.response_class([
             self.mapper << obj
             for obj in self.object_list.all()
-        ])
+        ], safe=False)
 
 
 class ListPostMixin(object):
 
     def post(self, request, *args, **kwargs):
-        self.mapper = self.get_mapper(self.model)
+        self.mapper = self.get_mapper(self.model())
         self.data = self.get_request_data()
 
         try:
