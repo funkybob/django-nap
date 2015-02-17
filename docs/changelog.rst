@@ -8,6 +8,7 @@ v0.14.3
 Ehancements
 
 + JsonMixin.get_request_data will now handle form encoded data for PUT
++ Change API for datamapper to separate _apply and _patch.
 
 v0.14.2
 =======
