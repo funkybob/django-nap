@@ -41,11 +41,11 @@ class DataMapper(object):
 
     def __rlshift__(self, other):
         '''
-        Allow implicit apply using:
+        Allow implicit patch using:
 
         >>> obj = data >> mapper
         '''
-        return self._apply(other)
+        return self._patch(other)
 
     def _reduce(self):
         '''
@@ -58,25 +58,54 @@ class DataMapper(object):
             for name in self._field_names
         }
 
-    def _apply(self, data, full=False):
+    def _patch(self, data):
+        '''
+        Update an instance from supplied data.
+        '''
+
+        errors = defaultdict(list)
+
+        for name in self._field_names:
+            try:
+                value = data[name]
+            except KeyError:
+                continue
+            try:
+                setattr(self, name, value)
+            except ValidationError as e:
+                errors[name].append(e.message)
+
+        self._errors = dict(errors)
+        if errors:
+            raise ValidationError(self._errors)
+
+        return self._obj
+
+    def _apply(self, data):
         '''
         Update an instance from supplied data.
 
-        If full is True, all fields not tagged as .required=False MUST be
-        supplied in the data dict.
+        All fields marked required=True MUST be provided.
+        All fields omitted will have their default used, if provided.
         '''
         errors = defaultdict(list)
 
         for name in self._field_names:
             required = getattr(self._fields[name], 'required', True)
             default = getattr(self._fields[name], 'default', NOT_PROVIDED)
-            value = data.get(name, default)
-            if value is NOT_PROVIDED:
-                if full and required:
-                    errors[name].append(
-                        ValidationError('This field is required')
-                    )
-                continue
+
+            try:
+                value = data[name]
+            except KeyError:
+                if required:
+                    if default is NOT_PROVIDED:
+                        errors[name].append(
+                            ValidationError('This field is required')
+                        )
+                        continue
+                elif default is NOT_PROVIDED:
+                    continue
+                value = default
             try:
                 setattr(self, name, value)
             except ValidationError as e:

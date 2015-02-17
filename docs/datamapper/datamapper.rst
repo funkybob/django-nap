@@ -19,13 +19,19 @@ All properties and methods are prefixed with _ to avoid polluting the namespace 
       Returns a dict containing all the field values on the currently bound
       object.
 
-   .. method:: _apply(data, full=False)
+   .. method:: _patch(data)
 
-      Update all properties on this mapper from the dict ``data``.
+      Update all properties on this mapper supplied from the dict ``data``.
+
+      Any omitted fields will be skipped entirely.
+
+   .. method:: _apply(data)
+
+      Update all properties on this mapper fron the dict ``data``.
+
+      If a field is marked as `required` it must have either a value provided,
+      or a default specified.
 
       All ValidationErrors raised by fields and their filters will be collected
       in a single ValidationError. You can access this dict via the exception's
       `error_dict` property.
-
-      If the `full` argument is True, all fields will be validated, even if no
-      value is supplied for them. Otherwise they would raise ValidationErrors.

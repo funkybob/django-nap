@@ -81,7 +81,7 @@ class ListPostMixin(object):
         self.data = self.get_request_data()
 
         try:
-            self.object = self.mapper._apply(self.data, full=True)
+            self.object = self.mapper._apply(self.data)
         except ValidationError as e:
             return self.post_invalid(e.error_dict)
 
@@ -118,7 +118,7 @@ class ObjectPutMixin(object):
         self.data = self.get_request_data({})
 
         try:
-            self.mapper._apply(self.data)
+            self.mapper._patch(self.data)
         except ValidationError as e:
             return self.put_invalid(e.error_dict)
 
