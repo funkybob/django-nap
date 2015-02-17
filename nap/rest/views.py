@@ -26,13 +26,20 @@ class MapperMixin(JsonMixin):
     content_type = 'application/json'
     mapper_class = None
 
+    ok_status = http.STATUS.OK
     accepted_status = http.STATUS.ACCEPTED
     created_status = http.STATUS.CREATED
-    deleted_status = http.STATUS.OK
+    deleted_status = http.STATUS.RESET_CONTENT
     error_status = http.STATUS.BAD_REQUEST
 
     def get_mapper(self, obj=None):
         return self.mapper_class(obj)
+
+    def ok_response(self):
+        return self.response_class(
+            self.mapper << self.object,
+            status=self.ok_status
+        )
 
     def accepted_response(self):
         return self.response_class('', status=self.accepted_status)
@@ -126,7 +133,7 @@ class ObjectPutMixin(object):
 
     def put_valid(self):
         self.object.save()
-        return self.response_class(self.mapper._reduce())
+        return self.ok_response()
 
     def put_invalid(self, errors):
         return self.error_response(errors)
