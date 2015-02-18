@@ -1,10 +1,10 @@
 from __future__ import unicode_literals
 
 from .. import http
+from ..shortcuts import get_object_or_404
 from .publisher import Publisher
 
 from django.db import transaction
-from django.shortcuts import get_object_or_404
 
 
 class ModelPublisher(Publisher):
