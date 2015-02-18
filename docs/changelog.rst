@@ -2,6 +2,13 @@
 Changelog
 =========
 
+v0.14.4
+=======
+
+Bug Fixes:
+
+- Use our own get_object_or_404 shortcut in ModelPublisher.
+
 v0.14.3
 =======
 
