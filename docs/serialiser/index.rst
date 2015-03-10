@@ -39,7 +39,7 @@ For each declared field:
 The Inflate Cycle
 -----------------
 
-For reach declared field:
+For each declared field:
 
 - If the Serialiser has an inflate_FOO method, its result is stored in the
   obj_data dict.
