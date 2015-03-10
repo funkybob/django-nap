@@ -95,12 +95,12 @@ instances.
 ModelReadSerialiser will only retrieve existing instances, passing all data to
 the managers ``get`` method.
 
-The ModelCreateUpdateSerialier will try to construct a new instance, or update
+The ModelCreateUpdateSerialiser will try to construct a new instance, or update
 an existing one if it can be found.
 
 The values found from ``Meta.key_fields`` will be passed to ``get_or_create``.
 The ``defaults`` argument will be constructed from ``Meta.defaults``, and the
-infalted values listed in ``Meta.core_fields``.
+inflated values listed in ``Meta.core_fields``.
 
 Then, the instance will be updated for all fields not listed in
 ``Meta.related_fields`` or ``Meta.ignored_fields``.
