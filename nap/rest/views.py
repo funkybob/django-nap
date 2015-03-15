@@ -29,7 +29,7 @@ class MapperMixin(JsonMixin):
     ok_status = http.STATUS.OK
     accepted_status = http.STATUS.ACCEPTED
     created_status = http.STATUS.CREATED
-    deleted_status = http.STATUS.RESET_CONTENT
+    deleted_status = http.STATUS.NO_CONTENT
     error_status = http.STATUS.BAD_REQUEST
 
     def get_mapper(self, obj=None):
@@ -125,7 +125,7 @@ class ObjectPutMixin(object):
         self.data = self.get_request_data({})
 
         try:
-            self.mapper._patch(self.data)
+            self.mapper._apply(self.data)
         except ValidationError as e:
             return self.put_invalid(e.error_dict)
 
@@ -136,6 +136,29 @@ class ObjectPutMixin(object):
         return self.ok_response()
 
     def put_invalid(self, errors):
+        return self.error_response(errors)
+
+
+class ObjectPatchMixin(object):
+
+    def patch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.mapper = self.get_mapper(self.object)
+
+        self.data = self.get_request_data({})
+
+        try:
+            self.mapper._patch(self.data)
+        except ValidationError as e:
+            return self.patch_invalid(e.error_dict)
+
+        return self.patch_valid()
+
+    def patch_valid(self):
+        self.object.save()
+        return self.ok_response()
+
+    def patch_invalid(self, errors):
         return self.error_response(errors)
 
 
