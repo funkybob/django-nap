@@ -5,6 +5,11 @@ Changelog
 v0.14.4
 =======
 
+Enhancements:
+
++ Added encoding support to JsonMixin
++ Added encoding supoort to Publisher
+
 Bug Fixes:
 
 - Use our own get_object_or_404 shortcut in ModelPublisher.
