@@ -297,7 +297,7 @@ class Publisher(JsonMixin, BasePublisher):
     def create_response(self, content, **response_kwargs):
         '''Return a response, serialising the content'''
         response_class = response_kwargs.pop('response_class', self.response_class)
-        response_kwargs.setdefault('content_type', self.CONTENT_TYPES[0])
+        response_kwargs.setdefault('content_type', '%s; charset=%s' % (self.CONTENT_TYPES[0], self.ENCODING))
         return response_class(self.dumps(content), **response_kwargs)
 
     def render_single_object(self, obj, serialiser=None, **response_kwargs):
