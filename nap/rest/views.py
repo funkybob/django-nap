@@ -10,7 +10,8 @@ from ..utils import JsonMixin, flatten_errors
 
 class SerialisedResponseMixin(object):
     '''
-    Passes context data through a
+    Override response_class with a JsonResponse, and set an appropriate
+    Content-Type.
     '''
     content_type = 'application/json'
     response_class = http.JsonResponse
