@@ -15,7 +15,7 @@ class RPCTest(TestCase):
 
     def test_body_omitted(self):
         r = self.call(None)
-        self.assertEqual(r.content, '{}')
+        self.assertEqual(r.content.decode('utf-8'), '{}')
 
     def test_body_not_json(self):
         r = self.call('this is not actually json')
