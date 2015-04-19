@@ -41,7 +41,7 @@ class MapperTest(TestCase):
     def test_002_readonly(self):
         m = TestMapper()
         with self.assertRaises(AttributeError):
-            m._apply({'readonly', False})
+            m._apply({'readonly': False})
 
     def test_003_validate(self):
         m = TestMapper()
