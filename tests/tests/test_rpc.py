@@ -31,13 +31,13 @@ class RPCTest(TestCase):
 
     def test_basic(self):
         r = self.call(json.dumps({'foo': 'bar', 'baz': 42}))
-        self.assertEqual(json.loads(r.content), {'foo': 'bar', 'baz': 42})
+        self.assertEqual(json.loads(r.content.decode('utf-8')), {'foo': 'bar', 'baz': 42})
 
     def test_no_content_type(self):
         # Note of caution: when it does it as multipart/form-data in this way
         # (foo=bar), each value is taken as a list. May not be what's intended.
         r = self.call({"foo": "bar"}, content_type=None)
-        self.assertEqual(json.loads(r.content), {'foo': ['bar']})
+        self.assertEqual(json.loads(r.content.decode('utf-8')), {'foo': ['bar']})
 
     def test_no_action(self):
         r = self.call(None, action=None)
