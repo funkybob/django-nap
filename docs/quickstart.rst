@@ -44,6 +44,6 @@ or if you're using Django 1.7, use the AppConfig:
 
    INSTALLED_APPS = [
        ...
-       'nap.apps.NapConfig',
+       'nap',
    ]
 
