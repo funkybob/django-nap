@@ -34,22 +34,22 @@ class MapperTest(TestCase):
 
     def test_001_update(self):
         m = TestMapper()
-        m._apply({'value': 1})
+        m._patch({'value': 1})
 
         self.assertEqual(m._obj['value'], 1)
 
     def test_002_readonly(self):
         m = TestMapper()
-        with self.assertRaises(AttributeError):
+        with self.assertRaises(ValidationError):
             m._apply({'readonly': False})
 
     def test_003_validate(self):
         m = TestMapper()
 
-        m._apply({})
+        m._patch({})
 
         with self.assertRaises(ValidationError):
-            m._apply({}, full=True)
+            m._apply({})
 
 
 class FilterTest(TestCase):
