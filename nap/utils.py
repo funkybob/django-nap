@@ -36,8 +36,6 @@ class JsonMixin(object):
     '''
     CONTENT_TYPES = ['application/json', 'text/json']
 
-    ENCODING = 'utf-8'
-
     def get_request_data(self, default=None):
         '''Retrieve data from request'''
         c_type, c_data = parse_header(self.request.META.get('CONTENT_TYPE', ''))
@@ -59,11 +57,11 @@ class JsonMixin(object):
 
     def dumps(self, data):
         '''How to parse content that matches our content types list.'''
-        return json.dumps(data, encoding=self.ENCODING)
+        return json.dumps(data)
 
     def loads(self, data):
         '''Serialise data for responses.'''
-        return json.loads(data, encoding=self.request.encoding)
+        return json.loads(data)
 
 
 def flatten_errors(errors):
