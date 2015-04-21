@@ -7,12 +7,13 @@ v0.14.4
 
 Enhancements:
 
-+ Added encoding support to JsonMixin
-+ Added encoding supoort to Publisher
+- Fix travis config
+- Simplify AppConfig usage
 
 Bug Fixes:
 
 - Use our own get_object_or_404 shortcut in ModelPublisher.
+- Fixed rest.views to closer match RFC [Thanks Ian Wilson]
 
 v0.14.3
 =======
