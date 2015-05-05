@@ -1,9 +1,10 @@
 from __future__ import unicode_literals
 
+from django.utils.six.moves import http_client
+
 '''Add some missing HttpResponse sub-classes'''
 from django.core.exceptions import SuspiciousOperation
 from django.http import HttpResponse, Http404
-from django.http.response import REASON_PHRASES
 from django.utils.encoding import iri_to_uri
 
 try:
@@ -18,12 +19,11 @@ except ImportError:
 import json
 import re
 
-REASON_PHRASES.update({
-    308: 'PERMANENT REDIRECT',  # Not in 1.6
-    427: 'BAD GEOLOCATION',
-})
-
-STATUS_CODES = tuple(sorted(REASON_PHRASES.items()))
+STATUS_CODES = list(http_client.responses.items()) + [
+    (308, 'PERMANENT REDIRECT'),
+    (427, 'BAD GEOLOCATION'),
+]
+STATUS_CODES = tuple(sorted(STATUS_CODES))
 
 STATUS = OrderedDict(STATUS_CODES)
 # Set constant-like properties for reverse lookup
