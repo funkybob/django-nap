@@ -9,6 +9,8 @@ Enhancements:
 
 - Fix travis config
 - Simplify AppConfig usage
+- Switched from using Django's HTTP reason phrases to Python's.
+- Added BaseListView and BaseObjectView to django.rest.views.
 
 Bug Fixes:
 
