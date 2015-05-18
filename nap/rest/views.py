@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django.core.exceptions import ValidationError
+from django.views.generic import View
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.list import MultipleObjectMixin
 
@@ -104,6 +105,10 @@ class ListPostMixin(object):
         return self.created_response()
 
 
+class BaseListView(ListMixin, View):
+    pass
+
+
 class ObjectMixin(MapperMixin, SingleObjectMixin):
     pass
 
@@ -175,3 +180,7 @@ class ObjectDeleteMixin(object):
         self.object.delete()
 
         return self.deleted_response()
+
+
+class BaseObjectView(ObjectMixin, View):
+    pass
