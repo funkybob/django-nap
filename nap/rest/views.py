@@ -37,26 +37,33 @@ class MapperMixin(JsonMixin):
     def get_mapper(self, obj=None):
         return self.mapper_class(obj)
 
-    def ok_response(self):
-        return self.response_class(
-            self.mapper << self.object,
-            status=self.ok_status
-        )
+    def empty_response(self, **kwargs):
+        return self.response_class('', **kwargs)
+
+    def single_response(self, **kwargs):
+        obj = kwargs.pop('object', self.object)
+        mapper = kwargs.pop('mapper', self.mapper)
+
+        return self.response_class(mapper << obj, **kwargs)
+
+    def multiple_response(self, **kwargs):
+        kwargs.setdefault('safe', False)
+        object_list = kwargs.pop('object_list', self.object_list)
+        mapper = kwargs.pop('mapper', self.mapper)
+
+        return self.response_class([
+            mapper << obj
+            for obj in object_list
+        ], **kwargs)
 
     def accepted_response(self):
-        return self.response_class('', status=self.accepted_status)
+        return self.empty_response(status=self.accepted_status)
 
     def created_response(self):
-        return self.response_class(
-            self.mapper << self.object,
-            status=self.created_status,
-        )
+        return self.single_response(status=self.created_status)
 
     def deleted_response(self):
-        return self.response_class(
-            self.mapper << self.object,
-            status=self.deleted_status,
-        )
+        return self.single_response(status=self.deleted_status)
 
     def error_response(self, errors):
         return self.response_class(
@@ -67,20 +74,18 @@ class MapperMixin(JsonMixin):
 
 # List views
 class ListMixin(MapperMixin, MultipleObjectMixin):
-    pass
+
+    def ok_response(self):
+        return self.list_response(status=self.ok_response)
 
 
 class ListGetMixin(object):
 
     def get(self, request, *args, **kwargs):
         self.object_list = self.get_queryset()
-
         self.mapper = self.get_mapper()
 
-        return self.response_class([
-            self.mapper << obj
-            for obj in self.object_list.all()
-        ], safe=False)
+        return self.ok_response()
 
 
 class ListPostMixin(object):
@@ -110,7 +115,9 @@ class BaseListView(ListMixin, View):
 
 
 class ObjectMixin(MapperMixin, SingleObjectMixin):
-    pass
+
+    def ok_response(self):
+        return self.single_response(status=self.ok_status)
 
 
 class ObjectGetMixin(object):
@@ -119,7 +126,7 @@ class ObjectGetMixin(object):
         self.object = self.get_object()
         self.mapper = self.get_mapper(self.object)
 
-        return self.response_class(self.mapper._reduce())
+        return self.ok_response()
 
 
 class ObjectPutMixin(object):
