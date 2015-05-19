@@ -14,7 +14,7 @@ class SingleObjectRestViewTest(TestCase):
         self.poll = Poll.objects.create(question=self.default_question, pub_date=self.default_pub_date)
 
     def test_get(self):
-        response = self.c.get('/rest/polls/{}'.format(self.poll.pk))
+        response = self.client.get('/rest/polls/{}'.format(self.poll.pk))
         self.assertEqual(response.status_code, STATUS.OK)
         self.assertEqual(response['Content-Type'], 'application/json')
         data = json.loads(response.content.decode('utf-8'))
@@ -24,19 +24,19 @@ class SingleObjectRestViewTest(TestCase):
     def test_put(self):
         # put requires all fields
         request_data = {}
-        response = self.c.put('/rest/polls/{}'.format(self.poll.pk), data=json.dumps(request_data), content_type='application/json')
+        response = self.client.put('/rest/polls/{}'.format(self.poll.pk), data=json.dumps(request_data), content_type='application/json')
         self.assertEqual(response.status_code, STATUS.BAD_REQUEST)
 
         request_data = {'question': 'A new question'}
-        response = self.c.put('/rest/polls/{}'.format(self.poll.pk), data=json.dumps(request_data), content_type='application/json')
+        response = self.client.put('/rest/polls/{}'.format(self.poll.pk), data=json.dumps(request_data), content_type='application/json')
         self.assertEqual(response.status_code, STATUS.BAD_REQUEST)
 
         request_data = {'pub_date': '2014-06-01 12:30:30'}
-        response = self.c.put('/rest/polls/{}'.format(self.poll.pk), data=json.dumps(request_data), content_type='application/json')
+        response = self.client.put('/rest/polls/{}'.format(self.poll.pk), data=json.dumps(request_data), content_type='application/json')
         self.assertEqual(response.status_code, STATUS.BAD_REQUEST)
 
         request_data = {'question': 'A new question', 'pub_date': '2014-06-01 12:30:30'}
-        response = self.c.put('/rest/polls/{}'.format(self.poll.pk), data=json.dumps(request_data), content_type='application/json')
+        response = self.client.put('/rest/polls/{}'.format(self.poll.pk), data=json.dumps(request_data), content_type='application/json')
         self.assertEqual(response.status_code, STATUS.OK)
         self.assertEqual(response['Content-Type'], 'application/json')
         data = json.loads(response.content.decode('utf-8'))
@@ -49,7 +49,7 @@ class SingleObjectRestViewTest(TestCase):
     def test_patch(self):
         # patch can have any combination of fields
         request_data = {}
-        response = self.c.patch('/rest/polls/{}'.format(self.poll.pk), data=json.dumps(request_data), content_type='application/json')
+        response = self.client.patch('/rest/polls/{}'.format(self.poll.pk), data=json.dumps(request_data), content_type='application/json')
         self.assertEqual(response.status_code, STATUS.OK)
         self.assertEqual(response['Content-Type'], 'application/json')
         data = json.loads(response.content.decode('utf-8'))
@@ -61,7 +61,7 @@ class SingleObjectRestViewTest(TestCase):
 
         # one field
         request_data = {'question': 'One field question'}
-        response = self.c.patch('/rest/polls/{}'.format(self.poll.pk), data=json.dumps(request_data), content_type='application/json')
+        response = self.client.patch('/rest/polls/{}'.format(self.poll.pk), data=json.dumps(request_data), content_type='application/json')
         self.assertEqual(response.status_code, STATUS.OK)
         self.assertEqual(response['Content-Type'], 'application/json')
         data = json.loads(response.content.decode('utf-8'))
@@ -72,7 +72,7 @@ class SingleObjectRestViewTest(TestCase):
         self.assertEqual(poll.pub_date.isoformat(' '), self.default_pub_date)
 
         request_data = {'question': 'A new question', 'pub_date': '2014-06-01 12:30:30'}
-        response = self.c.patch('/rest/polls/{}'.format(self.poll.pk), data=json.dumps(request_data), content_type='application/json')
+        response = self.client.patch('/rest/polls/{}'.format(self.poll.pk), data=json.dumps(request_data), content_type='application/json')
         self.assertEqual(response.status_code, STATUS.OK)
         self.assertEqual(response['Content-Type'], 'application/json')
         data = json.loads(response.content.decode('utf-8'))
@@ -83,7 +83,7 @@ class SingleObjectRestViewTest(TestCase):
         self.assertEqual(poll.pub_date.isoformat(' '), request_data['pub_date'])
 
     def test_delete(self):
-        response = self.c.delete('/rest/polls/{}'.format(self.poll.pk))
+        response = self.client.delete('/rest/polls/{}'.format(self.poll.pk))
         self.assertEqual(response.status_code, STATUS.NO_CONTENT)
         # make sure the poll isn't in the db
         self.assertFalse(Poll.objects.filter(pk=self.poll.pk).exists())
