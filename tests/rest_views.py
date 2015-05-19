@@ -12,6 +12,6 @@ class PollMapper(ModelDataMapper):
         fields = ['question', 'pub_date']
 
 
-class SinglePollView(views.ObjectGetMixin, views.ObjectPutMixin, views.ObjectPatchMixin, views.ObjectDeleteMixin, views.ObjectMixin, View):
+class SinglePollView(views.ObjectGetMixin, views.ObjectPutMixin, views.ObjectPatchMixin, views.ObjectDeleteMixin, views.BaseObjectView):
     model = Poll
     mapper_class = PollMapper
