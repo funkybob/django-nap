@@ -150,7 +150,7 @@ Sample ``views.py`` that provides ``GET``, ``PUT``, ``PATCH``, and ``DELETE`` me
    from django.views.generic import View
 
    from nap.datamapper.models import ModelDataMapper
-   from nap.rest.views import ObjectGetMixin, ObjectPutMixin, ObjectPatchMixin, ObjectDeleteMixin, ObjectMixin
+   from nap.rest.views import ObjectGetMixin, ObjectPutMixin, ObjectPatchMixin, ObjectDeleteMixin, BaseObjectView
 
    from .models import Poll
 
@@ -161,6 +161,6 @@ Sample ``views.py`` that provides ``GET``, ``PUT``, ``PATCH``, and ``DELETE`` me
            fields = ['question', 'pub_date']
 
 
-   class SinglePollView(ObjectGetMixin, ObjectPutMixin, ObjectPatchMixin, ObjectDeleteMixin, ObjectMixin, View):
+   class SinglePollView(ObjectGetMixin, ObjectPutMixin, ObjectPatchMixin, ObjectDeleteMixin, BaseObjectView):
        model = Poll
        mapper_class = PollMapper
