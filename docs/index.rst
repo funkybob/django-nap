@@ -30,12 +30,17 @@ one thing, and do it well.  They are:
    A Class-based view system which merges many related views into a single
    class, including url routing.
 
-3. RPC Views
+
+3. RESTful Class-Based Views
+
+   A collection of mixins and views for building class-based API views.
+
+4. RPC View
 
    A mixin for Django's class-based views which allows a single url to provide
    multiple RPC methods.
 
-4. Data Mapper
+5. Data Mapper
 
    Alternative approach to converting objects between serialisable forms and
    program objects.
