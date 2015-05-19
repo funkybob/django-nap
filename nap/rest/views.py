@@ -114,6 +114,7 @@ class BaseListView(ListMixin, View):
     pass
 
 
+# Object views
 class ObjectMixin(MapperMixin, SingleObjectMixin):
 
     def ok_response(self):
