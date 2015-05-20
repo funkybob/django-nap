@@ -25,18 +25,13 @@ Quick Start
 
     rest.api.register('api', MyModelPublisher)
 
-3. Auto-discover publishers, and add your APIs to your URLs:
+3. Auto-discover publishers:
 
 .. code-block:: python
 
     from nap import rest
 
     rest.api.autodiscover()
-
-    urlpatterns('',
-        (r'', include(rest.api.patterns())),
-        ...
-    )
 
 or if you're using Django 1.7, use the AppConfig:
 
@@ -47,3 +42,12 @@ or if you're using Django 1.7, use the AppConfig:
        'nap',
    ]
 
+
+4. Add your APIs to your URLs:
+
+.. code-block:: python
+
+    urlpatterns('',
+        (r'', include(rest.api.patterns())),
+        ...
+    )
