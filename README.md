@@ -10,14 +10,14 @@ Change log: http://django-nap.readthedocs.org/en/latest/changelog.html
 
 An API library for Django
 
-A minimalist approach to object de/serailisers, RESTful views, and RPC views.
+A minimalist approach to object de/serialisers, RESTful views, and RPC views.
 
 Benefits
 ========
 
 1. Modular
 
-    Unlike some tools, the Serlialiser definition is separate from the API.
+    Unlike some tools, the Serialiser definition is separate from the API.
 
     This not only makes it easier to have different 'shapes' of data for
     different endpoints, but also allows using them in more places, not just
