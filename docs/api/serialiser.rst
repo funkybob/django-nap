@@ -15,7 +15,7 @@ Serialiser
       Return a list made by calling object_deflate on each item in the supplied
       iterable.
 
-      Passes kwargs to each call to object_deflate.
+      Passes kwargs to each call of object_deflate.
 
    .. method:: object_inflate(data, instance=None, \**kwargs)
 
