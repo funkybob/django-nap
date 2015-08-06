@@ -30,7 +30,7 @@ if not settings.configured:
         MIDDLEWARE_CLASSES=(
         ),
         ROOT_URLCONF='tests.urls',
-        **extra_settings,
+        **extra_settings
     )
 
 
