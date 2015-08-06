@@ -19,6 +19,15 @@ All properties and methods are prefixed with _ to avoid polluting the namespace 
       Returns a dict containing all the field values on the currently bound
       object.
 
+   .. method:: _clean(data, full)
+
+      Allows whole-object validation.
+
+      Should update self._errors dict with any new validation errors.
+
+      The `full` flag indicates if this is an _apply (True) or _patch (False)
+      cycle.
+
    .. method:: _patch(data)
 
       Update all properties on this mapper supplied from the dict ``data``.
