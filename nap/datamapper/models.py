@@ -1,4 +1,5 @@
 
+from django.core.exceptions import ValidationError
 from django.db.models.fields import NOT_PROVIDED
 from django.utils.six import with_metaclass
 
@@ -75,4 +76,5 @@ class ModelDataMapper(with_metaclass(MetaMapper, DataMapper)):
         try:
             self._obj.full_clean()
         except ValidationError as e:
-            self._errors.update(e.message_dict)
+            for k, v in e.message_dict.items():
+                self._errors.setdefault(k, []).extend(v)
