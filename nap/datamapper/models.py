@@ -71,7 +71,7 @@ class MetaMapper(type):
 
 class ModelDataMapper(with_metaclass(MetaMapper, DataMapper)):
 
-    def _clean(self, data):
+    def _clean(self, data, full=True):
         try:
             self._obj.full_clean()
         except ValidationError as e:
