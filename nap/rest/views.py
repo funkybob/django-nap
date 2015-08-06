@@ -57,18 +57,18 @@ class MapperMixin(JsonMixin):
         ], **kwargs)
 
     def accepted_response(self):
-        return self.empty_response(status_code=self.accepted_status)
+        return self.empty_response(status=self.accepted_status)
 
     def created_response(self):
-        return self.single_response(status_code=self.created_status)
+        return self.single_response(status=self.created_status)
 
     def deleted_response(self):
-        return self.single_response(status_code=self.deleted_status)
+        return self.single_response(status=self.deleted_status)
 
     def error_response(self, errors):
         return self.response_class(
             flatten_errors(errors),
-            status_code=self.error_status,
+            status=self.error_status,
         )
 
 
@@ -76,7 +76,7 @@ class MapperMixin(JsonMixin):
 class ListMixin(MapperMixin, MultipleObjectMixin):
 
     def ok_response(self):
-        return self.multiple_response(status_code=self.ok_response)
+        return self.multiple_response(status=self.ok_status)
 
 
 class ListGetMixin(object):
@@ -118,7 +118,7 @@ class BaseListView(ListMixin, View):
 class ObjectMixin(MapperMixin, SingleObjectMixin):
 
     def ok_response(self):
-        return self.single_response(status_code=self.ok_status)
+        return self.single_response(status=self.ok_status)
 
 
 class ObjectGetMixin(object):
