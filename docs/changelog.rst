@@ -2,6 +2,19 @@
 Changelog
 =========
 
+v0.14.5
+=======
+
+Enhancements:
+
+- Add _clean method to DataMapper for whole-object cleaning.
+- Make ModelDataMapper._clean call instance.full_clean.
+
+Bug Fixes:
+
+- Fix ModelDataMapper to not get confused by ``six.with_metaclass`` hacks.
+- Fix ListMixin.ok_response to call self.multiple_response not self.list_response
+
 v0.14.4
 =======
 
