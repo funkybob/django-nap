@@ -2,6 +2,13 @@
 Changelog
 =========
 
+v0.14.5.1
+=========
+
+Bug Fixes:
+- Use six.string_types not str in flatten_errors
+- Properly update error dict in ModelDataMapper._clean
+
 v0.14.5
 =======
 
