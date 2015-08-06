@@ -32,7 +32,7 @@ class MetaMapper(type):
         meta = Options(attrs.get('Meta', None))
 
         if meta.model is None:
-            if name != 'ModelDataMapper':
+            if name not in ['NewBase', 'ModelDataMapper']:
                 raise ValueError('model not defined on class Meta')
         else:
             # XXX Does the top base have all fields?
