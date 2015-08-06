@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from cgi import parse_header, parse_multipart
 import json
 
+from django.utils import six
 from django.utils.six.moves.urllib.parse import parse_qs
 
 try:
@@ -70,7 +71,7 @@ def flatten_errors(errors):
     '''
     return {
         field: [
-            error if isinstance(error, str) else error.message
+            error if isinstance(error, six.string_types) else error.message
             for error in errors
         ]
         for field, errors in errors.items()
