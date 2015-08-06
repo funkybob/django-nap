@@ -2,7 +2,7 @@
 from collections import defaultdict
 from inspect import classify_class_attrs
 
-from django.core.exceptions import ValidationError
+from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
 from django.db.models.fields import NOT_PROVIDED
 from django.utils.functional import cached_property
 
@@ -58,6 +58,15 @@ class DataMapper(object):
             for name in self._field_names
         }
 
+    def _clean(self, data, full=True):
+        '''
+        Hook for finall pass validation.
+
+        full indicates if this is an _apply (True) or _patch (False)
+        Should update self._errors dict.
+        '''
+        return
+
     def _patch(self, data):
         '''
         Update an instance from supplied data.
@@ -76,7 +85,11 @@ class DataMapper(object):
                 errors[name].append(e.message)
 
         self._errors = dict(errors)
-        if errors:
+
+        # Allow a final pass of cleaning
+        self._clean(data, full=False)
+
+        if self._errors:
             raise ValidationError(self._errors)
 
         return self._obj
@@ -112,7 +125,11 @@ class DataMapper(object):
                 errors[name].append(e.message)
 
         self._errors = dict(errors)
-        if errors:
+
+        # Allow a final pass of cleaning
+        self._clean(data, full=True)
+
+        if self._errors:
             raise ValidationError(self._errors)
 
         return self._obj

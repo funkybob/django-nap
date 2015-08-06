@@ -70,4 +70,9 @@ class MetaMapper(type):
 
 
 class ModelDataMapper(with_metaclass(MetaMapper, DataMapper)):
-    pass
+
+    def _clean(self, data):
+        try:
+            self._obj.full_clean()
+        except ValidationError as e:
+            self._errors.update(e.message_dict)
