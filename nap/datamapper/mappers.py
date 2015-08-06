@@ -2,7 +2,7 @@
 from collections import defaultdict
 from inspect import classify_class_attrs
 
-from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
+from django.core.exceptions import ValidationError
 from django.db.models.fields import NOT_PROVIDED
 from django.utils.functional import cached_property
 
