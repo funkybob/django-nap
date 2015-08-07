@@ -4,7 +4,7 @@ from django.utils.six.moves import http_client
 
 '''Add some missing HttpResponse sub-classes'''
 from django.core.exceptions import SuspiciousOperation
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404  # NOQA
 from django.utils.encoding import iri_to_uri
 
 try:
