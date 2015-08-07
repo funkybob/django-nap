@@ -15,7 +15,7 @@ class CachedSerialiser(object):
     def object_deflate(self, obj, **kwargs):
         '''Add object caching'''
         # This currently assumes obj is a Model instance
-        cache_key = 'api_%s_%d' % (self.__class__.__name__, obj.pk)
+        cache_key = 'api_%s_%s' % (self.__class__.__name__, obj.pk)
         data = self._meta.cache.get(cache_key)
         if data is None:
             data = super(CachedSerialiser, self).object_deflate(obj, **kwargs)
