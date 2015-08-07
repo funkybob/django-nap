@@ -37,7 +37,7 @@ Installing
 It is NOT necessary to add nap to your INSTALLED\_APPS.  It does not provide
 models, templates, template tags, or static files.
 
-Currently, tests are only run in Python 2.7 and 3.3.  Except for the
-DecimalField, all of the code should work on Python 2.6.
+Currently, tests are only run in Python 2.7 and 3.3, 3.4, pypy and pypy3.
+Except for the DecimalField, all of the code should work on Python 2.6.
 
-Django versions 1.4 through 1.7 are supported.
+Django versions from 1.7 up are supported.
