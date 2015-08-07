@@ -33,3 +33,28 @@ def instrument_django_nap_publisher(module):
 
     module.BasePublisher.execute = ObjectWrapper(
         module.BasePublisher.execute, None, execute_wrapper)
+
+
+def instrument_django_nap_rpc(module):
+
+    def execute_wrapper(wrapped, instance, args, kwargs):
+
+        transaction = current_transaction()
+
+        if transaction is None:
+            return wrapped(*args, **kwargs)
+
+        def _handler(handler, *args, **kwargs):
+            return handler
+
+        handler = _handler(*args, **kwargs)
+
+        name = callable_name(handler)
+
+        set_transaction_name(name)
+
+        with FunctionTrace(transaction, name):
+            return wrapped(*args, **kwargs)
+
+    module.RpcMixin.execute = ObjectWrapper(
+        module.RpcMixin.execute, None, execute_wrapper)
