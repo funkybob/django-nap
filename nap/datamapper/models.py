@@ -78,3 +78,22 @@ class ModelDataMapper(with_metaclass(MetaMapper, DataMapper)):
         except ValidationError as e:
             for k, v in e.message_dict.items():
                 self._errors.setdefault(k, []).extend(v)
+
+
+class ModelFilter(filters.Filter):
+    def __init__(self, model=None, queryset=None):
+        if model is None and queryset is None:
+            raise ValueError('Must specify either "model" or "queryset".')
+        if queryset:
+            self.queryset = queryset
+        else:
+            self.queryset = model._default_manager.all()
+
+    def to_python(self, value):
+        try:
+            return self.queryset.get(pk=value)
+        except self.queryset._model.DoesNotExist:
+            raise ValidationError('Not a valid pk for {}: {}'.format(value, self.queryset._model))
+
+    def from_python(self, value):
+        return value.pk
