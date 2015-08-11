@@ -13,6 +13,13 @@ used via the `property` built-in.
 When constructing a DataMapper you can pass an object for it to "bind" to. All
 field access to the DataMapper fields will proxy to this bound object.
 
+Thread Safety
+=============
+
+Since mapper instances retain a reference to the object they are bound to, even
+when using << syntax, instances MUST NOT be shared between threads.
+
+
 .. toctree::
    :maxdepth: 2
 
