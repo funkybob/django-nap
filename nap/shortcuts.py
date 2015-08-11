@@ -10,14 +10,14 @@ from nap import http
 
 def get_object_or_404(klass, *args, **kwargs):
     """
-    Uses get() to return an object, or raises a Http404 exception if the object
+    Uses get() to return an object, or raises a NotFound exception if the object
     does not exist.
 
     klass may be a Model, Manager, or QuerySet object. All other passed
     arguments and keyword arguments are used in the get() query.
 
-    Note: Like with get(), an MultipleObjectsReturned will be raised if more than one
-    object is found.
+    Note: Like with get(), an MultipleObjectsReturned will be raised if more 
+    han one object is found.
     """
     queryset = _get_queryset(klass)
     try:
@@ -28,7 +28,7 @@ def get_object_or_404(klass, *args, **kwargs):
 
 def get_list_or_404(klass, *args, **kwargs):
     """
-    Uses filter() to return a list of objects, or raise a Http404 exception if
+    Uses filter() to return a list of objects, or raise a NotFound exception if
     the list is empty.
 
     klass may be a Model, Manager, or QuerySet object. All other passed
