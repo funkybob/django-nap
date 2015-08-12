@@ -56,6 +56,7 @@ Contents:
    :maxdepth: 2
 
    quickstart
+   tutorial/index
    serialiser/index
    serialiser/fields
    serialiser/models
