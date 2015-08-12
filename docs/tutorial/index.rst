@@ -50,8 +50,9 @@ Our application is going to allow a `User` to create `Lists` of `Items`. `Items`
     class List(models.Model):
         name = models.CharField(max_length=64)
 
-        def __unicode__(self):
+        def __str__(self):
             return self.name
+
 
     class Item(models.Model):
         title = models.CharField(max_length=64)
@@ -59,7 +60,7 @@ Our application is going to allow a `User` to create `Lists` of `Items`. `Items`
         completed = models.BooleanField(default=False)
         owner = models.ForeignKey('auth.User')
 
-        def __unicode__(self):
+        def __str__(self):
             return self.title
 
 Next we need to create a migration and migrate the database. In your terminal window execute the following commands:
@@ -70,6 +71,7 @@ Next we need to create a migration and migrate the database. In your terminal wi
     python manage.py migrate
 
 Awesome let's move on to the next step.
+
 
 ===================
 3. DataMappers
@@ -96,7 +98,6 @@ Let's create a new file in the todoapp directory called mappers.py and add the f
 
 The `ModelDataMapper` will create a DataMapper for us and all we need to tell it is which model we want to map, and which fields to use. As you can see we have told the `ModelDataMapper` to use __all__ of the User fields. 
 
-
 DataMapper for List
 -------------------
 Next let's add a `ModelDataMapper` for the `List` model. This should be very similar to the `ModelDataMapper` we created for the User model. Your todoapp/mappers.py file should now look like this:
@@ -120,7 +121,6 @@ Next let's add a `ModelDataMapper` for the `List` model. This should be very sim
             model = models.List
             fields = '__all__'
 
-
 DataMapper for Item
 -------------------
 Next let's add a `ModelDataMapper` for the Item model. This ones a little different though because there are some more complicated fields in the `Item` model than there are in our `User` and `List` models. Let's start by implementing the parts of the `ItemMapper` we know. We're going to add a `ModelDataMapper` for `Item` to our code in the todoapp/mappers.py file so that it looks like this:
@@ -133,27 +133,29 @@ Next let's add a `ModelDataMapper` for the Item model. This ones a little differ
     
     from . import models
     
+
     class UserMapper(datamapper.ModelDataMapper):
-    class Meta:
-        model = User
-        fields = '__all__'
+        class Meta:
+            model = User
+            fields = '__all__'
     
     
     class ListMapper(datamapper.ModelDataMapper):
-    class Meta:
-        model = models.List
-        fields = '__all__'
+        class Meta:
+            model = models.List
+            fields = '__all__'
     
     
     class ItemMapper(datamapper.ModelDataMapper):
-    class Meta:
-        model = models.Item
-        fields = '__all__'
-        exclude = ['owner', 'list']
+        class Meta:
+            model = models.Item
+            fields = '__all__'
+            exclude = ['owner', 'list']
 
 As you can see we've defined the model and fields we want, but this time we're also telling the `ModelDataMapper` which fields to exclude. We're going to exclude the more complicated Foreign Key fields, owner and list, and deal with them later. 
 
 Now that we've got our `DataMappers` implemented for all of our models, we can go on to create the URLs and views for our RESTful service. 
+
 
 =============================
 4. Class-Based Views and URLs
@@ -164,6 +166,7 @@ Let's being by add a pattern for /api/ to our root url configuration (todoprojec
 
     from django.conf.urls import include, url
     from django.contrib import admin
+
 
     urlpatterns = [
         url(r'^admin/', include(admin.site.urls)),
@@ -282,8 +285,7 @@ Update your todoapp/urls.py to look like this:
         # /api/login/ # POST will deal with 7
     ]
 
-You can see that we've mapped the list/ endpoint to ListListView class that we wrote earlier. Now that we have built the functionality to create Lists and view Lists it's time to see if our API works. 
-
+You can see that we've mapped the list/ endpoint to ListListView class that we wrote earlier. Now that we have built the functionality to create Lists and view Lists it's time to see if our API works.
 
 Testing with Python Requests: list of List 
 ------------------------------------------
@@ -304,8 +306,6 @@ Recap: list of List
 -------------------
 So a quick recap of what we've done before we move on. We've created a `List` database model and a `ModelDataMapper` that maps our Python models to JSON and vice-versa. We've created a ListListView, which handles both GETing all our List instances in the database and POSTing new instances to our database. We've also then mapped our /api/list/ url to that view which allows external clients to use our API. 
 
-|
-
 Not bad huh? We'll repeat the process and write view classes and corresponding url patterns for the other endpoints that we defined earlier.
 
 Writing the views: object of List
@@ -321,11 +321,10 @@ Lets add the following code to the todoapp/rest_views.py file:
     from . import mappers
     from . import models
     
+
     class ListObjectView(views.BaseObjectView):
         model = models.List
         mapper_class = mappers.ListMapper
-
-
 
 
 Adding GET functionality: object of List
@@ -486,6 +485,7 @@ Update your ItemMapper in todoapp/mappers.py to look like this:
 Recap
 -----
 You can see that we have modified our `DataMappers` to use the ``field`` and ``setter`` decorators to provide the get/set functionality. The ``field`` decorator extends the builtin ``property``, and so supports ``@x.setter`` and ``@x.deleter`` for setting the setter and deleter functions. 
+
 
 ================
 6. Authorisation
