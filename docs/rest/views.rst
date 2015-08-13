@@ -2,10 +2,17 @@
 Class-Based Views
 =================
 
-Also included are some mixins for working with Django's Class-Based Views.
+Also included are some mixins for working with Django's Class-Based Generic
+Views.  As they follow the existing CBV interfaces, they are compatible with
+existing decorators and other utilities.
 
-At a minimum, all of the following mixins require being mixed in to Django's base View.
+At their core is the `MapperMixin`, which extends the
+`:class:JsonMixin <nap.utils.JsonMixin>`.  This provides ways to get the mapper
+to use for the request, and utility functions for returning empty, single
+object, and multiple object responses.
 
+Additionally it provides wrappers for these to use specific response codes,
+which can be configured on the class also.
 
 Base Classes
 ============
@@ -106,7 +113,7 @@ List Classes
 Single Object Classes
 =====================
 
-.. class:: ObjectMixin
+.. class:: ObjectMixin(MapperMixin, SingleObjectMixin)
 
    Base single object mixin, extends Django's SingleObjectMixin.
 
