@@ -30,6 +30,7 @@ class MapperMixin(JsonMixin):
 
     # Defaults for safety
     object = None
+    object_list = None
     mapper = None
 
     ok_status = http.STATUS.OK
