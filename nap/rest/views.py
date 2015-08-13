@@ -28,6 +28,10 @@ class MapperMixin(JsonMixin):
     content_type = 'application/json'
     mapper_class = None
 
+    # Defaults for safety
+    object = None
+    mapper = None
+
     ok_status = http.STATUS.OK
     accepted_status = http.STATUS.ACCEPTED
     created_status = http.STATUS.CREATED
@@ -42,14 +46,25 @@ class MapperMixin(JsonMixin):
 
     def single_response(self, **kwargs):
         obj = kwargs.pop('object', self.object)
+        if obj is None:
+            obj = self.get_object()
+
         mapper = kwargs.pop('mapper', self.mapper)
+        if mapper is None:
+            mapper = self.get_mapper(obj)
 
         return self.response_class(mapper << obj, **kwargs)
 
     def multiple_response(self, **kwargs):
         kwargs.setdefault('safe', False)
+
         object_list = kwargs.pop('object_list', self.object_list)
+        if object_list is None:
+            object_list = self.get_queryset()
+
         mapper = kwargs.pop('mapper', self.mapper)
+        if mapper is None:
+            mapper = self.get_mapper()
 
         return self.response_class([
             mapper << obj
@@ -82,9 +97,6 @@ class ListMixin(MapperMixin, MultipleObjectMixin):
 class ListGetMixin(object):
 
     def get(self, request, *args, **kwargs):
-        self.object_list = self.get_queryset()
-        self.mapper = self.get_mapper()
-
         return self.ok_response()
 
 
@@ -124,9 +136,6 @@ class ObjectMixin(MapperMixin, SingleObjectMixin):
 class ObjectGetMixin(object):
 
     def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        self.mapper = self.get_mapper(self.object)
-
         return self.ok_response()
 
 
