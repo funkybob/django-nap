@@ -4,7 +4,7 @@ DataMappers
 
 DataMappers function to reduce Python objects into simple data types supported 
 by JSON, and to expand JSON into Python objects. They are an alternative 
-approach approach to using Serialisers. 
+approach to using Serialisers. 
 
 As the name suggests, a DataMapper will map properties on themselves to your 
 object. They allow you to easily write proxy objects, primarily for converting 
@@ -39,8 +39,7 @@ Here's an example to illustrate some of these concepts:
 
         '''
         The self argument refers to the object we bind to the DataMapper when 
-        we construct it. It DOES NOT refer to the instance of an instance of
-        the UserMapper.
+        we construct it. It DOES NOT refer to the instance of the UserMapper.
         '''
         @datamapper.field 
         def name(self):
