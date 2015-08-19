@@ -27,8 +27,7 @@ if not settings.configured:
         INSTALLED_APPS=(
             'tests',
         ),
-        MIDDLEWARE_CLASSES=(
-        ),
+        MIDDLEWARE_CLASSES=[],
         ROOT_URLCONF='tests.urls',
         **extra_settings
     )

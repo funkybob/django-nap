@@ -7,11 +7,12 @@ v0.14.6 (????-??-??)
 
 Enhancements:
 
-- Make MapperMixin.single_response and MapperMixin.multiple_response get
++ Make MapperMixin.single_response and MapperMixin.multiple_response get
   mapper, object, and queryset if none is provided.
-- Fix tests to work on older Djangos
-- Added DataMapper tutorial to docs (Thanks limbera!)
-- Added ModelFilter to DataMapper
++ Fix tests to work on older Djangos
++ Added DataMapper tutorial to docs (Thanks limbera!)
++ Added ModelFilter to DataMapper
++ Reworked Publisher URLs to be easier to customise, and more consistent
 
 v0.14.5.1 (2015-08-06)
 ======================
