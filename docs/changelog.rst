@@ -11,7 +11,7 @@ Enhancements:
   mapper, object, and queryset if none is provided.
 - Fix tests to work on older Djangos
 - Added DataMapper tutorial to docs (Thanks limbera!)
-
+- Added ModelFilter to DataMapper
 
 v0.14.5.1
 =========
