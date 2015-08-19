@@ -2,8 +2,8 @@
 Changelog
 =========
 
-v0.14.6
-=======
+v0.14.6 (????-??-??)
+====================
 
 Enhancements:
 
@@ -13,15 +13,15 @@ Enhancements:
 - Added DataMapper tutorial to docs (Thanks limbera!)
 - Added ModelFilter to DataMapper
 
-v0.14.5.1
-=========
+v0.14.5.1 (2015-08-06)
+======================
 
 Bug Fixes:
 - Use six.string_types not str in flatten_errors
 - Properly update error dict in ModelDataMapper._clean
 
-v0.14.5
-=======
+v0.14.5 (2015-08-06)
+====================
 
 Enhancements:
 
@@ -33,8 +33,8 @@ Bug Fixes:
 - Fix ModelDataMapper to not get confused by ``six.with_metaclass`` hacks.
 - Fix ListMixin.ok_response to call self.multiple_response not self.list_response
 
-v0.14.4
-=======
+v0.14.4 (2015-05-19)
+====================
 
 Enhancements:
 
@@ -49,16 +49,16 @@ Bug Fixes:
 - Use our own get_object_or_404 shortcut in ModelPublisher.
 - Fixed rest.views to closer match RFC [Thanks Ian Wilson]
 
-v0.14.3
-=======
+v0.14.3 (2015-02-17)
+====================
 
 Ehancements
 
 + JsonMixin.get_request_data will now handle form encoded data for PUT
 + Change API for datamapper to separate _apply and _patch.
 
-v0.14.2
-=======
+v0.14.2 (2015-01-23)
+====================
 
 .. admonition:: WARNING: Removed module
 
