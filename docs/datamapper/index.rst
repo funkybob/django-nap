@@ -63,10 +63,11 @@ the "bound" object, not the DataMapper. The Field class covers simpler cases,
 as well as allowing easier control. Field's first argument is the name of the 
 property on the bound object it gets/sets.
 
-Validation: filters
-===================
-Filters provide casting and validation functions for Fields. There are a number 
-of filters built-in to nap:
+Filters: validation and type casting
+====================================
+Filters provide casting and validation functions for Fields. That means you 
+need to use them to: perform inbound field validation and to perform outbound
+type casting. There are a number of filters built-in to nap:
 
 - DateFilter
 - TimeFilter 
