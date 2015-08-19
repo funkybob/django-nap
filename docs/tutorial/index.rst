@@ -663,10 +663,6 @@ In your rest_views.py add the following class:
     class LoginView(views.BaseObjectView):
         mapper_class = mappers.UserMapper
 
-        def dispatch(self, *args, **kwargs):
-            self.mapper = self.get_mapper()
-            return super(LoginView, self).dispatch(*args, **kwargs)
-
         def get(self, request):
             if request.user.is_authenticated():
                 return self.single_response(object=request.user)
