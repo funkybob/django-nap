@@ -6,10 +6,9 @@ DataMappers function to reduce Python objects into simple data types supported
 by JSON, and to expand JSON into Python objects. They are an alternative 
 approach approach to using Serialisers. 
 
-As the name suggests, a DataMapper will
-map properties on themselves to your object. They allow you to easily write 
-proxy objects, primarily for converting between serialised (JSON) and live 
-(Python) formats of your resources.
+As the name suggests, a DataMapper will map properties on themselves to your 
+object. They allow you to easily write proxy objects, primarily for converting 
+between serialised (JSON) and live (Python) formats of your resources.
 
 Field decorator: get/set
 ========================
@@ -70,7 +69,7 @@ even when using << syntax, instances MUST NOT be shared between threads.
 Validation: filters
 ===================
 Filters provide casting and validation functions for Fields. There are a number 
-of filters built-in to nap: **Should we explain these in detail?**
+of filters built-in to nap:
 
 - DateFilter
 - TimeFilter 
@@ -129,17 +128,18 @@ setting some fields in an inner Meta class. The fields that can be set are:
 You **have to set one of either model or queryset**, the rest of the fields can 
 be left unset and will get their default values. 
 
-- ``model`` will tell the ModelDataMapper which model class to create the 
-    mapping for. 
-- ``fields`` contains a list of the fields we want the ModelDataMapper to 
-    automatically generate mappings for. There is a shortcut you can use and 
-    set fields = '__all__' to tell the ModelDataMapper to use all of the model 
-    fields.
-- ``exclude`` is the compliment to fields, it tells the ModelDataMapper which 
-    of the fields to not create an automatic mapping for. 
-- ``required`` is a dictionary of .... **Needs an explanation**
-- ``quertset`` is ... ** not sure if it's a property or a method that we 
-    override **
+``model`` will tell the ModelDataMapper which model class to create the mapping for. 
+
+``fields`` contains a list of the fields we want the ModelDataMapper to automatically 
+generate mappings for. There is a shortcut you can use and set fields = '__all__' to 
+tell the ModelDataMapper to use all of the model fields.
+
+``exclude`` is the compliment to fields, it tells the ModelDataMapper which of the 
+fields to not create an automatic mapping for. 
+
+``required`` is a dictionary of .... **Needs an explanation**
+
+``quertset`` is ... ** not sure if it's a property or a method that we override **
 
 
 Here is the UserMapper rewritten to use a ModelDataMapper:
