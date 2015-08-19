@@ -56,7 +56,6 @@ Contents:
    :maxdepth: 2
 
    quickstart
-   tutorial/index
    serialiser/index
    serialiser/fields
    serialiser/models
@@ -65,6 +64,7 @@ Contents:
    rpc/index
    extras/index
    api/index
+   tutorial/index
    examples
    changelog
 

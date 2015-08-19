@@ -9,7 +9,6 @@ django-nap (0.14.5.1).
 Instead of using a more 'traditional' `Serialiser` based approach to building
 the service, we will use nap's powerful `Datamappers` and Django CBV mixins.
 
-========
 1. Setup
 ========
 
@@ -53,7 +52,6 @@ That's great, our project directory is all set up and ready for us to start
 creating the models that we will use in our application.
 
 
-==============
 2. Models
 ==============
 
@@ -92,7 +90,6 @@ window execute the following commands:
 Awesome let's move on to the next step.
 
 
-===================
 3. DataMappers
 ===================
 
@@ -202,7 +199,6 @@ Now that we've got our `DataMappers` implemented for all of our models, we can
 go on to create the URLs and views for our RESTful service.
 
 
-=============================
 4. Class-Based Views and URLs
 =============================
 
@@ -525,7 +521,6 @@ views:
     url(r'^item/(?P<pk>\d+)/$', csrf_exempt(rest_views.ItemObjectView.as_view())),
 
 
-=================
 5. Update Mappers
 =================
 
@@ -643,7 +638,6 @@ decorator extends the builtin ``property``, and so supports ``@x.setter`` and
 ``@x.deleter`` for setting the setter and deleter functions.
 
 
-================
 6. Authorisation
 ================
 
@@ -668,7 +662,6 @@ In your rest_views.py add the following class:
 
     class LoginView(views.BaseObjectView):
         mapper_class = mappers.UserMapper
-        object = None
 
         def dispatch(self, *args, **kwargs):
             self.mapper = self.get_mapper()
@@ -690,18 +683,12 @@ In your rest_views.py add the following class:
             return self.error_response(form.errors)
 
 
-.. note:
-
-   The ``object = None`` is an artefact of how the CBV checks for an object to
-   render.
-
 We have defined a BaseObjectView that will allow get() and post(). If logged
 in, GET will return a serialised representation of the User, and if not logged
 in will return an HTTP 403. If not logged in, POST will authenticate the User
 and either log them in, or return an error dictionary. POSTing to this view
 when already logged in will log the User out.
 
-==============
 7. Permissions
 ==============
 
@@ -763,7 +750,6 @@ ItemObjectView class in todoapp/rest_views.py to look like this:
         def get(self, *args, **kwargs):
             return super(ItemObjectView, self).get(*args, **kwargs)
 
-============
 8. Finished!
 ============
 
