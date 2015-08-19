@@ -125,18 +125,20 @@ setting some fields in an inner Meta class. The fields that can be set are:
 You **have to set one of either model or queryset**, the rest of the fields can 
 be left unset and will get their default values. 
 
-``model`` will tell the ModelDataMapper which model class to create the mapping for. 
+``model`` will tell the ModelDataMapper which model class to create the mapping 
+for. 
 
-``fields`` contains a list of the fields we want the ModelDataMapper to automatically 
-generate mappings for. There is a shortcut you can use and set fields = '__all__' to 
-tell the ModelDataMapper to use all of the model fields.
+``fields`` contains a list of the fields we want the ModelDataMapper to 
+automatically generate mappings for. There is a shortcut you can use and set 
+fields = '__all__' to tell the ModelDataMapper to use all of the model fields.
 
-``exclude`` is the compliment to fields, it tells the ModelDataMapper which of the 
-fields to not create an automatic mapping for. 
+``exclude`` is the compliment to fields, it tells the ModelDataMapper which of 
+the fields to not create an automatic mapping for. 
 
-``required`` is a dictionary of .... **Needs an explanation**
+``required`` dictionary is a list of overrides of the default calculated 
+required values for fields
 
-``quertset`` is ... ** not sure if it's a property or a method that we override **
+``queryset``
 
 
 Here is the UserMapper rewritten to use a ModelDataMapper:
