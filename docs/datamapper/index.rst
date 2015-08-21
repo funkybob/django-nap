@@ -125,25 +125,31 @@ ModelDataMappers
 ================
 A ModelDataMapper will automatically create a DataMapper for a Django model. A 
 ModelDataMapper behaves very similar to a Django ModelForm, you use it by 
-setting some fields in an inner Meta class. The fields that can be set are:
+setting some fields in an inner Meta class. 
 
-- model (default = None)
-- fields (default = [])
-- exclude (default = [])
-- required (default = {})
+The fields that can be set are:
 
-``model`` will tell the ModelDataMapper which model class to create the mapping 
-for. 
+.. class:: ModelDataMapper
 
-``fields`` contains a list of the fields we want the ModelDataMapper to 
-automatically generate mappings for. There is a shortcut you can use and set 
-fields = '__all__' to tell the ModelDataMapper to use all of the model fields.
+   .. attribute:: model
 
-``exclude`` is the compliment to fields, it tells the ModelDataMapper which of 
-the fields to not create an automatic mapping for. 
+      Default: None
+      The model this ``DataMapper`` is for
 
-``required`` dictionary is a list of overrides of the default calculated 
-required values for fields
+   .. attribute:: fields
+
+      Default: []
+      The list of fields to use. You can set it to '__all__' to map all fields.
+
+    .. attribute:: exclude
+
+      Default: []
+      The list of fields to exclude from the Model
+
+   .. attribute:: required
+
+      Default: {}
+      The list of overrides of default calculated required values for fields.
 
 You can rewrite the DataMapper so that it subclasses ModelDataMapper. Here's a 
 new Person object that subclasses Django's models.Model:
