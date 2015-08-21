@@ -14,7 +14,7 @@ an alternative approach to using Serialisers.
 Field decorator: get/set
 ========================
 
-You can set and get properties on a DataMapper by using Python's descriptor 
+You can set and get properties on a DataMapper using Python's descriptor 
 protocol, which allows you to control how properties are read from and written 
 to your objects. This is most commonly implemented via the `property` built-in. 
 When constructing a DataMapper you can pass an object for it to "bind" to. All 
@@ -63,7 +63,7 @@ property on the bound object it gets/sets.
 
 Filters: validation and type casting
 ====================================
-Filters provide casting and validation functions for Fields. They perform a 
+Filters provide casting and validation functions for Fields. They form a 
 pipeline to help you control how your values are converted between Python and 
 JSON. They can be used for inbound field validation or for for outbound type 
 casting.
@@ -104,16 +104,14 @@ A DataMapper supports several methods:
 _reduce will reduce the instance to its serialisable state, returning a 
 dict representation of the DataMapper.
 
-_patch(data): will perform a partial update (patch) on the fields of a 
-DataMapper instance. You pass it a dict of data you want to patch and it will 
-then try to update the DataMapper with the new values. If validation fails it 
-will raise a ValidationError.
+_patch(data): will partially update (patch) a DataMapper's fields with the 
+values you pass in the data dict. If validation fails it will raise a 
+ValidationError.
 
-_apply(data): will perform set all of the fields of a DataMapper instance. You
-pass it a dict of data you want to set and it will try to set the fields on the 
-DataMapper. If you don't pass a field in the data dict it will try to set the 
-field to the default value. If there is no default and the field is required it 
-will raise a ValidationError. 
+_apply(data): will fully update (apply) a DataMapper's fields with the values 
+you pass it in the data dict. If you don't pass a field in the data dict it 
+will try to set the field to the default value. If there is no default and the 
+field is required it will raise a ValidationError. 
 
 _clean(data, full=True): is a hook for final pass validation. It allows you to
 define your own custom cleaning code. You should update the self._errors dict. 
