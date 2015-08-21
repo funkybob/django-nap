@@ -63,9 +63,12 @@ property on the bound object it gets/sets.
 
 Filters: validation and type casting
 ====================================
-Filters provide casting and validation functions for Fields. That means you 
-need to use them to: perform inbound field validation and to perform outbound
-type casting. There are a number of filters built-in to nap:
+Filters provide casting and validation functions for Fields. They perform a 
+pipeline to help you control how your values are converted between Python and 
+JSON. They can be used for inbound field validation or for for outbound type 
+casting.
+
+These are the built-in nap filters:
 
 - DateFilter
 - TimeFilter 
@@ -96,9 +99,7 @@ filters fail a ValidationError is raised.
 
 DataMapper functions
 ====================
-A DataMapper has several methods exposed for you to use. They actually do the 
-work when converting between serialised (JSON) and live (Python) formats. Here
-are the available methods and their return types:
+A DataMapper supports several methods:
 
 _reduce will reduce the instance to its serialisable state, returning a 
 dict representation of the DataMapper.
