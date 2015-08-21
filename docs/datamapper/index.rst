@@ -94,6 +94,32 @@ filters fail a ValidationError is raised.
         last_name = datamapper.Field('last_name')
         is_alive = datamapper.Field('is_alive', filters=[BooleanFilter])
 
+DataMapper functions
+====================
+A DataMapper has several methods exposed for you to use. They actually do the 
+work when converting between serialised (JSON) and live (Python) formats. Here
+are the available methods and their return types:
+
+_reduce will reduce the instance to its serialisable state, returning a 
+dict representation of the DataMapper.
+
+_patch(data): will perform a partial update (patch) on the fields of a 
+DataMapper instance. You pass it a dict of data you want to patch and it will 
+then try to update the DataMapper with the new values. If validation fails it 
+will raise a ValidationError.
+
+_apply(data): will perform set all of the fields of a DataMapper instance. You
+pass it a dict of data you want to set and it will try to set the fields on the 
+DataMapper. If you don't pass a field in the data dict it will try to set the 
+field to the default value. If there is no default and the field is required it 
+will raise a ValidationError. 
+
+_clean(data, full=True): is a hook for final pass validation. It allows you to
+define your own custom cleaning code. You should update the self._errors dict. 
+The full boolean indicates if the calling method was _apply (True) or _patch 
+(False). 
+
+
 ModelDataMappers
 ================
 A ModelDataMapper will automatically create a DataMapper for a Django model. A 
