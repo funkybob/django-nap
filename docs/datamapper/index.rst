@@ -2,13 +2,10 @@
 DataMappers
 ===========
 
-DataMappers function to reduce Python objects into simple data types supported 
-by JSON, and to expand JSON into Python objects. They are an alternative 
-approach to using Serialisers. 
-
 As the name suggests, a DataMapper will map properties on themselves to your 
 object. They allow you to easily write proxy objects, primarily for converting 
-between serialised (JSON) and live (Python) formats of your resources.
+between serialised (JSON) and live (Python) formats of your resources. They are 
+an alternative approach to using Serialisers. 
 
 .. Warning::
     Since a DataMapper instance retain a reference to the object they are bound 
@@ -18,9 +15,10 @@ Field decorator: get/set
 ========================
 
 You can set and get properties on a DataMapper by using Python's descriptor 
-protocol, which is most commonly used via the `property` built-in. When 
-constructing a DataMapper you can pass an object for it to "bind" to. All field 
-access to the DataMapper fields will proxy to this bound object. 
+protocol, which allows you to control how properties are read from and written 
+to your objects. This is most commonly implemented via the `property` built-in. 
+When constructing a DataMapper you can pass an object for it to "bind" to. All 
+field access to the DataMapper fields will proxy to this bound object. 
 
 Here's an example to illustrate some of these concepts:
 
@@ -42,7 +40,7 @@ Here's an example to illustrate some of these concepts:
     class UserMapper(datamapper.DataMapper):
 
         '''
-        The self argument refers to the object we bind to the DataMapper when 
+        The self argument refers to the object we bind the DataMapper to when 
         we construct it. It DOES NOT refer to the instance of the UserMapper.
         '''
         @datamapper.field 
@@ -78,7 +76,8 @@ type casting. There are a number of filters built-in to nap:
 - NotNullFilter
 
 Here's a small example to show you how to use a BooleanFilter, which will 
-ensure the values _set_ on the is_alive property are proper Booleans. 
+ensure the values _set_ on the is_alive property are proper Booleans. When
+filters fail a ValidationError is raised.
 
 .. code-block:: python
 
@@ -89,7 +88,7 @@ ensure the values _set_ on the is_alive property are proper Booleans.
 
         @datamapper.field 
         def name(self):
-            return {}.format(self.first_name, self.last_name)
+            return {}{}.format(self.first_name, self.last_name)
 
         first_name = datamapper.Field('first_name')
         last_name = datamapper.Field('last_name')
@@ -97,34 +96,14 @@ ensure the values _set_ on the is_alive property are proper Booleans.
 
 ModelDataMappers
 ================
-A ModelDataMapper will automatically create a DataMapper for a Django model. 
-You can rewrite the DataMapper so that it subclasses ModelDataMapper. Here's a 
-new Person object that subclasses Django's models.Model:
-
-.. code-block:: python
-
-    from django.db import models
-
-
-    # An Django models.Model we want to create a DataMapper for
-    class Person(models.Model):
-        first_name = models.CharField(max_length=100)
-        last_name = models.CharField(max_length=100)
-        age = models.IntegerField()
-        is_alive = models.BooleanField(default=True)
-
-
-A ModelDataMapper behaves very similar to a Django ModelForm, you use it by 
+A ModelDataMapper will automatically create a DataMapper for a Django model. A 
+ModelDataMapper behaves very similar to a Django ModelForm, you use it by 
 setting some fields in an inner Meta class. The fields that can be set are:
 
 - model (default = None)
 - fields (default = [])
 - exclude (default = [])
 - required (default = {})
-- queryset (default = None)
-
-You **have to set one of either model or queryset**, the rest of the fields can 
-be left unset and will get their default values. 
 
 ``model`` will tell the ModelDataMapper which model class to create the mapping 
 for. 
@@ -139,7 +118,20 @@ the fields to not create an automatic mapping for.
 ``required`` dictionary is a list of overrides of the default calculated 
 required values for fields
 
-``queryset``
+You can rewrite the DataMapper so that it subclasses ModelDataMapper. Here's a 
+new Person object that subclasses Django's models.Model:
+
+.. code-block:: python
+
+    from django.db import models
+
+
+    # An Django models.Model we want to create a DataMapper for
+    class Person(models.Model):
+        first_name = models.CharField(max_length=100)
+        last_name = models.CharField(max_length=100)
+        age = models.IntegerField()
+        is_alive = models.BooleanField(default=True)
 
 
 Here is the UserMapper rewritten to use a ModelDataMapper:
@@ -157,9 +149,10 @@ Here is the UserMapper rewritten to use a ModelDataMapper:
             model = models.Person
             fields = '__all__'
 
-You can still use the `property` built-in to get/set properties on a 
-ModelDataMapper. This is useful when the model contains some properties that
-the ModelDataMapper cannot understand. 
+You can still use the `property` built-in to get/set properties and fields on 
+a ModelDataMapper. This is useful when the model contains some properties that
+the ModelDataMapper cannot understand, or when you want to customise how 
+certain fields are represented.
 
 To illustrate this we will add a new Django field (models.UUIDField) to our 
 model. UUIDField does not have a filter built in to nap, so you will need to 
