@@ -118,6 +118,55 @@ define your own custom cleaning code. You should update the self._errors dict.
 The full boolean indicates if the calling method was _apply (True) or _patch 
 (False). 
 
+Here is some code to explain how these concepts work. We will continue to use 
+the Person class and PersonMapper class defined above.
+
+
+Using _reduce:
+
+.. code-block:: python
+
+    p = Person('Jane', 'Doe', True)
+    m = PersonMapper(p)
+    reduced_p = m._reduce()
+    print(reduced_p)
+
+    # Output: {'first_name': 'Jane', 'last_name': 'Doe', 'is_alive': True}
+
+
+Using _apply:
+
+.. code-block:: python
+    
+    m = PersonMapper()
+    m._apply({
+        "first_name": "Jane",
+        "last_name": "Doe",
+        "is_alive": False
+    })
+    reduced = m.reduce()
+    print(reduced)
+
+    # Output: {'first_name': 'Jane', 'last_name': 'Doe', 'is_alive': False}
+
+
+Using _patch:
+
+.. code-block:: python
+    
+    p = Person('Jane', 'Doe', True)
+    m = PersonMapper(p)
+    m._patch({"last_name": "Notdoe"}) # This should patch last_name
+    reduced = m.reduce()
+    print(reduced)
+
+    # Output: {'first_name': 'Jane', 'last_name': 'Notdoe', 'is_alive': True}
+
+Using _clean:
+
+.. code-block:: python
+    # Todo
+
 
 ModelDataMappers
 ================
