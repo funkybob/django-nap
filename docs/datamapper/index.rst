@@ -27,10 +27,9 @@ Here's an example to illustrate some of these concepts:
     # An object we want to create a DataMapper for
     class Person(object):
 
-        def __init__(self, first_name, last_name, age, is_alive):
+        def __init__(self, first_name, last_name, is_alive):
             self.first_name = first_name
             self.last_name = last_name
-            self.age = age
             self.is_alive = is_alive
 
 
@@ -211,7 +210,6 @@ new Person object that subclasses Django's models.Model:
     class Person(models.Model):
         first_name = models.CharField(max_length=100)
         last_name = models.CharField(max_length=100)
-        age = models.IntegerField()
         is_alive = models.BooleanField(default=True)
 
 Here is the PersonMapper rewritten to use a ModelDataMapper:
@@ -249,7 +247,6 @@ Here is a Person model object with a UUIDField:
     class Person(models.Model):
         first_name = models.CharField(max_length=100)
         last_name = models.CharField(max_length=100)
-        age = models.IntegerField()
         is_alive = models.BooleanField(default=True)
         uuid = models.UUIDField(default=uuid.uuid4, editable=False)
 
