@@ -11,9 +11,9 @@ an alternative approach to using Serialisers.
     Since a DataMapper instance retain a reference to the object they are bound 
     to, even when using << syntax, instances MUST NOT be shared between threads.
 
+
 Field decorator: get/set
 ========================
-
 You can set and get properties on a DataMapper using Python's descriptor 
 protocol, which allows you to control how properties are read from and written 
 to your objects. This is most commonly implemented via the `property` built-in. 
@@ -52,7 +52,7 @@ Here's an example to illustrate some of these concepts:
         last_name = datamapper.Field('last_name')
         is_alive = datamapper.Field('is_alive')
 
-    # Construct instances of the Person and a DataMapper clases
+    # Construct instances of the Person and a DataMapper classes
     person = Person('Jane', 'Doe', 22, True)
     mapper = DataMapper(person)
 
@@ -60,6 +60,7 @@ The decorator `field` works exactly like `property`, however it will operate on
 the "bound" object, not the DataMapper. The Field class covers simpler cases, 
 as well as allowing easier control. Field's first argument is the name of the 
 property on the bound object it gets/sets.
+
 
 Filters: validation and type casting
 ====================================
@@ -97,6 +98,7 @@ filters fail a ValidationError is raised.
         last_name = datamapper.Field('last_name')
         is_alive = datamapper.Field('is_alive', filters=[BooleanFilter])
 
+
 DataMapper functions
 ====================
 A DataMapper supports several methods:
@@ -120,7 +122,6 @@ The full boolean indicates if the calling method was _apply (True) or _patch
 
 Here is some code to explain how these concepts work. We will continue to use 
 the Person class and PersonMapper class defined above.
-
 
 Using _reduce:
 
@@ -212,7 +213,6 @@ new Person object that subclasses Django's models.Model:
         last_name = models.CharField(max_length=100)
         age = models.IntegerField()
         is_alive = models.BooleanField(default=True)
-
 
 Here is the PersonMapper rewritten to use a ModelDataMapper:
 
