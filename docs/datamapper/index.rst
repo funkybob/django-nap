@@ -37,11 +37,11 @@ Here's an example to illustrate some of these concepts:
     from nap import datamapper
 
     # A DataMapper that we are creating for the Person object
-    class UserMapper(datamapper.DataMapper):
+    class PersonMapper(datamapper.DataMapper):
 
         '''
         The self argument refers to the object we bind the DataMapper to when 
-        we construct it. It DOES NOT refer to the instance of the UserMapper.
+        we construct it. It DOES NOT refer to the instance of the PersonMapper.
         '''
         @datamapper.field 
         def name(self):
@@ -87,7 +87,7 @@ filters fail a ValidationError is raised.
     from nap import datamapper
 
 
-    class UserMapper(datamapper.DataMapper):
+    class PersonMapper(datamapper.DataMapper):
 
         @datamapper.field 
         def name(self):
@@ -165,7 +165,7 @@ new Person object that subclasses Django's models.Model:
         is_alive = models.BooleanField(default=True)
 
 
-Here is the UserMapper rewritten to use a ModelDataMapper:
+Here is the PersonMapper rewritten to use a ModelDataMapper:
 
 .. code-block:: python
 
@@ -175,7 +175,7 @@ Here is the UserMapper rewritten to use a ModelDataMapper:
     from . import models 
 
 
-    class UserMapper(datamapper.ModelDataMapper):
+    class PersonMapper(datamapper.ModelDataMapper):
         class Meta:
             model = models.Person
             fields = '__all__'
@@ -214,7 +214,7 @@ of field:
     from . import models 
 
 
-    class UserMapper(datamapper.ModelDataMapper):
+    class PersonMapper(datamapper.ModelDataMapper):
         class Meta:
             model = models.Person
             fields = '__all__'
