@@ -14,6 +14,7 @@ an alternative approach to using Serialisers.
 
 Field decorator: get/set
 ========================
+
 DataMappers work using Python's descriptor protocol, which is most commonly
 used via the `property` built-in. This gives you full control over a 
 DataMapper's properties. When constructing a DataMapper you can pass an
@@ -63,6 +64,7 @@ property on the bound object it gets/sets.
 
 Filters: validation and type casting
 ====================================
+
 Filters provide casting and validation functions for Fields. They form a 
 pipeline to help you control how your values are converted between Python and 
 JSON. They can be used for inbound field validation or for for outbound type 
@@ -100,6 +102,7 @@ filters fail a ValidationError is raised.
 
 DataMapper functions
 ====================
+
 A DataMapper supports several methods:
 
 ``_reduce()`` will reduce the instance to its serialisable state, returning a 
@@ -171,6 +174,7 @@ Using _clean:
 
 ModelDataMappers
 ================
+
 A ModelDataMapper will automatically create a DataMapper for a Django model. A 
 ModelDataMapper behaves very similar to a Django ModelForm, you use it by 
 setting some fields in an inner Meta class. 
