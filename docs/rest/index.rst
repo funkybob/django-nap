@@ -11,7 +11,7 @@ This is managed using a Publisher pattern.
    :maxdepth: 2
 
    publisher
+   views
    api
    auth
    models
-   views
