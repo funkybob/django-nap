@@ -14,11 +14,11 @@ an alternative approach to using Serialisers.
 
 Field decorator: get/set
 ========================
-You can set and get properties on a DataMapper using Python's descriptor 
-protocol, which allows you to control how properties are read from and written 
-to your objects. This is most commonly implemented via the `property` built-in. 
-When constructing a DataMapper you can pass an object for it to "bind" to. All 
-field access to the DataMapper fields will proxy to this bound object. 
+DataMappers work using Python's descriptor protocol, which is most commonly
+used via the `property` built-in. This gives you full control over a 
+DataMapper's properties. When constructing a DataMapper you can pass an
+object for it to "bind" to. All field access to the DataMapper fields will 
+proxy to this bound object. 
 
 Here's an example to illustrate some of these concepts:
 
