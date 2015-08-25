@@ -13,6 +13,7 @@ Enhancements:
 + Added DataMapper tutorial to docs (Thanks limbera!)
 + Added ModelFilter to DataMapper
 + Reworked Publisher URLs to be easier to customise, and more consistent
++ Added test module
 
 v0.14.5.1 (2015-08-06)
 ======================
