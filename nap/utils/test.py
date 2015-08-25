@@ -17,5 +17,6 @@ class JsonClient(Client):
 class ApiTestCase(TestCase):
 
     def assertResponseCode(self, url, status_code, method='get', **kwargs):
-        result = getattr(self.client, method)(url, **kwargs)
+        result = self.client.generic(method, **kwargs)
         self.assertEqual(result.status_code, status_code)
+        return result

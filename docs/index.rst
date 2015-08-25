@@ -64,6 +64,7 @@ Contents:
    rpc/index
    extras/index
    api/index
+   testing
    tutorial/index
    examples
    changelog
