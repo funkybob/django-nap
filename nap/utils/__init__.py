@@ -48,7 +48,7 @@ class JsonMixin(object):
                 getattr(self.request, 'encoding', None) or ISO_8859_1
             ))
 
-        if self.request.method == 'PUT':
+        if self.request.method in ('PUT', 'PATCH'):
             if c_type == 'application/x-www-form-urlencoded':
                 return parse_qs(self.request.body)
             elif c_type == 'multipart/form-data':
