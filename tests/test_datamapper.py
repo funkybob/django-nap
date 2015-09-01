@@ -51,6 +51,25 @@ class MapperTest(TestCase):
         with self.assertRaises(ValidationError):
             m._apply({})
 
+    def test_004_validation_error_params(self):
+        class DM(DataMapper):
+            @field
+            def f(self):
+                return None
+
+            @f.setter
+            def f(self, value):
+                raise ValidationError("foo %(msg)s buz", params={'msg': "bar"})
+
+        m = DM()
+        with self.assertRaises(ValidationError) as cm:
+            m._apply({'f': 'lorem'})
+        self.assertEqual(cm.exception.messages, ["foo bar buz"])
+
+        with self.assertRaises(ValidationError) as cm:
+            m._patch({'f': 'lorem'})
+        self.assertEqual(cm.exception.messages, ["foo bar buz"])
+
 
 class FilterTest(TestCase):
 

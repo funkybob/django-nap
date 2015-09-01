@@ -71,7 +71,9 @@ def flatten_errors(errors):
     '''
     return {
         field: [
-            error if isinstance(error, six.string_types) else error.message
+            error if isinstance(error, six.string_types) else (
+                error.message % error.params if error.params else error.message
+            )
             for error in errors
         ]
         for field, errors in errors.items()

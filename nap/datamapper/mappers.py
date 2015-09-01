@@ -82,7 +82,7 @@ class DataMapper(object):
             try:
                 setattr(self, name, value)
             except ValidationError as e:
-                errors[name].append(e.message)
+                errors[name].append(e)
 
         self._errors = dict(errors)
 
@@ -122,7 +122,7 @@ class DataMapper(object):
             try:
                 setattr(self, name, value)
             except ValidationError as e:
-                errors[name].append(e.message)
+                errors[name].append(e)
 
         self._errors = dict(errors)
 
