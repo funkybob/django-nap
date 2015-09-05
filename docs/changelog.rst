@@ -14,6 +14,7 @@ Enhancements:
 + Added ModelFilter to DataMapper
 + Reworked Publisher URLs to be easier to customise, and more consistent
 + Added test module
++ ModelDataMapper now creates a new Model instance if not passed one at construction.
 
 v0.14.5.1 (2015-08-06)
 ======================
