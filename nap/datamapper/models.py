@@ -72,6 +72,11 @@ class MetaMapper(type):
 
 class ModelDataMapper(with_metaclass(MetaMapper, DataMapper)):
 
+    def __init__(self, obj=None, **kwargs):
+        if obj is None:
+            obj = self._meta.model()
+        super(ModelDataMapper, self).__init__(obj, **kwargs)
+
     def _clean(self, data, full=True):
         try:
             self._obj.full_clean()
