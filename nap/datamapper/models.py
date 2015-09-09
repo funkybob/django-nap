@@ -79,7 +79,7 @@ class ModelDataMapper(with_metaclass(MetaMapper, DataMapper)):
 
     def _clean(self, data, full=True):
         try:
-            self._obj.full_clean()
+            self._obj.full_clean(exclude=self._meta.exclude)
         except ValidationError as e:
             for k, v in e.message_dict.items():
                 self._errors.setdefault(k, []).extend(v)
