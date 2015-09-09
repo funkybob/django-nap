@@ -8,7 +8,7 @@ class JsonClient(Client):
     def generic(self, method, path, data='', *args, **kwargs):
         if 'json' in kwargs:
             if data:
-                raise ValueError("Must specify at most ond of 'data' and 'json'.")
+                raise ValueError("Must specify at most one of 'data' and 'json'.")
             data = json.dumps(kwargs.pop('json'))
             kwargs.setdefault('content_type', 'text/json')
         return super(Client, self).generic(method, path, data, *args, **kwargs)
