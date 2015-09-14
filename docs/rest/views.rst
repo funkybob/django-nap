@@ -150,14 +150,16 @@ Single Object Classes
 Example
 -------
 
-Sample ``views.py`` that provides ``GET``, ``PUT``, ``PATCH``, and ``DELETE`` methods for the Poll model:
+Sample ``views.py`` that provides ``GET``, ``PUT``, ``PATCH``, and ``DELETE``
+methods for the Poll model:
 
 .. code-block:: python
 
-   from django.views.generic import View
-
    from nap.datamapper.models import ModelDataMapper
-   from nap.rest.views import ObjectGetMixin, ObjectPutMixin, ObjectPatchMixin, ObjectDeleteMixin, BaseObjectView
+   from nap.rest.views import (
+       ObjectGetMixin, ObjectPutMixin, ObjectPatchMixin, ObjectDeleteMixin,
+       BaseObjectView,
+   )
 
    from .models import Poll
 
@@ -168,6 +170,49 @@ Sample ``views.py`` that provides ``GET``, ``PUT``, ``PATCH``, and ``DELETE`` me
            fields = ['question', 'pub_date']
 
 
-   class SinglePollView(ObjectGetMixin, ObjectPutMixin, ObjectPatchMixin, ObjectDeleteMixin, BaseObjectView):
+   class PollDetailView(ObjectGetMixin,
+                        ObjectPutMixin,
+                        ObjectPatchMixin,
+                        ObjectDeleteMixin,
+                        BaseObjectView):
        model = Poll
        mapper_class = PollMapper
+
+
+Example: Updating two objects
+-----------------------------
+
+Here's an example of updating two related objects in a single PATCH call.
+
+.. code-block:: python
+
+   class UserDetailView(ObjectGetMixin, BaseObjectView):
+        model = User
+        mapper_class = UserMapper
+
+        def patch(self, request, *args, **kwargs):
+            data = self.get_request_data({})
+
+            self.object = user = self.get_object()
+
+            errors = {}
+
+            mapper = self.get_mapper(user)
+            try:
+                data >> mapper
+            except ValidationError as e:
+                errors.update(dict(e))
+
+            profile_mapper = ProfileMapper(user.profile)
+            try:
+                data >> profile_mapper
+            except ValidationError as e:
+                errors.update(dict(e))
+
+            if errors:
+                return self.patch_invalid(errors)
+
+            user.save()
+            user.profile.save()
+
+            return self.ok_response(object=user, mapper=mapper)
