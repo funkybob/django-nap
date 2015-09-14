@@ -2,6 +2,13 @@
 Changelog
 =========
 
+v0.xx.x (????-??-??)
+====================
+
+Enhancements:
+
++ Allow passing extra arguments to MapperMinix.ok_response
+
 v0.14.6 (2015-09-14)
 ====================
 
