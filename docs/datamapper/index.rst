@@ -201,7 +201,8 @@ The fields that can be set are:
    .. attribute:: required
 
       Default: {}
-      The list of overrides of default calculated required values for fields.
+      The list of overrides of default required values for fields inferred from
+      the model.  It does not influence @field declarations.
 
 You can rewrite the DataMapper so that it subclasses ModelDataMapper. Here's a 
 new Person object that subclasses Django's models.Model:
