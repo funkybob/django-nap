@@ -2,13 +2,13 @@
 DataMappers
 ===========
 
-As the name suggests, a DataMapper will map properties on themselves to your 
-object. They allow you to easily write proxy objects, primarily for converting 
-between serialised (JSON) and live (Python) formats of your resources. They are 
-an alternative approach to using Serialisers. 
+As the name suggests, a DataMapper will map properties on themselves to your
+object. They allow you to easily write proxy objects, primarily for converting
+between serialised (JSON) and live (Python) formats of your resources. They are
+an alternative approach to using Serialisers.
 
 .. Warning::
-    Since a DataMapper instance retain a reference to the object they are bound 
+    Since a DataMapper instance retain a reference to the object they are bound
     to, even when using << syntax, instances MUST NOT be shared between threads.
 
 
@@ -16,10 +16,10 @@ Field decorator: get/set
 ========================
 
 DataMappers work using Python's descriptor protocol, which is most commonly
-used via the `property` built-in. This gives you full control over a 
+used via the `property` built-in. This gives you full control over a
 DataMapper's properties. When constructing a DataMapper you can pass an
-object for it to "bind" to. All field access to the DataMapper fields will 
-proxy to this bound object. 
+object for it to "bind" to. All field access to the DataMapper fields will
+proxy to this bound object.
 
 Here's an example to illustrate some of these concepts:
 
@@ -40,10 +40,10 @@ Here's an example to illustrate some of these concepts:
     class PersonMapper(datamapper.DataMapper):
 
         '''
-        The self argument refers to the object we bind the DataMapper to when 
+        The self argument refers to the object we bind the DataMapper to when
         we construct it. It DOES NOT refer to the instance of the PersonMapper.
         '''
-        @datamapper.field 
+        @datamapper.field
         def name(self):
             return {}.format(self.first_name, self.last_name)
 
@@ -56,31 +56,31 @@ Here's an example to illustrate some of these concepts:
     person = Person('Jane', 'Doe', 22, True)
     mapper = DataMapper(person)
 
-The decorator `field` works exactly like `property`, however it will operate on 
-the "bound" object, not the DataMapper. The Field class covers simpler cases, 
-as well as allowing easier control. Field's first argument is the name of the 
+The decorator `field` works exactly like `property`, however it will operate on
+the "bound" object, not the DataMapper. The Field class covers simpler cases,
+as well as allowing easier control. Field's first argument is the name of the
 property on the bound object it gets/sets.
 
 
 Filters: validation and type casting
 ====================================
 
-Filters provide casting and validation functions for Fields. They form a 
-pipeline to help you control how your values are converted between Python and 
-JSON. They can be used for inbound field validation or for for outbound type 
+Filters provide casting and validation functions for Fields. They form a
+pipeline to help you control how your values are converted between Python and
+JSON. They can be used for inbound field validation or for for outbound type
 casting.
 
 These are the built-in nap filters:
 
 - DateFilter
-- TimeFilter 
+- TimeFilter
 - DateTimeFilter
 - BooleanFilter
 - IntegerFilter
 - FloatFilter
 - NotNullFilter
 
-Here's a small example to show you how to use a BooleanFilter, which will 
+Here's a small example to show you how to use a BooleanFilter, which will
 ensure the values _set_ on the is_alive property are proper Booleans. When
 filters fail a ValidationError is raised.
 
@@ -91,7 +91,7 @@ filters fail a ValidationError is raised.
 
     class PersonMapper(datamapper.DataMapper):
 
-        @datamapper.field 
+        @datamapper.field
         def name(self):
             return {}{}.format(self.first_name, self.last_name)
 
@@ -105,24 +105,24 @@ DataMapper functions
 
 A DataMapper supports several methods:
 
-``_reduce()`` will reduce the instance to its serialisable state, returning a 
+``_reduce()`` will reduce the instance to its serialisable state, returning a
 dict representation of the DataMapper.
 
-``_patch(data)`` will partially update (patch) a DataMapper's fields with the 
-values you pass in the data dict. If validation fails it will raise a 
+``_patch(data)`` will partially update (patch) a DataMapper's fields with the
+values you pass in the data dict. If validation fails it will raise a
 ValidationError.
 
-``_apply(data)`` will fully update (apply) a DataMapper's fields with the 
-values you pass it in the data dict. If you don't pass a field in the data dict 
-it will try to set the field to the default value. If there is no default and 
-the field is required it will raise a ValidationError. 
+``_apply(data)`` will fully update (apply) a DataMapper's fields with the
+values you pass it in the data dict. If you don't pass a field in the data dict
+it will try to set the field to the default value. If there is no default and
+the field is required it will raise a ValidationError.
 
-``_clean(data, full=True)`` is a hook for final pass validation. It allows you 
-to define your own custom cleaning code. You should update the ``self._errors`` 
+``_clean(data, full=True)`` is a hook for final pass validation. It allows you
+to define your own custom cleaning code. You should update the ``self._errors``
 dict. The ``full`` boolean indicates if the calling method was ``_apply``
-(True) or ``_patch`` (False). 
+(True) or ``_patch`` (False).
 
-Here is some code to explain how these concepts work. We will continue to use 
+Here is some code to explain how these concepts work. We will continue to use
 the Person class and PersonMapper class defined above.
 
 Using _reduce:
@@ -140,7 +140,7 @@ Using _reduce:
 Using _apply:
 
 .. code-block:: python
-    
+
     m = PersonMapper()
     m._apply({
         "first_name": "Jane",
@@ -156,7 +156,7 @@ Using _apply:
 Using _patch:
 
 .. code-block:: python
-    
+
     p = Person('Jane', 'Doe', True)
     m = PersonMapper(p)
     m._patch({"last_name": "Notdoe"}) # This should patch last_name
@@ -175,9 +175,9 @@ Using _clean:
 ModelDataMappers
 ================
 
-A ModelDataMapper will automatically create a DataMapper for a Django model. A 
-ModelDataMapper behaves very similar to a Django ModelForm, you use it by 
-setting some fields in an inner Meta class. 
+A ModelDataMapper will automatically create a DataMapper for a Django model. A
+ModelDataMapper behaves very similar to a Django ModelForm, you use it by
+setting some fields in an inner Meta class.
 
 The fields that can be set are:
 
@@ -204,7 +204,7 @@ The fields that can be set are:
       The list of overrides of default required values for fields inferred from
       the model.  It does not influence @field declarations.
 
-You can rewrite the DataMapper so that it subclasses ModelDataMapper. Here's a 
+You can rewrite the DataMapper so that it subclasses ModelDataMapper. Here's a
 new Person object that subclasses Django's models.Model:
 
 .. code-block:: python
@@ -225,7 +225,7 @@ Here is the PersonMapper rewritten to use a ModelDataMapper:
     from nap import datamapper
 
     # This should reference the model package where we define Person
-    from . import models 
+    from . import models
 
 
     class PersonMapper(datamapper.ModelDataMapper):
@@ -233,13 +233,13 @@ Here is the PersonMapper rewritten to use a ModelDataMapper:
             model = models.Person
             fields = '__all__'
 
-You can still use the `property` built-in to get/set properties and fields on 
+You can still use the `property` built-in to get/set properties and fields on
 a ModelDataMapper. This is useful when the model contains some properties that
-the ModelDataMapper cannot understand, or when you want to customise how 
+the ModelDataMapper cannot understand, or when you want to customise how
 certain fields are represented.
 
-To illustrate this we will add a new Django field (models.UUIDField) to our 
-model. UUIDField does not have a filter built in to nap, so you will need to 
+To illustrate this we will add a new Django field (models.UUIDField) to our
+model. UUIDField does not have a filter built in to nap, so you will need to
 define your own get and set functionality using the `field` decorator.
 
 Here is a Person model object with a UUIDField:
@@ -263,7 +263,7 @@ of field:
 
     from nap import datamapper
 
-    from . import models 
+    from . import models
 
 
     class PersonMapper(datamapper.ModelDataMapper):
