@@ -2,19 +2,20 @@
 Changelog
 =========
 
-v0.14.6 (????-??-??)
+v0.14.6 (2015-09-14)
 ====================
 
 Enhancements:
 
 + Make MapperMixin.single_response and MapperMixin.multiple_response get
   mapper, object, and queryset if none is provided.
-+ Fix tests to work on older Djangos
++ Dropped testing support for older versions of Django
 + Added DataMapper tutorial to docs (Thanks limbera!)
 + Added ModelFilter to DataMapper
 + Reworked Publisher URLs to be easier to customise, and more consistent
 + Added test module
 + ModelDataMapper now creates a new Model instance if not passed one at construction.
++ Pass list of excluded fields to Model.full_clean()
 
 v0.14.5.1 (2015-08-06)
 ======================
