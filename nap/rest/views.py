@@ -91,8 +91,9 @@ class MapperMixin(JsonMixin):
 # List views
 class ListMixin(MapperMixin, MultipleObjectMixin):
 
-    def ok_response(self):
-        return self.multiple_response(status=self.ok_status)
+    def ok_response(self, **kwargs):
+        kwargs.setdefault('status', self.ok_status)
+        return self.multiple_response(**kwargs)
 
 
 class ListGetMixin(object):
@@ -130,8 +131,9 @@ class BaseListView(ListMixin, View):
 # Object views
 class ObjectMixin(MapperMixin, SingleObjectMixin):
 
-    def ok_response(self):
-        return self.single_response(status=self.ok_status)
+    def ok_response(self, **kwargs):
+        kwargs.setdefault('status', self.ok_status)
+        return self.single_response(**kwargs)
 
 
 class ObjectGetMixin(object):
