@@ -7,3 +7,7 @@
 - Make CSRF configurable
 
 - Make meta.next/meta.prev URLs
+
+- Support something like formsets with datamappers
+
+- Support prefixes with datamappers
