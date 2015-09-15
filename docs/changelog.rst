@@ -28,6 +28,7 @@ v0.14.5.1 (2015-08-06)
 ======================
 
 Bug Fixes:
+
 - Use six.string_types not str in flatten_errors
 - Properly update error dict in ModelDataMapper._clean
 
