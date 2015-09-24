@@ -8,6 +8,7 @@ v0.xx.x (????-??-??)
 Enhancements:
 
 + Allow passing extra arguments to MapperMinix.ok_response
++ Add `required` and `default` options for datamapper.field
 
 v0.14.6 (2015-09-14)
 ====================
