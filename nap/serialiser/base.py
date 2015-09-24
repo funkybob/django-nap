@@ -1,11 +1,10 @@
 from __future__ import unicode_literals
 
+import inspect
 from collections import defaultdict
 
 from django.core.exceptions import ValidationError
 from django.utils.six import with_metaclass
-
-import inspect
 
 from . import fields
 from .meta import Meta

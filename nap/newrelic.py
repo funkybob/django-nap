@@ -1,13 +1,15 @@
 from __future__ import absolute_import
 
+from newrelic.agent import (FunctionTrace, ObjectWrapper, callable_name,
+                            current_transaction, set_transaction_name)
+
+
 # In agent configuration file add:
 #
 # [import-hook:nap.rest.publisher]
 # enabled = true
 # execute = nap.newrelic:instrument_django_nap_publisher
 
-from newrelic.agent import (current_transaction, set_transaction_name,
-    FunctionTrace, callable_name, ObjectWrapper)
 
 
 def instrument_django_nap_publisher(module):

@@ -7,7 +7,6 @@ from django.views.generic import View
 from nap import http
 from nap.utils import JsonMixin
 
-
 RPC_MARKER = '_rpc'
 
 

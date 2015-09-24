@@ -1,11 +1,14 @@
 from __future__ import unicode_literals
 
+import json
+import re
+
+from django.core.exceptions import SuspiciousOperation
+from django.http import Http404, HttpResponse  # NOQA
+from django.utils.encoding import iri_to_uri
 from django.utils.six.moves import http_client
 
 '''Add some missing HttpResponse sub-classes'''
-from django.core.exceptions import SuspiciousOperation
-from django.http import HttpResponse, Http404  # NOQA
-from django.utils.encoding import iri_to_uri
 
 try:
     from urlparse import urlparse
@@ -16,8 +19,6 @@ try:
 except ImportError:
     from ordereddict import OrderedDict
 
-import json
-import re
 
 STATUS_CODES = list(http_client.responses.items()) + [
     (308, 'PERMANENT REDIRECT'),

@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
-from django.core.cache import get_cache, cache as default_cache
+from django.core.cache import cache as default_cache
+from django.core.cache import get_cache
 from django.utils.six import string_types
 
 

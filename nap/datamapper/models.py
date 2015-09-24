@@ -7,7 +7,6 @@ from . import filters
 from .fields import Field
 from .mappers import DataMapper
 
-
 # Map of ModelField name -> list of filters
 FIELD_FILTERS = {
     'DateField': [filters.DateFilter],
