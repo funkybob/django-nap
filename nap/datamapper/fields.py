@@ -1,3 +1,4 @@
+from functools import partial
 
 from django.core.exceptions import ValidationError
 from django.db.models.fields import NOT_PROVIDED
@@ -7,6 +8,19 @@ from nap.utils import digattr
 
 class field(property):
     '''A base class to compare against.'''
+    def __new__(cls, *args, **kwargs):
+        '''
+        Allow specifying keyword arguments when used as a decorator.
+        '''
+        if not args:
+            return partial(field, **kwargs)
+        return super(field, cls).__new__(cls, *args, **kwargs)
+
+    def __init__(self, *args, **kwargs):
+        self.required = kwargs.pop('required', False)
+        self.default = kwargs.pop('default', NOT_PROVIDED)
+        super(field, self).__init__(*args, **kwargs)
+
     def __get__(self, instance, cls=None):
         if instance is None:
             return self
