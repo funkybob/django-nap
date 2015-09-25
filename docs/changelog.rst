@@ -10,6 +10,7 @@ Enhancements:
 + Allow passing extra arguments to MapperMinix.ok_response
 + Add `required` and `default` options for datamapper.field
 + Add `LoginRequiredMixin` and `StaffRequiredMixin` to `nap.rest.auth`
++ Allow use of custom JSONEncoder/JSONDecoder with JsonMixin
 
 v0.14.6 (2015-09-14)
 ====================
