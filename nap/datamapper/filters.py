@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 
 from django.core.exceptions import ValidationError
 
@@ -37,7 +37,7 @@ class BooleanFilter(Filter):
 class _CastFilter(Filter):
     @classmethod
     def to_python(self, value):
-        if value is None:
+        if value is None or isinstance(value, self.type_class):
             return value
         try:
             return self.type_class(value)
@@ -56,9 +56,9 @@ class FloatFilter(_CastFilter):
 class TimeFilter(object):
     @staticmethod
     def to_python(value):
-        if value is None:
+        if value is None or isinstance(value, datetime.time):
             return value
-        return datetime.strptime(value, '%H:%M:%S').time()
+        return datetime.datetime.strptime(value, '%H:%M:%S').time()
 
     @staticmethod
     def from_python(value):
@@ -70,9 +70,9 @@ class TimeFilter(object):
 class DateFilter(object):
     @staticmethod
     def to_python(value):
-        if value is None:
+        if value is None or isinstance(value, datetime.date):
             return value
-        return datetime.strptime(value, '%Y-%m-%d').date()
+        return datetime.datetime.strptime(value, '%Y-%m-%d').date()
 
     @staticmethod
     def from_python(value):
@@ -84,9 +84,9 @@ class DateFilter(object):
 class DateTimeFilter(object):
     @staticmethod
     def to_python(value):
-        if value is None:
+        if value is None or isinstance(value, datetime.datetime):
             return value
-        return datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
+        return datetime.datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
 
     @staticmethod
     def from_python(value):
