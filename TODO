@@ -11,3 +11,5 @@
 - Support something like formsets with datamappers
 
 - Support prefixes with datamappers
+
+- Add true 'read-only' solution to DataMapper fields.
