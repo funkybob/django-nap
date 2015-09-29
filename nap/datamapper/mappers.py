@@ -119,6 +119,8 @@ class DataMapper(object):
                 elif default is NOT_PROVIDED:
                     continue
                 value = default
+                if callable(value):
+                    value = value()
             try:
                 setattr(self, name, value)
             except ValidationError as e:
