@@ -2,6 +2,15 @@
 Changelog
 =========
 
+v0.14.?? (2015-??-??)
+=====================
+
+Bug Fixes:
+
+- On a DataMapper, if a Field's default is callable, call it.
+- Make _CastFiler and Date/Time filters skip to_python if value is of right
+  type already.
+
 v0.14.7 (2015-09-29)
 ====================
 
@@ -24,7 +33,8 @@ Enhancements:
 + Added ModelFilter to DataMapper
 + Reworked Publisher URLs to be easier to customise, and more consistent
 + Added test module
-+ ModelDataMapper now creates a new Model instance if not passed one at construction.
++ ModelDataMapper now creates a new Model instance if not passed one at
+  construction.
 + Pass list of excluded fields to Model.full_clean()
 
 v0.14.5.1 (2015-08-06)
@@ -46,7 +56,8 @@ Enhancements:
 Bug Fixes:
 
 - Fix ModelDataMapper to not get confused by ``six.with_metaclass`` hacks.
-- Fix ListMixin.ok_response to call self.multiple_response not self.list_response
+- Fix ListMixin.ok_response to call self.multiple_response not
+  self.list_response
 
 v0.14.4 (2015-05-19)
 ====================
@@ -81,7 +92,8 @@ v0.14.2 (2015-01-23)
 
 Enhancements:
 
-+ Switched custom ValidationError / ValidationErrors to django's ValidationError
++ Switched custom ValidationError / ValidationErrors to django's
+  ValidationError
 + Added DataMapper library
 + Added CBV mixins for composing API Views that use DataMappers
 
@@ -111,7 +123,8 @@ Bug Fixes:
 + Raise a 404 on invalid page_size value
 + Validate the data we got in RPC View is passable as \**kwargs
 + ISO_8859_1 isn't defined in older Django versions
-+ Emulate django template lookups in digattr by ignoring callables flagged 'do_not_call_in_templates'
++ Emulate django template lookups in digattr by ignoring callables flagged
+  'do_not_call_in_templates'
 
 v0.14.0
 =======
@@ -149,7 +162,8 @@ v0.13.8
 Enhancements:
 
 + Added prefetch_related and select_related support to ExportCsv action
-+ Added Field.virtual to smooth changes to Field now raising AttributeError, and support optional fields
++ Added Field.virtual to smooth changes to Field now raising AttributeError,
+  and support optional fields
 
 v0.13.7
 =======
@@ -162,12 +176,14 @@ Enhancements:
 + Allow api.register to be used as a decorator
 + Make Meta classes more proscriptive
 + Allow ModelSerialiser to override Field type used for fields.
-+ Added ModelReadSerialiser and ModelCreateUpdateSerialiser to support more complex inflate scenarios [WIP]
++ Added ModelReadSerialiser and ModelCreateUpdateSerialiser to support more
+  complex inflate scenarios [WIP]
 
 Bug Fixes:
 
 - Fixed ExportCsv and simplecsv extras
-- Raise AttributeError if a deflating a field with no default set would result in using its default. [Fixes #28]
+- Raise AttributeError if a deflating a field with no default set would result
+  in using its default. [Fixes #28]
 - Fixed auto-generated api_names.
 - Purged under-developed ModelFormMixin class
 
@@ -234,7 +250,8 @@ v0.13.2
 
 Enhancements:
 
-+ Separate Publisher.build_view from Publisher.patterns to ease providing custom patterns
++ Separate Publisher.build_view from Publisher.patterns to ease providing
+  custom patterns
 + Added SimplePatternsMixin for Publisher
 + Added Publisher.sort_object_list and Publisher.filter_object_list hooks
 
@@ -322,7 +339,8 @@ Bugs Fixed:
 
 Enhancements:
 
-+ Allow passing an alternative default instead of None for Publisher.get_request_data
++ Allow passing an alternative default instead of None for
+  Publisher.get_request_data
 + Added "read_only_fields" to ModelSerialiser [thanks jayant]
 
 v0.12
@@ -330,7 +348,8 @@ v0.12
 
 Enhancements:
 
-+ Tune Serialisers to pre-build their deflater/inflater method lists, removing work from the inner loop
++ Tune Serialisers to pre-build their deflater/inflater method lists, removing
+  work from the inner loop
 + Remove \*args where it's no helpful
 
 v0.11.6.1
@@ -338,7 +357,8 @@ v0.11.6.1
 
 Bugs Fixed:
 
-- Renamed HttpResponseRedirect to HttpResponseRedirection to avoid clashing with Django http class
+- Renamed HttpResponseRedirect to HttpResponseRedirection to avoid clashing
+  with Django http class
 
 v0.11.6
 =======
@@ -359,7 +379,8 @@ v0.11.5
 
 Enhancements:
 
-+ Add Publisher.execute to make wrapping handler calls easier [also, makes NewRelic simpler to hook in]
++ Add Publisher.execute to make wrapping handler calls easier [also, makes
+  NewRelic simpler to hook in]
 + Allow empty first pages in pagination
 + Added support module for NewRelic
 
@@ -375,7 +396,8 @@ v0.11.3
 
 Enhancements:
 
-+ Make get_page honor limit parameter, but bound it to max_page_size, which defaults to page_size
++ Make get_page honor limit parameter, but bound it to max_page_size, which
+  defaults to page_size
 + Allow changing the GET param names for page, offset and limit
 + Allow passing page+limit or offset+limit
 
@@ -393,7 +415,8 @@ v0.11.1
 
 Enhancements:
 
-+ Changed SerialiserField/ManySerialiserField to replace reduce/restore instead of overriding inflate/deflate methods
++ Changed SerialiserField/ManySerialiserField to replace reduce/restore instead
+  of overriding inflate/deflate methods
 + Fixed broken url pattern for object action
 + Updated fields documentation
 
@@ -406,10 +429,12 @@ v0.11
 
 Enhancements:
 
-+ Changed deflate_object and deflate_list to object_deflate and list_deflate to avoid potential field deflater name conflict
++ Changed deflate_object and deflate_list to object_deflate and list_deflate to
+  avoid potential field deflater name conflict
 + Moved all model related code to models.py
 + Added modelserialiser_factory
-+ Updated ModelSerialiserField/ModelManySerialiserField to optionally auto-create a serialiser for the supplied model
++ Updated ModelSerialiserField/ModelManySerialiserField to optionally
+  auto-create a serialiser for the supplied model
 
 v0.10.3
 =======
