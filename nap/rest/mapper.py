@@ -57,7 +57,7 @@ class MapperPostMixin(object):
 
     def post_invalid(self, errors):
         return self.create_response(flatten_errors(errors),
-            response_class=http.BadRequest)
+                                    response_class=http.BadRequest)
 
 
 class PutMixin(object):
@@ -91,7 +91,7 @@ class PutMixin(object):
 
     def put_invalid(self, obj, errors):
         return self.create_response(flatten_errors(errors),
-            response_class=http.BadRequest)
+                                    response_class=http.BadRequest)
 
 
 class DeleteMixin(object):

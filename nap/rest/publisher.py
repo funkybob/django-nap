@@ -103,9 +103,8 @@ class BasePublisher(object):
         '''This allows wrapping calls to handler functions'''
         try:
             return handler(self.request,
-                action=self.action,
-                object_id=self.object_id,
-            )
+                           action=self.action,
+                           object_id=self.object_id,)
         except http.BaseHttpResponse as response:
             return response
 

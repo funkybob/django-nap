@@ -11,7 +11,6 @@ from newrelic.agent import (FunctionTrace, ObjectWrapper, callable_name,
 # execute = nap.newrelic:instrument_django_nap_publisher
 
 
-
 def instrument_django_nap_publisher(module):
 
     def execute_wrapper(wrapped, instance, args, kwargs):

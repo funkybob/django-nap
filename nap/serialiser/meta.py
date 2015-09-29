@@ -14,7 +14,7 @@ class DeclarativeMetaclass(type):
             if not key.startswith('_')
         }
         new_class = super(DeclarativeMetaclass, mcs).__new__(mcs, name, bases,
-            attrs)
+                                                             attrs)
         new_class._defaults = defaults
         return new_class
 
