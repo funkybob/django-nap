@@ -5,6 +5,10 @@ Changelog
 v0.14.7.1 (2015-09.29)
 ======================
 
+Enhancements:
+
+- Simplified `auth.permit_groups`
+
 Bug Fixes:
 
 - On a DataMapper, if a Field's default is callable, call it.
