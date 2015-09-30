@@ -27,8 +27,6 @@ permit_staff = permit(
 
 
 def permit_groups(*groups):
-    def in_groups(request, *args):
-        return request.user.groups.filter(name__in=groups).exists()
-    return permit(
-        lambda self, *args, **kwargs: in_groups(self.request, *groups)
-    )
+    def in_groups(self, *args, **kwargs):
+        return self.request.user.groups.filter(name__in=groups).exists()
+    return permit(in_groups)
