@@ -6,14 +6,14 @@ from functools import wraps
 from . import http
 
 
-def permit(test_func):
+def permit(test_func, response_class=http.Forbidden):
     '''Decorate a handler to control access'''
     def decorator(view_func):
         @wraps(view_func)
         def _wrapped_view(self, *args, **kwargs):
             if test_func(self, *args, **kwargs):
                 return view_func(self, *args, **kwargs)
-            return http.Forbidden()
+            return response_class()
         return _wrapped_view
     return decorator
 
