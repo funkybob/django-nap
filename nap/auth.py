@@ -17,16 +17,20 @@ def permit(test_func, response_class=http.Forbidden):
         return _wrapped_view
     return decorator
 
-permit_logged_in = permit(
-    lambda self, *args, **kwargs: self.request.user.is_authenticated()
-)
 
-permit_staff = permit(
-    lambda self, *args, **kwargs: self.request.user.is_staff
-)
+# Helpers for people wanting to control response class
+def test_logged_in(self, *args, **kwargs):
+    return self.request.user.is_authenticated()
 
 
-def permit_groups(*groups):
+def test_staff(self, *args, **kwargs):
+    return self.request.user.is_staff
+
+permit_logged_in = permit(test_logged_in)
+permit_staff = permit(test_staff)
+
+
+def permit_groups(*groups, response_class=http.Forbidden):
     def in_groups(self, *args, **kwargs):
         return self.request.user.groups.filter(name__in=groups).exists()
-    return permit(in_groups)
+    return permit(in_groups, response_class=response_class)
