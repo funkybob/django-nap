@@ -12,7 +12,7 @@ class Ripper(object):
     def __init__(self, *args, **kwargs):
         for arg in args:
             kwargs.setdefault(arg, arg)
-        self.getter = attrgetter(kwargs.values())
+        self.getter = attrgetter(*kwargs.values())
         self.tup = namedtuple('tup', kwargs.keys())
 
     def __call__(self, obj):
