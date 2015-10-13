@@ -1,11 +1,14 @@
-'''
-Extremely light-weight serialiser for very simple cases.
-'''
 from operator import attrgetter
 from collections import namedtuple
 
 
 class Ripper(object):
+    '''
+    Extremely light-weight serialiser for very simple cases.
+
+    See http://musings.tinbrain.net/blog/2015/aug/14/serialiser-hurry/ for
+    details.
+    '''
     def __init__(self, *args, **kwargs):
         for arg in args:
             kwargs.setdefault(arg, arg)
