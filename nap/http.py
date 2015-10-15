@@ -7,13 +7,10 @@ from django.core.exceptions import SuspiciousOperation
 from django.http import Http404, HttpResponse  # NOQA
 from django.utils.encoding import iri_to_uri
 from django.utils.six.moves import http_client
+from django.utils.six.moves.urllib.parse import urlparse
 
 '''Add some missing HttpResponse sub-classes'''
 
-try:
-    from urlparse import urlparse
-except ImportError:
-    from urllib.parse import urlparse
 try:
     from collections import OrderedDict
 except ImportError:
