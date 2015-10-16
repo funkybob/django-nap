@@ -37,8 +37,8 @@ class RPCMixin(JsonMixin):
             data = self.get_request_data({})
             # Ensure data is valid for passing as **kwargs
             (lambda **kwargs: None)(**data)
-        except (ValueError, TypeError):
-            return http.BadRequest()
+        except (ValueError, TypeError) as err:
+            return http.BadRequest(self.dumps(err.args))
 
         resp = self.execute(func, data)
 
