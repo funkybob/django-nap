@@ -64,3 +64,36 @@ urls.py
         (r'^api/', include(PostPublisher.patterns())),
     )
 
+
+Case 2: Login View
+==================
+
+Once you've defined a ``DataMapper`` for your `User` model, you can provide
+this simple Login endpoint:
+
+.. code-block:: python
+
+    from django.contrib import auth
+    from django.contrib.auth.forms import AuthenticationForm
+
+    from nap.rest import views
+
+    from . import mappers
+
+    class LoginView(views.BaseObjectView):
+        mapper_class = mappers.UserMapper
+
+        def get(self, request):
+            '''Returns the current user's details'''
+            if request.user.is_authenticated():
+                return self.single_response(object=request.user)
+            return http.Forbidden()
+
+        def post(self, request):
+            if request.user.is_authenticated():
+                auth.logout(request)
+            form = AuthenticationForm(request, self.get_request_data({}))
+            if form.is_valid():
+                auth.login(request, form.get_user())
+                return self.get(request)
+            return self.error_response(form.errors)
