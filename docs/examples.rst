@@ -75,6 +75,7 @@ this simple Login endpoint:
 
     from django.contrib import auth
     from django.contrib.auth.forms import AuthenticationForm
+    from django.views.decorators.csrf import ensure_csrf_cookie
 
     from nap.rest import views
 
@@ -82,6 +83,10 @@ this simple Login endpoint:
 
     class LoginView(views.BaseObjectView):
         mapper_class = mappers.UserMapper
+
+        def as_view(self, *args, **kwargs):
+            view = super(LoginView, self).as_view(*args, **kwargs)
+            return ensure_csrf_token(view)
 
         def get(self, request):
             '''Returns the current user's details'''
@@ -97,3 +102,7 @@ this simple Login endpoint:
                 auth.login(request, form.get_user())
                 return self.get(request)
             return self.error_response(form.errors)
+
+
+Note that it decorates `as_view` with `ensure_csrf_token`.  This ensures the
+CSRF token is set if your site is a SPA.
