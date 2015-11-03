@@ -9,6 +9,8 @@ Enhancements:
 
 - Added `Ripper` class to utils.
 - Use `six.moves.urllib` instead of our own try/except on import
+- Micro-optimisation: Calculate fields and field names for DataMappers at
+  declatation
 
 v0.14.7.1 (2015-09.29)
 ======================
