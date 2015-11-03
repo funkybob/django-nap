@@ -2,33 +2,37 @@
 from collections import defaultdict
 from inspect import classify_class_attrs
 
+from django.utils.six import with_metaclass
 from django.core.exceptions import ValidationError
 from django.db.models.fields import NOT_PROVIDED
-from django.utils.functional import cached_property
 
 from .fields import field
 from .utils import DictObject
 
 
-class DataMapper(object):
+class MetaMapper(type):
+
+    def __new__(mcs, name, bases, attrs):
+        new_class = super(MetaMapper, mcs).__new__(mcs, name, bases, attrs)
+        fields = {
+            name: prop
+            for name, kind, cls, prop in classify_class_attrs(new_class)
+            if isinstance(prop, field)
+        }
+
+        new_class._fields = fields
+        new_class._field_names = tuple(fields.keys())
+
+        return new_class
+
+
+class DataMapper(with_metaclass(MetaMapper)):
     def __init__(self, obj=None, **kwargs):
 
         if obj is None:
             obj = DictObject()
         self._obj = obj
         self._kwargs = kwargs
-
-    @cached_property
-    def _fields(self):
-        return {
-            name: prop
-            for name, kind, cls, prop in classify_class_attrs(self.__class__)
-            if isinstance(prop, field)
-        }
-
-    @cached_property
-    def _field_names(self):
-        return tuple(self._fields.keys())
 
     def __lshift__(self, other):
         '''

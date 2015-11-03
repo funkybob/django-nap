@@ -5,7 +5,7 @@ from django.utils.six import with_metaclass
 
 from . import filters
 from .fields import Field
-from .mappers import DataMapper
+from .mappers import DataMapper, MetaMapper as BaseMetaMapper
 
 # Map of ModelField name -> list of filters
 FIELD_FILTERS = {
@@ -26,7 +26,7 @@ class Options(object):
         self.required = getattr(meta, 'required', {})
 
 
-class MetaMapper(type):
+class MetaMapper(BaseMetaMapper):
 
     def __new__(mcs, name, bases, attrs):
         meta = Options(attrs.get('Meta', None))
