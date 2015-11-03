@@ -23,7 +23,7 @@ def get_object_or_404(klass, *args, **kwargs):
     try:
         return queryset.get(*args, **kwargs)
     except queryset.model.DoesNotExist:
-        raise http.NotFound()
+        return http.NotFound()
 
 
 def get_list_or_404(klass, *args, **kwargs):
@@ -37,5 +37,5 @@ def get_list_or_404(klass, *args, **kwargs):
     queryset = _get_queryset(klass)
     obj_list = list(queryset.filter(*args, **kwargs))
     if not obj_list:
-        raise http.NotFound()
+        return http.NotFound()
     return obj_list
