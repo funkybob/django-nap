@@ -12,6 +12,10 @@ Enhancements:
 - Micro-optimisation: Calculate fields and field names for DataMappers at
   declatation
 
+Bug Fixes:
+
+- Set safe=False in MapperMixin.empty_response
+
 v0.14.7.1 (2015-09.29)
 ======================
 
