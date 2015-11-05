@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 import json
 import re
+from collections import OrderedDict
 
 from django.core.exceptions import SuspiciousOperation
 from django.http import Http404, HttpResponse  # NOQA
@@ -10,11 +11,6 @@ from django.utils.six.moves import http_client
 from django.utils.six.moves.urllib.parse import urlparse
 
 '''Add some missing HttpResponse sub-classes'''
-
-try:
-    from collections import OrderedDict
-except ImportError:
-    from ordereddict import OrderedDict
 
 
 STATUS_CODES = list(http_client.responses.items()) + [
