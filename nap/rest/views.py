@@ -43,6 +43,7 @@ class MapperMixin(JsonMixin):
         return self.mapper_class(obj)
 
     def empty_response(self, **kwargs):
+        kwargs.setdefault('safe', False)
         return self.response_class('', **kwargs)
 
     def single_response(self, **kwargs):
