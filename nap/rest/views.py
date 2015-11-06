@@ -23,6 +23,19 @@ class SerialisedResponseMixin(object):
         return response_class(context, **response_kwargs)
 
 
+class NapView(View):
+
+    def dispatch(self, *args, **kwargs):
+        '''
+        If any code raises one of our HTTP responses, we should catch and
+        return it.
+        '''
+        try:
+            return super(BaseObjectView, self).dispatch(*args, **kwargs)
+        except http.BaseHttpResponse as exc:
+            return exc
+
+
 class MapperMixin(JsonMixin):
     response_class = http.JsonResponse
     content_type = 'application/json'
@@ -125,7 +138,7 @@ class ListPostMixin(object):
         return self.created_response()
 
 
-class BaseListView(ListMixin, View):
+class BaseListView(ListMixin, NapView):
     pass
 
 
@@ -203,12 +216,5 @@ class ObjectDeleteMixin(object):
         return self.deleted_response()
 
 
-class BaseObjectView(ObjectMixin, View):
-    def dispatch(self, request, *args, **kwargs):
-        '''
-        If any code raises one of our HTTP responses, we should catch and return it.
-        '''
-        try:
-            return super(BaseObjectView, self).dispatch(request, *args, **kwargs)
-        except http.BaseHttpResponse as exc:
-            return exc
+class BaseObjectView(ObjectMixin, NapView):
+    pass
