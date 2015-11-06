@@ -31,7 +31,7 @@ class NapView(View):
         return it.
         '''
         try:
-            return super(BaseObjectView, self).dispatch(*args, **kwargs)
+            return super(NapView, self).dispatch(*args, **kwargs)
         except http.BaseHttpResponse as exc:
             return exc
 
