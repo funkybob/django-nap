@@ -204,4 +204,11 @@ class ObjectDeleteMixin(object):
 
 
 class BaseObjectView(ObjectMixin, View):
-    pass
+    def dispatch(self, request, *args, **kwargs):
+        '''
+        If any code raises one of our HTTP responses, we should catch and return it.
+        '''
+        try:
+            return super(BaseObjectView, self).dispatch(request, *args, **kwargs)
+        except http.BaseHttpResponse as exc:
+            return exc
