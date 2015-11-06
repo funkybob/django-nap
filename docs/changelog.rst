@@ -11,6 +11,8 @@ Enhancements:
 - Use `six.moves.urllib` instead of our own try/except on import
 - Micro-optimisation: Calculate fields and field names for DataMappers at
   declatation
+- Added `NapView` to `nap.rest.views` to handle when custom `http` responses
+  are raised.
 
 Bug Fixes:
 
