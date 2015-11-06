@@ -76,9 +76,12 @@ Base Classes
       Returns an empty response with ``self.accepted_status``
 
    .. method:: created_response()
+
+      Returns a single response with ``self.created_status``.
+
    .. method:: deleted_response()
 
-      Returns a single response with the matching status.
+      Returns an empty response with ``self.deleted_status``.
 
    .. method:: error_response(error)
 

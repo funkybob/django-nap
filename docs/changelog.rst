@@ -13,6 +13,7 @@ Enhancements:
   declatation
 - Added `NapView` to `nap.rest.views` to handle when custom `http` responses
   are raised.
+- Change default DELETE response to be empty
 
 Bug Fixes:
 
