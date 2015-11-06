@@ -93,7 +93,7 @@ class MapperMixin(JsonMixin):
         return self.single_response(status=self.created_status)
 
     def deleted_response(self):
-        return self.single_response(status=self.deleted_status)
+        return self.empty_response(status=self.deleted_status)
 
     def error_response(self, errors):
         return self.response_class(
