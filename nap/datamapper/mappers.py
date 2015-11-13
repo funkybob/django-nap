@@ -2,9 +2,9 @@
 from collections import defaultdict
 from inspect import classify_class_attrs
 
-from django.utils.six import with_metaclass
 from django.core.exceptions import ValidationError
 from django.db.models.fields import NOT_PROVIDED
+from django.utils.six import with_metaclass
 
 from .fields import field
 from .utils import DictObject

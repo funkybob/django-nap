@@ -1,5 +1,5 @@
-from operator import attrgetter
 from collections import namedtuple
+from operator import attrgetter
 
 
 class Ripper(object):

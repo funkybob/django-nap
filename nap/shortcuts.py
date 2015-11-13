@@ -3,9 +3,9 @@
 A wrapper for django shortcuts that adapts responses to be from nap.http
 '''
 
-from django.shortcuts import _get_queryset
-
 from nap import http
+
+from django.shortcuts import _get_queryset
 
 
 def get_object_or_404(klass, *args, **kwargs):

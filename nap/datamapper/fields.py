@@ -1,9 +1,9 @@
 from functools import partial
 
+from nap.utils import digattr
+
 from django.core.exceptions import ValidationError
 from django.db.models.fields import NOT_PROVIDED
-
-from nap.utils import digattr
 
 
 class field(property):

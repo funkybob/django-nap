@@ -2,10 +2,10 @@
 import inspect
 import json
 
-from django.views.generic import View
-
 from nap import http
 from nap.utils import JsonMixin
+
+from django.views.generic import View
 
 RPC_MARKER = '_rpc'
 

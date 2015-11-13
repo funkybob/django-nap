@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 
-from cgi import parse_header, parse_multipart
 import json
+from cgi import parse_header, parse_multipart
 
 from django.utils import six
 from django.utils.six.moves.urllib.parse import parse_qs
