@@ -44,6 +44,8 @@ class MetaMapper(BaseMetaMapper):
                     continue
                 if meta.fields != '__all__' and \
                    model_field.name not in meta.fields:
+                    # Ensure model validation is told to exclude this
+                    meta.exclude.append(model_field.name)
                     continue
 
                 # XXX Magic for field types
