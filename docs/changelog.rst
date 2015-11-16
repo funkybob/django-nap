@@ -2,6 +2,13 @@
 Changelog
 =========
 
+v0.??.? (????-??-??)
+
+Bug Fixes:
+
+- Add any fields not in a supplied `Meta.fields` for a `ModelDataMapper` to the
+  excludes list to ensure model validation also excludes them.
+
 v0.14.8 (2015-10-12)
 ====================
 
