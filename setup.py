@@ -27,7 +27,4 @@ setup(
     install_requires = [
         'Django>=1.4',
     ],
-    extras_require = {
-        'python2.6':  ["ordereddict", ],
-    }
 )
