@@ -21,8 +21,11 @@ FIELD_FILTERS = {
 class Options(object):
     def __init__(self, meta):
         self.model = getattr(meta, 'model', None)
-        self.fields = getattr(meta, 'fields', [])
-        self.exclude = getattr(meta, 'exclude', [])
+        fields = getattr(meta, 'fields', [])
+        if fields != '__all__':
+            fields = list(fields)
+        self.fields = fields
+        self.exclude = list(getattr(meta, 'exclude', []))
         self.required = getattr(meta, 'required', {})
 
 
