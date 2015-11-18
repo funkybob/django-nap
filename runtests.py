@@ -9,13 +9,6 @@ from django.core.management import execute_from_command_line
 
 import django
 
-if django.VERSION < (1, 6):
-    extra_settings = {
-        'TEST_RUNNER': 'discover_runner.DiscoverRunner',
-    }
-else:
-    extra_settings = {}
-
 
 if not settings.configured:
     settings.configure(
@@ -29,7 +22,6 @@ if not settings.configured:
         ),
         MIDDLEWARE_CLASSES=[],
         ROOT_URLCONF='tests.urls',
-        **extra_settings
     )
 
 
