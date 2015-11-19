@@ -5,13 +5,27 @@ from django.test import Client, TestCase
 
 class JsonClient(Client):
 
-    def generic(self, method, path, data='', *args, **kwargs):
+    def _massage(self, kwargs):
         if 'json' in kwargs:
-            if data:
-                raise ValueError("May pass at most one of 'data' and 'json'.")
-            data = json.dumps(kwargs.pop('json'))
-            kwargs.setdefault('content_type', 'text/json')
-        return super(Client, self).generic(method, path, data, *args, **kwargs)
+            kwargs['data'] = json.dumps(kwargs.pop('json'))
+            kwargs.setdefault('content_type', 'application/json')
+        return kwargs
+
+    def get(self, *args, **kwargs):
+        kwargs = self._massage(kwargs)
+        return super(JsonClient, self).get(*args, **kwargs)
+
+    def post(self, *args, **kwargs):
+        kwargs = self._massage(kwargs)
+        return super(JsonClient, self).post(*args, **kwargs)
+
+    def put(self, *args, **kwargs):
+        kwargs = self._massage(kwargs)
+        return super(JsonClient, self).put(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        kwargs = self._massage(kwargs)
+        return super(JsonClient, self).delete(*args, **kwargs)
 
 
 class ApiTestCase(TestCase):
