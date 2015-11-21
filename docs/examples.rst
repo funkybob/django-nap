@@ -60,7 +60,7 @@ urls.py
 
     from .publishers import PostPublisher
 
-    urlpatters = patterns('',
+    urlpatterns = patterns('',
         (r'^api/', include(PostPublisher.patterns())),
     )
 
