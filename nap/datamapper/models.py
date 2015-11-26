@@ -1,4 +1,5 @@
 
+from django import VERSION
 from django.core.exceptions import ValidationError
 from django.db.models.fields import NOT_PROVIDED
 from django.utils.six import with_metaclass
@@ -16,6 +17,14 @@ FIELD_FILTERS = {
     'BooleanField': [filters.BooleanFilter],
     'IntegerField': [filters.IntegerFilter],
 }
+
+
+if VERSION < (1, 8):
+    def is_relfield(field):
+        return field.rel.to if field.rel else None
+else:
+    def is_relfield(field):
+        return field.related_model if field.is_relation else None
 
 
 class Options(object):
@@ -67,8 +76,9 @@ class MetaMapper(BaseMetaMapper):
                 )[:]
                 if not model_field.null:
                     kwargs['filters'].insert(0, filters.NotNullFilter)
-                if model_field.is_relation and model_field.related_model:
-                    kwargs['filters'].insert(0, ModelFilter(model_field.related_model))
+                related_model = is_relfield(model_field)
+                if related_model:
+                    kwargs['filters'].insert(0, ModelFilter(related_model))
                 attrs[model_field.name] = Field(model_field.name, **kwargs)
 
         attrs['_meta'] = meta
