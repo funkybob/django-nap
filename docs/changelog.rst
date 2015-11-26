@@ -4,10 +4,17 @@ Changelog
 
 v0.??.? (????-??-??)
 
+Enhancements:
+
+- Dropped support for testing in older Django
+- Add ModelFilter to ForeignKeys in ModelDataMapper
+
 Bug Fixes:
 
 - Add any fields not in a supplied `Meta.fields` for a `ModelDataMapper` to the
   excludes list to ensure model validation also excludes them.
+- Fixed `utils.JsonClient` to actually work.
+
 
 v0.14.8 (2015-10-12)
 ====================

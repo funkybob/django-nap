@@ -67,6 +67,8 @@ class MetaMapper(BaseMetaMapper):
                 )[:]
                 if not model_field.null:
                     kwargs['filters'].insert(0, filters.NotNullFilter)
+                if model_field.is_relation and model_field.related_model:
+                    kwargs['filters'].insert(0, ModelFilter(model_field.related_model))
                 attrs[model_field.name] = Field(model_field.name, **kwargs)
 
         attrs['_meta'] = meta
@@ -101,8 +103,8 @@ class ModelFilter(filters.Filter):
     def to_python(self, value):
         try:
             return self.queryset.get(pk=value)
-        except self.queryset._model.DoesNotExist:
-            raise ValidationError('Not a valid pk for {}: {}'.format(value, self.queryset._model))
+        except self.queryset.model.DoesNotExist:
+            raise ValidationError('Not a valid pk for {}: {}'.format(self.queryset.model._meta.verbose_name, value))
 
     def from_python(self, value):
         return value.pk
