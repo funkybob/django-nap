@@ -11,12 +11,6 @@ Take a REST with django-nap: APIs for Django
 .. image:: https://travis-ci.org/funkybob/django-nap.png
            :target: https://secure.travis-ci.org/funkybob/django-nap.png?branch=master
 
-.. image:: https://pypip.in/d/django-nap/badge.png
-           :target: https://crate.io/packages/django-nap
-
-.. image:: https://pypip.in/v/django-nap/badge.png
-           :target: https://crate.io/packages/django-nap
-
 In the spirit of the Unix philosophy, Nap provides a few tools which each do
 one thing, and do it well.  They are:
 
