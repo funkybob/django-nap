@@ -73,25 +73,34 @@ For simple cases where the descriptor protocol is overkill.
 
 .. class:: Field(name, required=True, default=NOT_PROVIDED, filters=None)
 
-   :param name: The name of the field 
-   :param default: The value to use if the source value is absent. Default: NOT_PROVIDED
+   :param name: The name of the property on the bound object it gets/sets.
+   :param default: The value to use if the source value is absent.
    :param filters: The filters to apply. Default: None
    :param required: Is this field required? Default: True
 
 
 DigField
 --------
-# Todo
+
+DigFields 'dig' out the value in a similar style to the dotted lookup syntax in
+Django's templates
+
+.. class:: DigField(instance, required=True, default=NOT_PROVIDED)
+    
+    :param instance: Reference to field on another instance using dot notation
+    :param default: The value to use if the source value is absent.
+    :param required: Is this field required? Default: True
 
 MapperField
 -----------
 
 Used when serialising a model that has a foreign key relation. 
 
-.. class:: MapperField(attribute=None, default=None, readonly=False, null=True, \*args, \**kwargs)
+.. class:: MapperField(required=True, default=NOT_PROVIDED, attribute=None, default=None, readonly=False, null=True, \*args, \**kwargs)
 
-   :param mapper: A DataMapper
-
+    :param mapper: A DataMapper
+    :param instance: Reference to field on another instance using dot notation
+    :param default: The value to use if the source value is absent.
 
 Filters: validation and type casting
 ====================================
