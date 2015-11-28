@@ -1,4 +1,4 @@
-DataMapper methods
+DataMapper Methods
 ====================
 
 A DataMapper supports several methods:

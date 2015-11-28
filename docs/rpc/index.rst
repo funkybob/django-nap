@@ -14,7 +14,9 @@ in the header, and it's been decorated as ``@method`` accessible, the request
 data will be parsed, passed as keyword arguments to the method, and the result
 JSON encoded and returned.
 
+
 .. toctree::
+   :maxdepth: 2
 
    example
-   api
+   rpc

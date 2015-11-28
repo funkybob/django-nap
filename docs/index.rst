@@ -43,15 +43,15 @@ REST Framework, such as rate limiting, token authentication, automatic UI, etc.
 Instead, it provides a flexible framework that makes it easy to combine with
 other specialised apps.
 
-Contents:
 
 .. toctree::
    :maxdepth: 2
+   :caption: Table of Contents
+   :name: mastertoc
+   :titlesonly:
 
    quickstart
    serialiser/index
-   serialiser/fields
-   serialiser/models
    datamapper/index
    rest/index
    rpc/index
