@@ -24,7 +24,6 @@ one thing, and do it well.  They are:
    A Class-based view system which merges many related views into a single
    class, including url routing.
 
-
 3. RESTful Class-Based Views
 
    A collection of mixins and views for building class-based API views.
