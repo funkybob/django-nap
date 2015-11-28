@@ -6,7 +6,8 @@ pipeline to help you control how your values are converted between Python and
 JSON. They can be used for inbound field validation or for for outbound type
 casting.
 
-These are the built-in nap filters:
+Built in nap filters
+--------------------
 
 - DateFilter
 - TimeFilter

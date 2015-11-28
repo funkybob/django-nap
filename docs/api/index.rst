@@ -4,7 +4,8 @@ API
 
 .. toctree::
 
-   serialiser
-   rest
-   rpc
+   ../serialiser/serialiser
+   ../datamapper/datamapper
+   ../rpc/rpc
+   
 

@@ -5,7 +5,8 @@ A ModelDataMapper will automatically create a DataMapper for a Django model. A
 ModelDataMapper behaves very similar to a Django ModelForm, you use it by
 setting some fields in an inner Meta class.
 
-The fields that can be set are:
+Fields
+------
 
 .. class:: ModelDataMapper
 
@@ -58,6 +59,9 @@ Here is the PersonMapper rewritten to use a ModelDataMapper:
         class Meta:
             model = models.Person
             fields = '__all__'
+
+Customised with property
+----------------------------
 
 You can still use the `property` built-in to get/set properties and fields on
 a ModelDataMapper. This is useful when the model contains some properties that

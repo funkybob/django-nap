@@ -26,7 +26,8 @@ the Person class and PersonMapper class defined above.
 Note that you will need to save the result of the _apply or _patch methods if
 you want to save a model to the database. 
 
-Using _reduce:
+_reduce:
+---------------
 
 .. code-block:: python
 
@@ -38,7 +39,8 @@ Using _reduce:
     # Output: {'first_name': 'Jane', 'last_name': 'Doe', 'is_alive': True}
 
 
-Using _apply:
+_apply:
+---------------
 
 .. code-block:: python
 
@@ -54,7 +56,8 @@ Using _apply:
     # Output: {'first_name': 'Jane', 'last_name': 'Doe', 'is_alive': False}
 
 
-Using _patch:
+_patch:
+---------------
 
 .. code-block:: python
 
@@ -66,7 +69,8 @@ Using _patch:
 
     # Output: {'first_name': 'Jane', 'last_name': 'Notdoe', 'is_alive': True}
 
-Using _clean:
+_clean:
+---------------
 
 .. code-block:: python
 
