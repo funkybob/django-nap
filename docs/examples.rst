@@ -75,6 +75,7 @@ this simple Login endpoint:
 
     from django.contrib import auth
     from django.contrib.auth.forms import AuthenticationForm
+    from django.utils.decorators import classonlymethod
     from django.views.decorators.csrf import ensure_csrf_cookie
 
     from nap.rest import views
@@ -84,8 +85,9 @@ this simple Login endpoint:
     class LoginView(views.BaseObjectView):
         mapper_class = mappers.UserMapper
 
-        def as_view(self, *args, **kwargs):
-            view = super(LoginView, self).as_view(*args, **kwargs)
+        @classonlymethod
+        def as_view(cls, *args, **kwargs):
+            view = super(LoginView, cls).as_view(*args, **kwargs)
             return ensure_csrf_token(view)
 
         def get(self, request):
