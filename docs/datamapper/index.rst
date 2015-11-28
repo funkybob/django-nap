@@ -112,8 +112,8 @@ dict representation of the DataMapper.
 values you pass in the data dict. If validation fails it will raise a
 ValidationError.
 
-``_apply(data)`` will fully update (apply) a DataMapper's fields with the
-values you pass it in the data dict. If you don't pass a field in the data dict
+``_apply(data)`` will fully update (put) a DataMapper's fields with the
+values you pass in the data dict. If you don't pass a field in the data dict
 it will try to set the field to the default value. If there is no default and
 the field is required it will raise a ValidationError.
 
@@ -123,7 +123,10 @@ dict. The ``full`` boolean indicates if the calling method was ``_apply``
 (True) or ``_patch`` (False).
 
 Here is some code to explain how these concepts work. We will continue to use
-the Person class and PersonMapper class defined above.
+the Person class and PersonMapper class defined above. 
+
+Note that you will need to save the result of the _apply or _patch methods if
+you want to save a model to the database. 
 
 Using _reduce:
 
