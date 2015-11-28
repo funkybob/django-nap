@@ -183,12 +183,12 @@ The fields that can be set are:
 
 .. class:: ModelDataMapper
 
-   .. attribute:: model
+    .. attribute:: model
 
       Default: None
       The model this ``DataMapper`` is for
 
-   .. attribute:: fields
+    .. attribute:: fields
 
       Default: []
       The list of fields to use. You can set it to '__all__' to map all fields.
@@ -198,7 +198,7 @@ The fields that can be set are:
       Default: []
       The list of fields to exclude from the Model
 
-   .. attribute:: required
+    .. attribute:: required
 
       Default: {}
       The list of overrides of default required values for fields inferred from
