@@ -96,9 +96,9 @@ MapperField
 
 Used when serialising a model that has a foreign key relation. 
 
-.. class:: MapperField(required=True, default=NOT_PROVIDED, attribute=None, default=None, readonly=False, null=True, \*args, \**kwargs)
+.. class:: MapperField(mapper required=True, default=NOT_PROVIDED)
 
-    :param mapper: A DataMapper
+    :param mapper: A DataMapper that will serialise the field
     :param instance: Reference to field on another instance using dot notation
     :param default: The value to use if the source value is absent.
 
