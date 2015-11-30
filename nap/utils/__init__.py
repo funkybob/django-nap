@@ -3,8 +3,9 @@ from __future__ import unicode_literals
 import json
 from cgi import parse_header, parse_multipart
 
+from django.conf import settings
+from django.http import QueryDict
 from django.utils import six
-from django.utils.six.moves.urllib.parse import parse_qs
 
 try:
     from django.core.handlers.wsgi import ISO_8859_1
@@ -43,29 +44,30 @@ class JsonMixin(object):
     def get_request_data(self, default=None):
         '''Retrieve data from request'''
         c_type, c_data = parse_header(self.request.META.get('CONTENT_TYPE', ''))
+        encoding = self.request.encoding or settings.DEFAULT_CHARSET
 
         if c_type in self.CONTENT_TYPES:
             if not self.request.body:
                 return default
-            return self.loads(self.request.body.decode(
-                getattr(self.request, 'encoding', None) or ISO_8859_1
-            ))
+            return self.loads(self.request.body, encoding=encoding)
 
         if self.request.method in ('PUT', 'PATCH'):
             if c_type == 'application/x-www-form-urlencoded':
-                return parse_qs(self.request.body)
+                return QueryDict(self.request.body, encoding=encoding)
             elif c_type == 'multipart/form-data':
                 return parse_multipart(self.request.body, c_data)
 
         return self.request.POST
 
-    def dumps(self, data):
+    def dumps(self, data, **kwargs):
         '''How to parse content that matches our content types list.'''
-        return json.dumps(data, cls=self.JSON_ENCODER)
+        kwargs.setdefault('cls', self.JSON_ENCODER)
+        return json.dumps(data, **kwargs)
 
-    def loads(self, data):
+    def loads(self, data, **kwargs):
         '''Serialise data for responses.'''
-        return json.loads(data, cls=self.JSON_DECODER)
+        kwargs.setdefault('cls', self.JSON_DECODER)
+        return json.loads(data, **kwargs)
 
 
 def flatten_errors(errors):
