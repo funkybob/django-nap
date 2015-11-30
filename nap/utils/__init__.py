@@ -49,7 +49,7 @@ class JsonMixin(object):
         if c_type in self.CONTENT_TYPES:
             if not self.request.body:
                 return default
-            return self.loads(self.request.body, encoding=encoding)
+            return self.loads(self.request.body.decode(encoding)
 
         if self.request.method in ('PUT', 'PATCH'):
             if c_type == 'application/x-www-form-urlencoded':
