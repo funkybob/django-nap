@@ -9,6 +9,7 @@ Enhancements:
 - Dropped support for testing in older Django
 - Add ModelFilter to ForeignKeys in ModelDataMapper
 - Allow passing kwargs to `JsonMixin.loads` and `JsonMixin.dums`
+- Added ability to change the response class used in auth decorators.
 
 Bug Fixes:
 
