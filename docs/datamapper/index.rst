@@ -62,6 +62,46 @@ as well as allowing easier control. Field's first argument is the name of the
 property on the bound object it gets/sets.
 
 
+DataMapper Fields
+=================
+Fields are declared on DataMappers. These are the valid supported types:
+
+Field
+-----
+
+For simple cases where the descriptor protocol is overkill. 
+
+.. class:: Field(name, required=True, default=NOT_PROVIDED, filters=None)
+
+   :param name: The name of the property on the bound object it gets/sets.
+   :param default: The value to use if the source value is absent.
+   :param filters: The filters to apply. Default: None
+   :param required: Is this field required? Default: True
+
+
+DigField
+--------
+
+DigFields 'dig' out the value in a similar style to the dotted lookup syntax in
+Django's templates
+
+.. class:: DigField(instance, required=True, default=NOT_PROVIDED)
+    
+    :param instance: Reference to field on another instance using dot notation
+    :param default: The value to use if the source value is absent.
+    :param required: Is this field required? Default: True
+
+MapperField
+-----------
+
+Used when serialising a model that has a foreign key relation. 
+
+.. class:: MapperField(mapper required=True, default=NOT_PROVIDED)
+
+    :param mapper: A DataMapper that will serialise the field
+    :param instance: Reference to field on another instance using dot notation
+    :param default: The value to use if the source value is absent.
+
 Filters: validation and type casting
 ====================================
 
@@ -112,8 +152,8 @@ dict representation of the DataMapper.
 values you pass in the data dict. If validation fails it will raise a
 ValidationError.
 
-``_apply(data)`` will fully update (apply) a DataMapper's fields with the
-values you pass it in the data dict. If you don't pass a field in the data dict
+``_apply(data)`` will fully update (put) a DataMapper's fields with the
+values you pass in the data dict. If you don't pass a field in the data dict
 it will try to set the field to the default value. If there is no default and
 the field is required it will raise a ValidationError.
 
@@ -123,7 +163,10 @@ dict. The ``full`` boolean indicates if the calling method was ``_apply``
 (True) or ``_patch`` (False).
 
 Here is some code to explain how these concepts work. We will continue to use
-the Person class and PersonMapper class defined above.
+the Person class and PersonMapper class defined above. 
+
+Note that these methods only update its fields of he model instance. You will
+need to call save() yourself to commit changes to the database.
 
 Using _reduce:
 
@@ -193,7 +236,7 @@ The fields that can be set are:
       Default: []
       The list of fields to use. You can set it to '__all__' to map all fields.
 
-    .. attribute:: exclude
+   .. attribute:: exclude
 
       Default: []
       The list of fields to exclude from the Model

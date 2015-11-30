@@ -202,13 +202,13 @@ Here's an example of updating two related objects in a single PATCH call.
 
             mapper = self.get_mapper(user)
             try:
-                data >> mapper
+                data >> mapper # This is shorthand for _patch
             except ValidationError as e:
                 errors.update(dict(e))
 
             profile_mapper = ProfileMapper(user.profile)
             try:
-                data >> profile_mapper
+                data >> profile_mapper # This is shorthand for _patch
             except ValidationError as e:
                 errors.update(dict(e))
 
@@ -219,3 +219,26 @@ Here's an example of updating two related objects in a single PATCH call.
             user.profile.save()
 
             return self.ok_response(object=user, mapper=mapper)
+
+
+Example: Customising GET 
+------------------------
+
+Here's an example of customising a GET call based on a querystring:
+
+.. code-block:: python
+
+   class QuestionListView(ListGetMixin, BaseListView):
+        model = Question
+        mapper_class = QuestionMapper
+
+        def get(self, request, *args, **kwargs):
+            qset = self.get_queryset()
+
+            # Apply filtering to get only questions for a particular poll
+            poll_id = request.GET.get('poll_id')
+            if poll_id:
+                qset = qset.filter(poll_id=poll_id)
+                
+            self.object_list = qset
+            return self.ok_response(object_list=qset)
