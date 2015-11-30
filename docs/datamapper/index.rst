@@ -165,8 +165,8 @@ dict. The ``full`` boolean indicates if the calling method was ``_apply``
 Here is some code to explain how these concepts work. We will continue to use
 the Person class and PersonMapper class defined above. 
 
-Note that you will need to save the result of the _apply or _patch methods if
-you want to save a model to the database. 
+Note that these methods only update its fields of he model instance. You will
+need to call save() yourself to commit changes to the database.
 
 Using _reduce:
 
@@ -226,22 +226,22 @@ The fields that can be set are:
 
 .. class:: ModelDataMapper
 
-    .. attribute:: model
+   .. attribute:: model
 
       Default: None
       The model this ``DataMapper`` is for
 
-    .. attribute:: fields
+   .. attribute:: fields
 
       Default: []
       The list of fields to use. You can set it to '__all__' to map all fields.
 
-    .. attribute:: exclude
+   .. attribute:: exclude
 
       Default: []
       The list of fields to exclude from the Model
 
-    .. attribute:: required
+   .. attribute:: required
 
       Default: {}
       The list of overrides of default required values for fields inferred from
