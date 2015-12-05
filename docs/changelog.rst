@@ -10,6 +10,7 @@ Enhancements:
 - Add ModelFilter to ForeignKeys in ModelDataMapper
 - Allow passing kwargs to `JsonMixin.loads` and `JsonMixin.dums`
 - Added ability to change the response class used in auth decorators.
+- Added `>>=` to `ModelDataMapper` to allow applying to new model instance.
 
 Bug Fixes:
 
