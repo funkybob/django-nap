@@ -93,6 +93,15 @@ class ModelDataMapper(with_metaclass(MetaMapper, DataMapper)):
             obj = self._meta.model()
         super(ModelDataMapper, self).__init__(obj, **kwargs)
 
+    def __irshift__(self, other):
+        '''
+        Allow implicit "update new instance" using:
+
+        >>> obj = data >>= mapper
+        '''
+        self.obj = self._meta.model()
+        return self._apply(other)
+
     def _clean(self, data, full=True):
         try:
             self._obj.full_clean(exclude=self._meta.exclude)
