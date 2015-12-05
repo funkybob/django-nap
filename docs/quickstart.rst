@@ -1,7 +1,7 @@
 Quick Start
 ===========
 
-Nap has two methods of use, you can use the: Serialisers/Publisher or the 
+Nap has two methods of use, you can use the: Serialisers/Publisher or the
 DataMapper/Views combinations.
 
 DataMapper/Views Quick Start
@@ -10,7 +10,7 @@ DataMapper/Views Quick Start
 1. Create a DataMapper for your Model in mappers.py
 
 .. code-block:: python
-    
+
     from nap import datamapper
     from myapp.models import MyModel
 
@@ -19,7 +19,7 @@ DataMapper/Views Quick Start
             model = MyModel
             exclude = ['user',]
 
-2. Create some views in rest_views.py 
+2. Create some views in rest_views.py
 
 .. code-block:: python
 
@@ -45,7 +45,7 @@ DataMapper/Views Quick Start
 
         url(r'^mymodel/(?P<pk>\d+)/$',
             MyModelObjectView.as_view(),
-            name='mymodel-detail'),        
+            name='mymodel-detail'),
     ]
 
 

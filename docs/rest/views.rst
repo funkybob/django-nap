@@ -202,13 +202,13 @@ Here's an example of updating two related objects in a single PATCH call.
 
             mapper = self.get_mapper(user)
             try:
-                data >> mapper # This is shorthand for _patch
+                data >> mapper  # This is shorthand for _patch
             except ValidationError as e:
                 errors.update(dict(e))
 
             profile_mapper = ProfileMapper(user.profile)
             try:
-                data >> profile_mapper # This is shorthand for _patch
+                data >> profile_mapper  # This is shorthand for _patch
             except ValidationError as e:
                 errors.update(dict(e))
 
@@ -221,7 +221,7 @@ Here's an example of updating two related objects in a single PATCH call.
             return self.ok_response(object=user, mapper=mapper)
 
 
-Example: Customising GET 
+Example: Customising GET
 ------------------------
 
 Here's an example of customising a GET call based on a querystring:
@@ -239,6 +239,6 @@ Here's an example of customising a GET call based on a querystring:
             poll_id = request.GET.get('poll_id')
             if poll_id:
                 qset = qset.filter(poll_id=poll_id)
-                
+
             self.object_list = qset
             return self.ok_response(object_list=qset)

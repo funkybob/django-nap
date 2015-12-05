@@ -69,7 +69,7 @@ Fields are declared on DataMappers. These are the valid supported types:
 Field
 -----
 
-For simple cases where the descriptor protocol is overkill. 
+For simple cases where the descriptor protocol is overkill.
 
 .. class:: Field(name, required=True, default=NOT_PROVIDED, filters=None)
 
@@ -86,7 +86,7 @@ DigFields 'dig' out the value in a similar style to the dotted lookup syntax in
 Django's templates
 
 .. class:: DigField(instance, required=True, default=NOT_PROVIDED)
-    
+
     :param instance: Reference to field on another instance using dot notation
     :param default: The value to use if the source value is absent.
     :param required: Is this field required? Default: True
@@ -94,7 +94,7 @@ Django's templates
 MapperField
 -----------
 
-Used when serialising a model that has a foreign key relation. 
+Used when serialising a model that has a foreign key relation.
 
 .. class:: MapperField(mapper required=True, default=NOT_PROVIDED)
 
@@ -163,7 +163,7 @@ dict. The ``full`` boolean indicates if the calling method was ``_apply``
 (True) or ``_patch`` (False).
 
 Here is some code to explain how these concepts work. We will continue to use
-the Person class and PersonMapper class defined above. 
+the Person class and PersonMapper class defined above.
 
 Note that these methods only update its fields of he model instance. You will
 need to call save() yourself to commit changes to the database.
