@@ -2,7 +2,8 @@
 Changelog
 =========
 
-v0.??.? (????-??-??)
+v0.14.9 (2015-12-08)
+====================
 
 Enhancements:
 
@@ -39,7 +40,7 @@ Bug Fixes:
 
 - Set safe=False in MapperMixin.empty_response
 
-v0.14.7.1 (2015-09.29)
+v0.14.7.1 (2015-09-29)
 ======================
 
 Enhancements:

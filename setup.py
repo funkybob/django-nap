@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='django-nap',
-    version='0.14.8',
+    version='0.14.9',
     description='A light REST tool for Django',
     author='Curtis Maloney',
     author_email='curtis@tinbrain.net',
@@ -22,9 +22,9 @@ setup(
         'Programming Language :: Python :: Implementation :: PyPy',
     ],
     requires = [
-        'Django (>=1.4)',
+        'Django (>=1.7)',
     ],
     install_requires = [
-        'Django>=1.4',
+        'Django>=1.7',
     ],
 )
