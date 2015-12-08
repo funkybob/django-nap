@@ -9,6 +9,7 @@ python:
 env:
   - DJANGO="Django<1.8"
   - DJANGO="Django<1.9"
+  - DJANGO="Django<1.10"
 
 install:
   - pip install -q $DJANGO
