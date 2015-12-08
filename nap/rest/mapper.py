@@ -1,10 +1,10 @@
 '''
 Mixins for using Mappers with Publisher
 '''
+from django.core.exceptions import ValidationError
+
 from nap import http
 from nap.utils import flatten_errors
-
-from django.core.exceptions import ValidationError
 
 
 class MapperListMixin(object):
