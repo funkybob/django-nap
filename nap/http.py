@@ -5,7 +5,7 @@ import re
 from collections import OrderedDict
 
 from django.core.exceptions import SuspiciousOperation
-from django.http import Http404, HttpResponse  # NOQA
+from django.http import Http404, HttpResponse, JsonResponse  # NOQA
 from django.utils.encoding import iri_to_uri
 from django.utils.six.moves import http_client
 from django.utils.six.moves.urllib.parse import urlparse
@@ -120,36 +120,43 @@ class PermanentRedirect(HttpResponseRedirection):
     status_code = STATUS.PERMANENT_REDIRECT
 
 #
+# Common ancestor for 4xx and 5xx responses
+#
+
+class HttpResponseError(BaseHttpResponse):
+    '''Common base class for all error responses'''
+
+#
 # Client Error Responses (4xx)
 #
 
 
-class HttpResponseError(BaseHttpResponse):
+class HttpResponseClientError(HttpResponseError):
     '''A base class for all 4xx responses.'''
 
 
-class BadRequest(HttpResponseError):
+class BadRequest(HttpResponseClientError):
     status_code = STATUS.BAD_REQUEST
 
 
 # XXX Auth-Realm ?
-class Unauthorized(HttpResponseError):
+class Unauthorized(HttpResponseClientError):
     status_code = STATUS.UNAUTHORIZED
 
 
-class PaymentRequired(HttpResponseError):
+class PaymentRequired(HttpResponseClientError):
     status_code = STATUS.PAYMENT_REQUIRED
 
 
-class Forbidden(HttpResponseError):
+class Forbidden(HttpResponseClientError):
     status_code = STATUS.FORBIDDEN
 
 
-class NotFound(HttpResponseError):
+class NotFound(HttpResponseClientError):
     status_code = STATUS.NOT_FOUND
 
 
-class MethodNotAllowed(HttpResponseError):
+class MethodNotAllowed(HttpResponseClientError):
     def __init__(self, permitted_methods, *args, **kwargs):
         super(MethodNotAllowed, self).__init__(*args, **kwargs)
         self['Allow'] = ', '.join(permitted_methods)
@@ -157,55 +164,55 @@ class MethodNotAllowed(HttpResponseError):
     status_code = STATUS.METHOD_NOT_ALLOWED
 
 
-class NotAcceptable(HttpResponseError):
+class NotAcceptable(HttpResponseClientError):
     status_code = STATUS.NOT_ACCEPTABLE
 
 
-class ProxyAuthenticationRequired(HttpResponseError):
+class ProxyAuthenticationRequired(HttpResponseClientError):
     status_code = STATUS.PROXY_AUTHENTICATION_REQUIRED
 
 
-class RequestTimeout(HttpResponseError):
+class RequestTimeout(HttpResponseClientError):
     status_code = STATUS.REQUEST_TIMEOUT
 
 
-class Conflict(HttpResponseError):
+class Conflict(HttpResponseClientError):
     status_code = STATUS.CONFLICT
 
 
-class Gone(HttpResponseError):
+class Gone(HttpResponseClientError):
     status_code = STATUS.GONE
 
 
-class LengthRequired(HttpResponseError):
+class LengthRequired(HttpResponseClientError):
     status_code = STATUS.LENGTH_REQUIRED
 
 
-class PreconditionFailed(HttpResponseError):
+class PreconditionFailed(HttpResponseClientError):
     status_code = STATUS.PRECONDITION_FAILED
 
 
-class RequestEntityTooLarge(HttpResponseError):
+class RequestEntityTooLarge(HttpResponseClientError):
     status_code = STATUS.REQUEST_ENTITY_TOO_LARGE
 
 
-class RequestURITooLong(HttpResponseError):
+class RequestURITooLong(HttpResponseClientError):
     status_code = STATUS.REQUEST_URI_TOO_LONG
 
 
-class UnsupportedMediaType(HttpResponseError):
+class UnsupportedMediaType(HttpResponseClientError):
     status_code = STATUS.UNSUPPORTED_MEDIA_TYPE
 
 
-class RequestedRangeNotSatisfiable(HttpResponseError):
+class RequestedRangeNotSatisfiable(HttpResponseClientError):
     status_code = STATUS.REQUESTED_RANGE_NOT_SATISFIABLE
 
 
-class ExpectationFailed(HttpResponseError):
+class ExpectationFailed(HttpResponseClientError):
     status_code = STATUS.EXPECTATION_FAILED
 
 
-class BadGeolocation(HttpResponseError):
+class BadGeolocation(HttpResponseClientError):
     status_code = STATUS.BAD_GEOLOCATION
 
 #
@@ -213,7 +220,7 @@ class BadGeolocation(HttpResponseError):
 #
 
 
-class HttpResponseServerError(BaseHttpResponse):
+class HttpResponseServerError(HttpResponseError):
     '''A base class for 5xx responses.'''
 
 
@@ -239,35 +246,3 @@ class GatewayTimeout(HttpResponseServerError):
 
 class HttpVersiontNotSupported(HttpResponseServerError):
     status_code = STATUS.HTTP_VERSION_NOT_SUPPORTED
-
-#
-# General Helpers
-#
-
-
-try:
-    from django.http import JsonResponse
-except ImportError:
-    # Back-ported from Django 1.7
-    from django.core.serializers.json import DjangoJSONEncoder
-
-    class JsonResponse(HttpResponse):
-        """
-        An HTTP response class that consumes data to be serialized to JSON.
-
-        :param data: Data to be dumped into json. By default only ``dict`` objects
-          are allowed to be passed due to a security flaw before EcmaScript 5. See
-          the ``safe`` parameter for more information.
-        :param encoder: Should be an json encoder class. Defaults to
-          ``django.core.serializers.json.DjangoJSONEncoder``.
-        :param safe: Controls if only ``dict`` objects may be serialized. Defaults
-          to ``True``.
-        """
-
-        def __init__(self, data, encoder=DjangoJSONEncoder, safe=True, **kwargs):
-            if safe and not isinstance(data, dict):
-                raise TypeError('In order to allow non-dict objects to be '
-                                'serialized set the safe parameter to False')
-            kwargs.setdefault('content_type', 'application/json')
-            data = json.dumps(data, cls=encoder)
-            super(JsonResponse, self).__init__(content=data, **kwargs)
