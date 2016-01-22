@@ -32,7 +32,7 @@ class DataMapper(with_metaclass(MetaMapper)):
         if obj is None:
             obj = DictObject()
         self._obj = obj
-        self._kwargs = kwargs
+        self._context = kwargs
 
     def __lshift__(self, other):
         '''

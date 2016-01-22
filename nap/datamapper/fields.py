@@ -32,6 +32,20 @@ class field(property):
         self.fset(instance._obj, value)
 
 
+class context_field(field):
+    '''Special case of field that allows access to the Mapper itself'''
+
+    def __get__(self, instance, cls=None):
+        if instance is None:
+            return self
+        return self.fget(self, instance._obj)
+
+    def __set__(self, instance, value):
+        if self.fset is None:
+            return
+        return self.fset(self, instance._obj, value)
+
+
 class Field(field):
     '''
     class V(DataMapper):
