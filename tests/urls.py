@@ -9,4 +9,5 @@ urlpatterns = patterns('',
     (r'^api/', include(api.patterns(True))),
     (r'^rpc/', rpc_views.View.as_view()),
     (r'^rest/polls/(?P<pk>\d+)$', rest_views.SinglePollView.as_view()),
+    (r'^rest/polls/$', rest_views.PollListView.as_view()),
 )
