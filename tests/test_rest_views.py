@@ -2,7 +2,6 @@ from django.test import TestCase, Client
 import json
 from nap.http import STATUS
 
-from rest_views import PollMapper
 from .models import Poll
 
 
