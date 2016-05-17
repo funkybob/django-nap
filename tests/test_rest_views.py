@@ -8,7 +8,6 @@ from .models import Poll
 class ListRestViewTest(TestCase):
 
     def setUp(self):
-        self.c = Client()
         self.question_1 = {'question': 'Question 1', 'pub_date': '2016-05-13 00:00:00'}
         self.question_2 = {'question': 'Question 2', 'pub_date': '2015-05-13 00:00:00'}
         Poll.objects.create(question=self.question_1['question'], pub_date=self.question_1['pub_date'])
@@ -46,7 +45,6 @@ class ListRestViewTest(TestCase):
 class SingleObjectRestViewTest(TestCase):
 
     def setUp(self):
-        self.c = Client()
         self.default_question = 'Default question'
         self.default_pub_date = '2015-01-01 00:00:00'
         self.poll = Poll.objects.create(question=self.default_question, pub_date=self.default_pub_date)
