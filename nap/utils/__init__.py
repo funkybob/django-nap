@@ -76,5 +76,5 @@ def flatten_errors(errors):
     '''
     return {
         f: e.get_json_data()
-        for f, e in form.errors.items()
+        for f, e in errors.items()
     }
