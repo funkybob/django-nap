@@ -9,20 +9,6 @@ from .. import http
 from ..utils import JsonMixin, flatten_errors
 
 
-class SerialisedResponseMixin(object):
-    '''
-    Override response_class with a JsonResponse, and set an appropriate
-    Content-Type.
-    '''
-    content_type = 'application/json'
-    response_class = http.JsonResponse
-
-    def render_to_response(self, context, **response_kwargs):
-        response_class = response_kwargs.pop('response_class', self.response_class)
-        response_kwargs.setdefault('content_type', self.content_type)
-        return response_class(context, **response_kwargs)
-
-
 class NapView(View):
 
     def dispatch(self, *args, **kwargs):

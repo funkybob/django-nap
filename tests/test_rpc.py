@@ -3,6 +3,7 @@ from django.test import TestCase
 
 import json
 
+
 class RPCTest(TestCase):
 
     def call(self, data=None, action='echo', content_type='application/json', **kwargs):
