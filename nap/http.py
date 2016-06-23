@@ -1,6 +1,5 @@
 from __future__ import unicode_literals
 
-import json
 import re
 from collections import OrderedDict
 
@@ -122,6 +121,7 @@ class PermanentRedirect(HttpResponseRedirection):
 #
 # Common ancestor for 4xx and 5xx responses
 #
+
 
 class HttpResponseError(BaseHttpResponse):
     '''Common base class for all error responses'''
