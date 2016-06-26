@@ -4,8 +4,7 @@ DataMappers
 
 As the name suggests, a DataMapper will map properties on themselves to your
 object. They allow you to easily write proxy objects, primarily for converting
-between serialised (JSON) and live (Python) formats of your resources. They are
-an alternative approach to using Serialisers.
+between serialised (JSON) and live (Python) formats of your resources.
 
 .. Warning::
     Since a DataMapper instance retain a reference to the object they are bound
@@ -38,7 +37,6 @@ Here's an example to illustrate some of these concepts:
 
     # A DataMapper that we are creating for the Person object
     class PersonMapper(datamapper.DataMapper):
-
         '''
         The self argument refers to the object we bind the DataMapper to when
         we construct it. It DOES NOT refer to the instance of the PersonMapper.
@@ -61,9 +59,16 @@ the "bound" object, not the DataMapper. The Field class covers simpler cases,
 as well as allowing easier control. Field's first argument is the name of the
 property on the bound object it gets/sets.
 
+Accessing extra state
+---------------------
+
+Sometimes when serialising an object, you need to provide additional state.
+This can be done using a ``context_field``, which subclasses ``field`` and
+additionally passes the `DataMapper` instance to the getter and setter methos.
 
 DataMapper Fields
 =================
+
 Fields are declared on DataMappers. These are the valid supported types:
 
 Field
@@ -165,7 +170,7 @@ dict. The ``full`` boolean indicates if the calling method was ``_apply``
 Here is some code to explain how these concepts work. We will continue to use
 the Person class and PersonMapper class defined above.
 
-Note that these methods only update its fields of he model instance. You will
+Note that these methods only update the fields of the model instance. You will
 need to call save() yourself to commit changes to the database.
 
 Using _reduce:
@@ -214,12 +219,29 @@ Using _clean:
 
     # Todo
 
+Shortcuts
+---------
+
+As a convenience, DataMappers support two shorthand syntaxes:
+
+.. code-block:: python
+
+   >>> data = mapper << obj
+
+This will bind the mapper to the obj, and then call ``_reduce``.
+
+.. code-block:: python
+
+   >>> obj = data >> mapper
+
+This will call ``_patch`` on the mapper, passing data, and returning the
+updated object.
 
 ModelDataMappers
 ================
 
 A ModelDataMapper will automatically create a DataMapper for a Django model. A
-ModelDataMapper behaves very similar to a Django ModelForm, you use it by
+ModelDataMapper behaves very similar to a Django ModelForm, you control it by
 setting some fields in an inner Meta class.
 
 The fields that can be set are:
@@ -276,8 +298,8 @@ Here is the PersonMapper rewritten to use a ModelDataMapper:
             model = models.Person
             fields = '__all__'
 
-You can still use the `property` built-in to get/set properties and fields on
-a ModelDataMapper. This is useful when the model contains some properties that
+You can still use `field` to get/set properties and fields on a
+ModelDataMapper. This is useful when the model contains some properties that
 the ModelDataMapper cannot understand, or when you want to customise how
 certain fields are represented.
 

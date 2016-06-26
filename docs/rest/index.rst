@@ -2,16 +2,12 @@
 REST
 ====
 
-Originally, Nap only provided RESTful API support.
-
-This is managed using a Publisher pattern.
+Nap provides a set of Class-Based View mixins to simplify building RESTful
+APIs.
 
 
 .. toctree::
    :maxdepth: 2
 
-   publisher
    views
-   api
    auth
-   models

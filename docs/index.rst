@@ -14,30 +14,18 @@ Take a REST with django-nap: APIs for Django
 In the spirit of the Unix philosophy, Nap provides a few tools which each do
 one thing, and do it well.  They are:
 
-1. Serialiser
+1. Data Mapper
 
-   Declarative style Serialiser definitions for reducing complex Python objects
-   to simple types expressible in JSON.
+   Wrapper classes for providing JSON-friendly interfaces to your objects.
 
-2. RESTful Publisher
-
-   A Class-based view system which merges many related views into a single
-   class, including url routing.
-
-
-3. RESTful Class-Based Views
+2. RESTful Class-Based Views
 
    A collection of mixins and views for building class-based API views.
 
-4. RPC View
+3. RPC View
 
    A mixin for Django's class-based views which allows a single url to provide
    multiple RPC methods.
-
-5. Data Mapper
-
-   Alternative approach to converting objects between serialisable forms and
-   program objects.
 
 Nap does not provide the wide range of features you see in tools like Django
 REST Framework, such as rate limiting, token authentication, automatic UI, etc.
@@ -50,9 +38,6 @@ Contents:
    :maxdepth: 2
 
    quickstart
-   serialiser/index
-   serialiser/fields
-   serialiser/models
    datamapper/index
    rest/index
    rpc/index

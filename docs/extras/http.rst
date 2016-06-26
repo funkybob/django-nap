@@ -63,6 +63,10 @@ way up.
 
   - HttpResponseError
 
+    A common base class for all Error responses (4xx and 5xx)
+
+  - HttpResponseClientError(HttpResponseError)
+
     - BadRequest
     - Unauthorized
     - PaymentRequired
@@ -82,7 +86,7 @@ way up.
     - RequestedRangeNotSatisfiable
     - ExpectationFailed
 
-  - HttpResponseServerError
+  - HttpResponseServerError(HttpResponseError)
 
     - InternalServerError
     - NotImplemented
