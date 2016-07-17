@@ -17,4 +17,3 @@ JSON encoded and returned.
 .. toctree::
 
    example
-   api
