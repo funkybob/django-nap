@@ -66,10 +66,15 @@ Sometimes when serialising an object, you need to provide additional state.
 This can be done using a ``context_field``, which subclasses ``field`` and
 additionally passes the `DataMapper` instance to the getter and setter methos.
 
+Any extra `kwargs` passed when the `DataMapper` is instanciated are stored on
+the instance in `self._context`.
+
 DataMapper Fields
 =================
 
-Fields are declared on DataMappers. These are the valid supported types:
+DataMappers use the declarative syntax familiar from Django Models and Forms.
+
+These are the valid supported types:
 
 Field
 -----
@@ -101,10 +106,10 @@ MapperField
 
 Used when serialising a model that has a foreign key relation.
 
-.. class:: MapperField(mapper required=True, default=NOT_PROVIDED)
+.. class:: MapperField(mapper, required=True, default=NOT_PROVIDED)
 
-    :param mapper: A DataMapper that will serialise the field
-    :param instance: Reference to field on another instance using dot notation
+    :param mapper: A DataMapper that will serialise the field value.
+    :param instance: Reference to a field on another instance using dot notation.
     :param default: The value to use if the source value is absent.
 
 Filters: validation and type casting
@@ -138,7 +143,7 @@ filters fail a ValidationError is raised.
 
         @datamapper.field
         def name(self):
-            return {}{}.format(self.first_name, self.last_name)
+            return "{}{}".format(self.first_name, self.last_name)
 
         first_name = datamapper.Field('first_name')
         last_name = datamapper.Field('last_name')
@@ -151,16 +156,16 @@ DataMapper functions
 A DataMapper supports several methods:
 
 ``_reduce()`` will reduce the instance to its serialisable state, returning a
-dict representation of the DataMapper.
+dict representation of the `DataMapper`.
 
-``_patch(data)`` will partially update (patch) a DataMapper's fields with the
+``_patch(data)`` will partially update (patch) a `DataMapper`'s fields with the
 values you pass in the data dict. If validation fails it will raise a
-ValidationError.
+`ValidationError`.
 
-``_apply(data)`` will fully update (put) a DataMapper's fields with the
+``_apply(data)`` will fully update (put) a `DataMapper`'s fields with the
 values you pass in the data dict. If you don't pass a field in the data dict
 it will try to set the field to the default value. If there is no default and
-the field is required it will raise a ValidationError.
+the field is required it will raise a `ValidationError`.
 
 ``_clean(data, full=True)`` is a hook for final pass validation. It allows you
 to define your own custom cleaning code. You should update the ``self._errors``
@@ -217,7 +222,15 @@ Using _clean:
 
 .. code-block:: python
 
-    # Todo
+    class DeadPersonMapper(PersonMapper):
+        def _clean(self):
+            if self.is_alive:
+                raise ValidationError("Only dead people accepted to the morgue.")
+
+    m = DeadPersonMapper()
+    m._apple({'last_name': 'Doe', 'first_name': 'John', 'is_alive': True})
+
+    # ValidationError
 
 Shortcuts
 ---------
