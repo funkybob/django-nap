@@ -38,11 +38,11 @@ Contents:
    :maxdepth: 2
 
    quickstart
+   ref/modules
    datamapper/index
    rest/index
    rpc/index
    extras/index
-   api/index
    testing
    tutorial/index
    examples
