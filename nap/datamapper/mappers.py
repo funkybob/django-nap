@@ -27,7 +27,16 @@ class MetaMapper(type):
 
 
 class DataMapper(with_metaclass(MetaMapper)):
+    '''
+    DataMapper class.
+
+    Provides a proxy class for retrieving and updating attributes on your objects.
+    '''
     def __init__(self, obj=None, **kwargs):
+        '''
+        :param: obj Optionally bind to object
+        :param: **kwargs Extra context (stored as self._context)
+        '''
 
         if obj is None:
             obj = DictObject()
