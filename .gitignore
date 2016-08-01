@@ -44,3 +44,7 @@ htmlcov
 
 # sphinx build dir
 docs/_build
+
+# Virtualenv
+env/
+venv/
