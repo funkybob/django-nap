@@ -30,11 +30,13 @@ class AuthorisationMixin(object):
 
 class LoginRequiredMixin(object):
 
+    @classonlymethod
     def auth_test(cls, request, *args, **kwargs):
         return request.user.is_authenticated()
 
 
 class StaffRequiredMixin(object):
 
+    @classonlymethod
     def auth_test(cls, request, *args, **kwargs):
         return request.user.is_staff
