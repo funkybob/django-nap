@@ -11,6 +11,10 @@ Enhancements:
   Django 1.7
 - Add a common base class `HttpResponseError` for Status 4xx and 5xx responses.
 
+Bug Fixes:
+
+- Fix `auth.permit_groups` [Thanks pizzathief!]
+
 v0.14.9 (2015-12-08)
 ====================
 
