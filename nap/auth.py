@@ -30,7 +30,7 @@ permit_logged_in = permit(test_logged_in)
 permit_staff = permit(test_staff)
 
 
-def permit_groups(response_class=http.Forbidden, *groups):
+def permit_groups(*groups, **kwargs):
     def in_groups(self, *args, **kwargs):
         return self.request.user.groups.filter(name__in=groups).exists()
-    return permit(in_groups, response_class=response_class)
+    return permit(in_groups, response_class=kwargs.get('reponse_class', http.Forbidden)
