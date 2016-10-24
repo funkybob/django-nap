@@ -34,6 +34,9 @@ class field(property):
 
 class context_field(field):
     '''Special case of field that allows access to the Mapper itself'''
+    def __init__(self, *args, **kwargs):
+        super(context_field, self).__init__(*args, **kwargs)
+        self.context = kwargs
 
     def __get__(self, instance, cls=None):
         if instance is None:
