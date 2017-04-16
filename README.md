@@ -1,7 +1,7 @@
 django-nap
 ==========
-[![Downloads](https://pypip.in/d/django-nap/badge.png)](https://crate.io/package/django-nap)
-[![Version](https://pypip.in/v/django-nap/badge.png)](https://crate.io/package/django-nap)
+[![Downloads](https://pypip.in/d/django-nap/badge.png)](https://pypi.python.org/pypi/django-nap)
+[![Version](https://pypip.in/v/django-nap/badge.png)](https://pypi.python.org/pypi/django-nap)
 [![Build Status](https://secure.travis-ci.org/funkybob/django-nap.png?branch=master)](http://travis-ci.org/funkybob/django-nap)
 
 Read The Docs: https://django-nap.readthedocs.io/en/latest/
