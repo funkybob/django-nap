@@ -4,14 +4,6 @@ nap.rest package
 Submodules
 ----------
 
-nap.rest.auth module
---------------------
-
-.. automodule:: nap.rest.auth
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 nap.rest.views module
 ---------------------
 

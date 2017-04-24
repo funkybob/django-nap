@@ -6,14 +6,29 @@ Changelog
 Current
 -------
 
-v0.??.? (????-??-??)
+v0.20.0 (2017-04-24)
 ====================
+
+.. admonition:: WARNING: Major Refactor
+
+   All code related to Publishers and Serialisers have been removed.
+
+   Many
 
 Enhancements:
 
+- Add a common base class `HttpResponseError` for Status 4xx and 5xx responses.
+- JsonMixin imports settings late to avoid problems
+
+Deprecation:
+
 - Removed backward compatibility shim for JsonResponse, now that we require
   Django 1.7
-- Add a common base class `HttpResponseError` for Status 4xx and 5xx responses.
+- Removed Publishers
+- Removed Serialisers
+- Removed auth - use Django's built in mixins.
+- Removed SerialisedResponseMixin
+
 
 -------
 History

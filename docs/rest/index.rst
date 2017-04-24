@@ -10,4 +10,3 @@ APIs.
    :maxdepth: 2
 
    views
-   auth
