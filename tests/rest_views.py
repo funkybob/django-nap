@@ -1,5 +1,3 @@
-from django.views.generic import View
-
 from nap.datamapper.models import ModelDataMapper
 from nap.rest import views
 

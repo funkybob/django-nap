@@ -1,5 +1,6 @@
 from nap import rpc
 
+
 class View(rpc.RPCView):
 
     @rpc.method

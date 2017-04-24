@@ -17,6 +17,7 @@ def method(view):
 
 
 def is_rpc_method(m):
+    '''Helper for checking if something is marked as a pubishable method.'''
     return getattr(m, RPC_MARKER, False)
 
 
@@ -25,6 +26,14 @@ class RPCMixin(JsonMixin):
     permit_introspect = False
 
     def dispatch(self, request, *args, **kwargs):
+        '''
+        Check if this is a POST and has the X-RPC-Action header.
+
+        If so, dispatch the request to the method, if it exists and is
+        publishable.
+
+        Otherwise behaves as normal.
+        '''
         method = request.META.get('HTTP_X_RPC_ACTION', None)
         if request.method != 'POST' or method is None:
             return super(RPCMixin, self).dispatch(request, *args, **kwargs)
@@ -45,6 +54,11 @@ class RPCMixin(JsonMixin):
         return http.JsonResponse(resp)
 
     def options(self, request, *args, **kwargs):
+        '''
+        Default OPTIONS handler.
+
+        Returns introspection data.
+        '''
         response = super(RPCMixin, self).options(request, *args, **kwargs)
         if self.permit_introspect:
             response['Content-Type'] = 'application/json'
@@ -52,6 +66,9 @@ class RPCMixin(JsonMixin):
         return response
 
     def _introspect(self):
+        '''
+        Provides a list of methods available on this view.
+        '''
         methods = {}
         for name, prop in inspect.getmembers(self, is_rpc_method):
             argspec = inspect.getargspec(prop)
@@ -68,5 +85,5 @@ class RPCMixin(JsonMixin):
 
 
 class RPCView(RPCMixin, View):
-    '''courtesy class to avoid having to mix it yourself.'''
+    '''Courtesy class to avoid having to mix it yourself.'''
     pass

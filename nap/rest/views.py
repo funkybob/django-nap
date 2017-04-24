@@ -9,21 +9,12 @@ from .. import http
 from ..utils import JsonMixin, flatten_errors
 
 
-class SerialisedResponseMixin(object):
-    '''
-    Override response_class with a JsonResponse, and set an appropriate
-    Content-Type.
-    '''
-    content_type = 'application/json'
-    response_class = http.JsonResponse
-
-    def render_to_response(self, context, **response_kwargs):
-        response_class = response_kwargs.pop('response_class', self.response_class)
-        response_kwargs.setdefault('content_type', self.content_type)
-        return response_class(context, **response_kwargs)
-
-
 class NapView(View):
+    '''
+    Base view for Nap CBV.
+
+    Catches any http exceptions raised, and returns them.
+    '''
 
     def dispatch(self, *args, **kwargs):
         '''
@@ -37,6 +28,9 @@ class NapView(View):
 
 
 class MapperMixin(JsonMixin):
+    '''
+    Base class for generating JSON responses using DataMappers.
+    '''
     response_class = http.JsonResponse
     content_type = 'application/json'
     mapper_class = None
@@ -53,13 +47,33 @@ class MapperMixin(JsonMixin):
     error_status = http.STATUS.BAD_REQUEST
 
     def get_mapper(self, obj=None):
+        '''
+        Get the mapper to use for this request.
+
+        Default action is to use self.mapper_class
+        '''
         return self.mapper_class(obj)
 
     def empty_response(self, **kwargs):
+        '''
+        Helper method to return an empty response.
+        '''
         kwargs.setdefault('safe', False)
         return self.response_class('', **kwargs)
 
     def single_response(self, **kwargs):
+        '''
+        Helper method to return a single object.
+
+        If `object` is not passed, it will try to use `self.object`.  If
+        `self.object` is not set, it will call `self.get_object()`.
+
+        If `mapper` is not passed, it will try to use `self.mapper`.  If
+        `self.mapper` is not set, it will call `self.get_mapper()`.
+
+        Returns a `self.response_class` instance, passed ``mapper << obj``,
+        along with `**kwargs`.
+        '''
         obj = kwargs.pop('object', self.object)
         if obj is None:
             obj = self.get_object()
@@ -71,6 +85,19 @@ class MapperMixin(JsonMixin):
         return self.response_class(mapper << obj, **kwargs)
 
     def multiple_response(self, **kwargs):
+        '''
+        Helper method to return an iterable of objects.
+
+        If `object_list` is not passed, it will try to use `self.obect_list`.
+        If `self.object_list` is not set, it will call `self.get_object_list()`.
+
+
+        If `mapper` is not passed, it will try to use `self.mapper`.  If
+        `self.mapper` is not set, it will call `self.get_mapper()`.
+        
+        Returns a `self.response_class` instance, passed a list of ``mapper <<
+        obj`` applied to each object, along with `**kwargs`.
+        '''
         kwargs.setdefault('safe', False)
 
         object_list = kwargs.pop('object_list', self.object_list)
@@ -87,15 +114,29 @@ class MapperMixin(JsonMixin):
         ], **kwargs)
 
     def accepted_response(self):
+        '''
+        Shortcut to return an ``empty_response`` using a ``status`` of ``self.accepted_status``.
+        '''
         return self.empty_response(status=self.accepted_status)
 
     def created_response(self):
+        '''
+        Shortcut to return a ``single_response`` using a ``status`` of ``self.created_status``.
+        '''
         return self.single_response(status=self.created_status)
 
     def deleted_response(self):
+        '''
+        Shortcut to return an ``empty_response`` using a ``status`` of ``self.deleted_status``.
+        '''
         return self.empty_response(status=self.deleted_status)
 
     def error_response(self, errors):
+        '''
+        Helper method to return ``self.respone_class`` with a ``status`` of ``self.error_status``.
+
+        Will flatten ``errors`` using ``flatten_error``.
+        '''
         return self.response_class(
             flatten_errors(errors),
             status=self.error_status,
@@ -106,6 +147,9 @@ class MapperMixin(JsonMixin):
 class ListMixin(MapperMixin, MultipleObjectMixin):
 
     def ok_response(self, **kwargs):
+        '''
+        Shortcut to return a ``multiple_response`` with a ``status`` of ``self.ok_status``.
+        '''
         kwargs.setdefault('status', self.ok_status)
         return self.multiple_response(**kwargs)
 

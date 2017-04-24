@@ -1,23 +1,28 @@
 Quick Start
 ===========
 
-Nap has two methods of use, you can use the: Serialisers/Publisher or the
-DataMapper/Views combinations.
+Nap REST views work by combining DataMappers with composible Class-Based Views.
+
+Let's see how you might got about providng an API for the Poll example from the
+Django tutorial.
 
 DataMapper/Views Quick Start
 ----------------------------
 
 1. Create a DataMapper for your Model in mappers.py
 
+This is very much like defining a ModelForm.
+
 .. code-block:: python
 
     from nap import datamapper
-    from myapp.models import MyModel
 
-    class MyModelMapper(datamapper.ModelDataMapper):
+    from . import models
+
+
+    class QuestionMapper(datamapper.ModelDataMapper):
         class Meta:
-            model = MyModel
-            exclude = ['user',]
+            model = models.Question
 
 2. Create some views in rest_views.py
 
@@ -25,81 +30,42 @@ DataMapper/Views Quick Start
 
     from nap.rest import views
 
-    class MyModelListView(views.ListPostMixin,
+    from . import mappers
+
+
+    class QuestionListView(views.ListGetMixin,
+                           views.ListPostMixin,
                            views.BaseListView):
-        pass
+        mapper_class = mappers.QuestionMapper
 
 
-    class MyModelObjectView(views.ObjectGetMixin,
-                            views.BaseObjectView):
-        pass
+    class QuestionObjectView(views.ObjectGetMixin,
+                             views.ObjectPutMixin,
+                             views.BaseObjectView):
+        mapper_class = mappers.QuestionMapper
+
+The `BaseListView` provides the core of any object list view, deriving from
+Django's `MultipleObjectMixin`.  Then we mix in the default handlers for
+``GET`` and ``POST`` actions.
+
+Similarly, the `BaseObjectView` supports single object access, deriving from
+Django's `SingleObjectMixin`.
+
+Where the list view has ``POST`` to create a new record, the object view has
+``PUT`` to update an existing record.
 
 3. Add your APIs to your URLs:
 
 .. code-block:: python
 
     urlpatterns = [
-        url(r'^mymodel/$',
-            MyModelListView.as_view(),
-            name='mymodel-list'),
+        url(r'^question/$',
+            QuestionListView.as_view(),
+            name='question-list'),
 
-        url(r'^mymodel/(?P<pk>\d+)/$',
-            MyModelObjectView.as_view(),
-            name='mymodel-detail'),
+        url(r'^question/(?P<pk>\d+)/$',
+            QuestionObjectView.as_view(),
+            name='question-detail'),
     ]
 
-
-
-Serialiser/Publisher Quick Start
---------------------------------
-
-1. Create a Serialiser for your Model in serialisers.py
-
-.. code-block:: python
-
-    from nap import serialiser
-    from myapp.models import MyModel
-
-    class MyModelSerialiser(serialiser.ModelSerialiser):
-        class Meta:
-            model = MyModel
-            exclude = ['user',]
-
-2. Create a Publisher in publishers.py, and register it.
-
-.. code-block:: python
-
-    from nap import rest
-    from myapp.serialisers import MyModelSerialiser
-
-    class MyModelPublisher(rest.ModelPublisher):
-        serialiser = MyModelSerialiser()
-
-    rest.api.register('api', MyModelPublisher)
-
-3. Auto-discover publishers:
-
-.. code-block:: python
-
-    from nap import rest
-
-    rest.api.autodiscover()
-
-or if you're using Django 1.7, use the AppConfig:
-
-.. code-block:: python
-
-   INSTALLED_APPS = [
-       ...
-       'nap',
-   ]
-
-
-4. Add your APIs to your URLs:
-
-.. code-block:: python
-
-    urlpatterns('',
-        (r'', include(rest.api.patterns())),
-        ...
-    )
+And we're done.  You can how access your Question model!

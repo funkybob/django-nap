@@ -4,8 +4,7 @@ DataMappers
 
 As the name suggests, a DataMapper will map properties on themselves to your
 object. They allow you to easily write proxy objects, primarily for converting
-between serialised (JSON) and live (Python) formats of your resources. They are
-an alternative approach to using Serialisers.
+between serialised (JSON) and live (Python) formats of your resources.
 
 .. Warning::
     Since a DataMapper instance retain a reference to the object they are bound
@@ -38,7 +37,6 @@ Here's an example to illustrate some of these concepts:
 
     # A DataMapper that we are creating for the Person object
     class PersonMapper(datamapper.DataMapper):
-
         '''
         The self argument refers to the object we bind the DataMapper to when
         we construct it. It DOES NOT refer to the instance of the PersonMapper.
@@ -61,10 +59,22 @@ the "bound" object, not the DataMapper. The Field class covers simpler cases,
 as well as allowing easier control. Field's first argument is the name of the
 property on the bound object it gets/sets.
 
+Accessing extra state
+---------------------
+
+Sometimes when serialising an object, you need to provide additional state.
+This can be done using a ``context_field``, which subclasses ``field`` and
+additionally passes the `DataMapper` instance to the getter and setter methos.
+
+Any extra `kwargs` passed when the `DataMapper` is instanciated are stored on
+the instance in `self._context`.
 
 DataMapper Fields
 =================
-Fields are declared on DataMappers. These are the valid supported types:
+
+DataMappers use the declarative syntax familiar from Django Models and Forms.
+
+These are the valid supported types:
 
 Field
 -----
@@ -96,10 +106,10 @@ MapperField
 
 Used when serialising a model that has a foreign key relation.
 
-.. class:: MapperField(mapper required=True, default=NOT_PROVIDED)
+.. class:: MapperField(mapper, required=True, default=NOT_PROVIDED)
 
-    :param mapper: A DataMapper that will serialise the field
-    :param instance: Reference to field on another instance using dot notation
+    :param mapper: A DataMapper that will serialise the field value.
+    :param instance: Reference to a field on another instance using dot notation.
     :param default: The value to use if the source value is absent.
 
 Filters: validation and type casting
@@ -133,7 +143,7 @@ filters fail a ValidationError is raised.
 
         @datamapper.field
         def name(self):
-            return {}{}.format(self.first_name, self.last_name)
+            return "{}{}".format(self.first_name, self.last_name)
 
         first_name = datamapper.Field('first_name')
         last_name = datamapper.Field('last_name')
@@ -146,16 +156,16 @@ DataMapper functions
 A DataMapper supports several methods:
 
 ``_reduce()`` will reduce the instance to its serialisable state, returning a
-dict representation of the DataMapper.
+dict representation of the `DataMapper`.
 
-``_patch(data)`` will partially update (patch) a DataMapper's fields with the
+``_patch(data)`` will partially update (patch) a `DataMapper`'s fields with the
 values you pass in the data dict. If validation fails it will raise a
-ValidationError.
+`ValidationError`.
 
-``_apply(data)`` will fully update (put) a DataMapper's fields with the
+``_apply(data)`` will fully update (put) a `DataMapper`'s fields with the
 values you pass in the data dict. If you don't pass a field in the data dict
 it will try to set the field to the default value. If there is no default and
-the field is required it will raise a ValidationError.
+the field is required it will raise a `ValidationError`.
 
 ``_clean(data, full=True)`` is a hook for final pass validation. It allows you
 to define your own custom cleaning code. You should update the ``self._errors``
@@ -165,7 +175,7 @@ dict. The ``full`` boolean indicates if the calling method was ``_apply``
 Here is some code to explain how these concepts work. We will continue to use
 the Person class and PersonMapper class defined above.
 
-Note that these methods only update its fields of he model instance. You will
+Note that these methods only update the fields of the model instance. You will
 need to call save() yourself to commit changes to the database.
 
 Using _reduce:
@@ -212,14 +222,39 @@ Using _clean:
 
 .. code-block:: python
 
-    # Todo
+    class DeadPersonMapper(PersonMapper):
+        def _clean(self):
+            if self.is_alive:
+                raise ValidationError("Only dead people accepted to the morgue.")
 
+    m = DeadPersonMapper()
+    m._apple({'last_name': 'Doe', 'first_name': 'John', 'is_alive': True})
+
+    # ValidationError
+
+Shortcuts
+---------
+
+As a convenience, DataMappers support two shorthand syntaxes:
+
+.. code-block:: python
+
+   >>> data = mapper << obj
+
+This will bind the mapper to the obj, and then call ``_reduce``.
+
+.. code-block:: python
+
+   >>> obj = data >> mapper
+
+This will call ``_patch`` on the mapper, passing data, and returning the
+updated object.
 
 ModelDataMappers
 ================
 
 A ModelDataMapper will automatically create a DataMapper for a Django model. A
-ModelDataMapper behaves very similar to a Django ModelForm, you use it by
+ModelDataMapper behaves very similar to a Django ModelForm, you control it by
 setting some fields in an inner Meta class.
 
 The fields that can be set are:
@@ -276,8 +311,8 @@ Here is the PersonMapper rewritten to use a ModelDataMapper:
             model = models.Person
             fields = '__all__'
 
-You can still use the `property` built-in to get/set properties and fields on
-a ModelDataMapper. This is useful when the model contains some properties that
+You can still use `field` to get/set properties and fields on a
+ModelDataMapper. This is useful when the model contains some properties that
 the ModelDataMapper cannot understand, or when you want to customise how
 certain fields are represented.
 

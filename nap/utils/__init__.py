@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 import json
 from cgi import parse_header, parse_multipart
 
-from django.conf import settings
 from django.http import QueryDict
 from django.utils import six
 
@@ -43,6 +42,7 @@ class JsonMixin(object):
 
     def get_request_data(self, default=None):
         '''Retrieve data from request'''
+        from django.conf import settings
         c_type, c_data = parse_header(self.request.META.get('CONTENT_TYPE', ''))
         encoding = self.request.encoding or settings.DEFAULT_CHARSET
 

@@ -60,9 +60,9 @@ urls.py
 
     from .publishers import PostPublisher
 
-    urlpatterns = patterns('',
+    urlpatterns = [
         (r'^api/', include(PostPublisher.patterns())),
-    )
+    ]
 
 
 Case 2: Login View
