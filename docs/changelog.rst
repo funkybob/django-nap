@@ -6,6 +6,12 @@ Changelog
 Current
 -------
 
+v0.20.1 (2017-05-04) ... be with you!
+
+Bug Fixes:
+
+- Remove `default_app_config` [Thanks nkuttler]
+
 v0.20.0 (2017-04-24)
 ====================
 
