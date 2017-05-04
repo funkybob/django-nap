@@ -246,3 +246,19 @@ class GatewayTimeout(HttpResponseServerError):
 
 class HttpVersiontNotSupported(HttpResponseServerError):
     status_code = STATUS.HTTP_VERSION_NOT_SUPPORTED
+
+
+#
+# decorator to make view functions honor exceptional responses
+#
+
+class except_response:
+    def __init__(self, func):
+        self.func = func
+
+    def __call__(self, request, *args, **kwargs):
+        try:
+            return self.func(request, *args, **kwargs)
+        except BaseHttpResponse as resp:
+            return resp
+
