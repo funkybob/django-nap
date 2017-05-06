@@ -1,8 +1,5 @@
 
 from django.http import StreamingHttpResponse
-from django.utils.encoding import force_text
-
-from nap.datamapper import ModelDataMapper
 
 from .simplecsv import Writer
 
@@ -31,14 +28,14 @@ class ExportCsv(object):
         if prefetch_related:
             queryset = queryset.prefetch_related(*prefetch_related)
 
-        def inner(ser):
-            csv = Writer(fields=self.opts.get('fields', ser._fields.keys()))
+        def inner():
+            csv = Writer(fields=self.opts.get('fields', mapper._fields.keys()))
             yield csv.write_headers()
             for obj in queryset:
                 data = mapper << obj
                 yield csv.write_dict(data)
 
-        response = StreamingHttpResponse(inner(ser_class()), content_type='text/csv')
+        response = StreamingHttpResponse(inner(), content_type='text/csv')
         filename = self.opts.get('filename', 'export_{classname}.csv')
         if callable(filename):
             filename = filename(admin)

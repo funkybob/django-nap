@@ -261,4 +261,3 @@ class except_response:
             return self.func(request, *args, **kwargs)
         except BaseHttpResponse as resp:
             return resp
-

@@ -94,7 +94,7 @@ class MapperMixin(JsonMixin):
 
         If `mapper` is not passed, it will try to use `self.mapper`.  If
         `self.mapper` is not set, it will call `self.get_mapper()`.
-        
+
         Returns a `self.response_class` instance, passed a list of ``mapper <<
         obj`` applied to each object, along with `**kwargs`.
         '''
