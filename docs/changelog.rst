@@ -6,6 +6,17 @@ Changelog
 Current
 -------
 
+v0.20.2 (2017-??-??)
+====================
+
+Bug Fixes:
+
+- Handle None values properly in ModelFilter
+
+-------
+History
+-------
+
 v0.20.1 (2017-05-06)
 ====================
 
@@ -14,10 +25,6 @@ Enhancements:
 - Added `nap.http.except_response` decorator to handle exceptional responses in
   view functions.
 - Finished updating `nap.extras.actions.ExportCsv` to work with DataMappers.
-
--------
-History
--------
 
 v0.20.1 (2017-05-04) ... be with you!
 =====================================
