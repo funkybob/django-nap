@@ -126,4 +126,4 @@ class ModelFilter(filters.Filter):
             raise ValidationError('Not a valid pk for {}: {}'.format(self.queryset.model._meta.verbose_name, value))
 
     def from_python(self, value):
-        return None if value is None else value.pk
+        return None if (value is None or value is NOT_PROVIDED) else value.pk
