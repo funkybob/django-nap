@@ -6,16 +6,30 @@ Changelog
 Current
 -------
 
+v0.21.0 (2017-05-??)
+====================
+
+.. admonition:: Support for Django 1.7 is no longer tested.
+
+Enhancements:
+
+- Added `readonly` attribute to `DataMapper.field`
+- Added `readonly` list to `ModelDataMapper.Meta`
+
+Bug Fixes:
+
+- Corrected `DataMapper` to work as documented for ``obj = data << dm``
+
+-------
+History
+-------
+
 v0.20.3 (2017-05-09)
 ====================
 
 Bug Fixes:
 
 - Handle None values properly in ModelFilter
-
--------
-History
--------
 
 v0.20.2 (2017-05-06)
 ====================

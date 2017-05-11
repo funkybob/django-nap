@@ -87,6 +87,7 @@ For simple cases where the descriptor protocol is overkill.
    :param default: The value to use if the source value is absent.
    :param filters: The filters to apply. Default: None
    :param required: Is this field required? Default: True
+   :param readonly: Can the field be updated? Default: True
 
 
 DigField
@@ -281,6 +282,10 @@ The fields that can be set are:
       Default: {}
       The list of overrides of default required values for fields inferred from
       the model.  It does not influence @field declarations.
+
+   .. attribute:: readonly
+      The list of fields which are read only.
+      Must not conflict with `required`.
 
 You can rewrite the DataMapper so that it subclasses ModelDataMapper. Here's a
 new Person object that subclasses Django's models.Model:
