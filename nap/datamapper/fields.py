@@ -55,11 +55,14 @@ class Field(field):
         foo = Field('bar', default=1)
     '''
     def __init__(self, name, default=NOT_PROVIDED, filters=None,
-                 required=True):
+                 required=True, readonly=False):
         self.name = name
         self.default = default
         self.filters = filters or []
+        if readonly and required:
+            raise ValueError("Field can not be both readonly and required.")
         self.required = required
+        self.readonly = readonly
 
     def __get__(self, instance, cls=None):
         if instance is None:
@@ -79,6 +82,9 @@ class Field(field):
 
 
 class DigField(Field):
+    def __init__(self, *args, **kargs):
+        kwargs.setdefault('readonly', True)
+        super(DigField, self).__init__(*args, **kwargs)
 
     def __get__(self, instance, cls=None):
         if instance is None:

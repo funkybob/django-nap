@@ -1,5 +1,4 @@
 
-from collections import defaultdict
 from inspect import classify_class_attrs
 
 from django.core.exceptions import ValidationError
@@ -52,7 +51,7 @@ class DataMapper(with_metaclass(MetaMapper)):
         self._obj = other
         return self._reduce()
 
-    def __rlshift__(self, other):
+    def __rrshift__(self, other):
         '''
         Allow implicit patch using:
 
@@ -85,9 +84,11 @@ class DataMapper(with_metaclass(MetaMapper)):
         Update an instance from supplied data.
         '''
 
-        errors = defaultdict(list)
+        self._errors = errors = {}
 
         for name in self._field_names:
+            if self._field[name].readonly:
+                continue
             try:
                 value = data[name]
             except KeyError:
@@ -95,9 +96,7 @@ class DataMapper(with_metaclass(MetaMapper)):
             try:
                 setattr(self, name, value)
             except ValidationError as e:
-                errors[name].append(e)
-
-        self._errors = dict(errors)
+                errors.setdefault(name, []).append(e)
 
         # Allow a final pass of cleaning
         self._clean(data, full=False)
@@ -114,9 +113,12 @@ class DataMapper(with_metaclass(MetaMapper)):
         All fields marked required=True MUST be provided.
         All fields omitted will have their default used, if provided.
         '''
-        errors = defaultdict(list)
+        self._errors = errors = {}
 
         for name in self._field_names:
+            if self._field[name].readonly:
+                continue
+
             required = getattr(self._fields[name], 'required', True)
             default = getattr(self._fields[name], 'default', NOT_PROVIDED)
 
@@ -125,7 +127,7 @@ class DataMapper(with_metaclass(MetaMapper)):
             except KeyError:
                 if required:
                     if default is NOT_PROVIDED:
-                        errors[name].append(
+                        errors.setdefault(name, []).append(
                             ValidationError('This field is required')
                         )
                         continue
@@ -137,9 +139,7 @@ class DataMapper(with_metaclass(MetaMapper)):
             try:
                 setattr(self, name, value)
             except ValidationError as e:
-                errors[name].append(e)
-
-        self._errors = dict(errors)
+                errors.setdefault(name, []).append(e)
 
         # Allow a final pass of cleaning
         self._clean(data, full=True)

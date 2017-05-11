@@ -19,14 +19,6 @@ FIELD_FILTERS = {
 }
 
 
-if VERSION < (1, 8):
-    def is_relfield(field):
-        return field.rel.to if field.rel else None
-else:
-    def is_relfield(field):
-        return field.related_model if field.is_relation else None
-
-
 class Options(object):
     def __init__(self, meta):
         self.model = getattr(meta, 'model', None)
@@ -36,6 +28,7 @@ class Options(object):
         self.fields = fields
         self.exclude = list(getattr(meta, 'exclude', []))
         self.required = getattr(meta, 'required', {})
+        self.readonly = getattr(meta, 'readonly', [])
 
 
 class MetaMapper(BaseMetaMapper):
@@ -62,6 +55,7 @@ class MetaMapper(BaseMetaMapper):
 
                 # XXX Magic for field types
                 kwargs = {}
+                kwargs['readonly'] = not model.editable or model_field.name in meta.readonly
                 if model_field.null is True and model_field.default is NOT_PROVIDED:
                     kwargs['default'] = None
                 else:
@@ -76,9 +70,8 @@ class MetaMapper(BaseMetaMapper):
                 )[:]
                 if not model_field.null:
                     kwargs['filters'].insert(0, filters.NotNullFilter)
-                related_model = is_relfield(model_field)
-                if related_model:
-                    kwargs['filters'].insert(0, ModelFilter(related_model))
+                if model_field.is_relation:
+                    kwargs['filters'].insert(0, ModelFilter(model_field.related_model))
                 attrs[model_field.name] = Field(model_field.name, **kwargs)
 
         attrs['_meta'] = meta
