@@ -55,7 +55,7 @@ class MetaMapper(BaseMetaMapper):
 
                 # XXX Magic for field types
                 kwargs = {}
-                kwargs['readonly'] = not model.editable or model_field.name in meta.readonly
+                kwargs['readonly'] = not model_field.editable or model_field.name in meta.readonly
                 if model_field.null is True and model_field.default is NOT_PROVIDED:
                     kwargs['default'] = None
                 else:

@@ -116,7 +116,7 @@ class DataMapper(with_metaclass(MetaMapper)):
         self._errors = errors = {}
 
         for name in self._field_names:
-            if self._field[name].readonly:
+            if self._fields[name].readonly:
                 continue
 
             required = getattr(self._fields[name], 'required', True)

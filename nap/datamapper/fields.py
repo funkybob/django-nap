@@ -19,6 +19,7 @@ class field(property):
     def __init__(self, *args, **kwargs):
         self.required = kwargs.pop('required', False)
         self.default = kwargs.pop('default', NOT_PROVIDED)
+        self.readonly = kwargs.pop('readonly', False)
         super(field, self).__init__(*args, **kwargs)
 
     def __get__(self, instance, cls=None):
