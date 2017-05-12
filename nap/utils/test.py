@@ -13,19 +13,19 @@ class JsonClient(Client):
 
     def get(self, *args, **kwargs):
         kwargs = self._massage(kwargs)
-        return super(JsonClient, self).get(*args, **kwargs)
+        return super().get(*args, **kwargs)
 
     def post(self, *args, **kwargs):
         kwargs = self._massage(kwargs)
-        return super(JsonClient, self).post(*args, **kwargs)
+        return super().post(*args, **kwargs)
 
     def put(self, *args, **kwargs):
         kwargs = self._massage(kwargs)
-        return super(JsonClient, self).put(*args, **kwargs)
+        return super().put(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
         kwargs = self._massage(kwargs)
-        return super(JsonClient, self).delete(*args, **kwargs)
+        return super().delete(*args, **kwargs)
 
 
 class ApiTestCase(TestCase):

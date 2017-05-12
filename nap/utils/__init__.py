@@ -1,15 +1,7 @@
-from __future__ import unicode_literals
-
 import json
-from cgi import parse_header, parse_multipart
+from cgi import parse_multipart
 
 from django.http import QueryDict
-from django.utils import six
-
-try:
-    from django.core.handlers.wsgi import ISO_8859_1
-except ImportError:  # pre-1.7
-    ISO_8859_1 = str('iso-8859-1')
 
 
 def digattr(obj, attr, default=None):
@@ -31,38 +23,30 @@ def digattr(obj, attr, default=None):
     return obj
 
 
-class JsonMixin(object):
+class JsonMixin:
     '''
     Common methods for handling JSON request data.
     '''
     CONTENT_TYPES = ['application/json', 'text/json']
-
-    JSON_ENCODER = None
     JSON_DECODER = None
 
     def get_request_data(self, default=None):
         '''Retrieve data from request'''
         from django.conf import settings
-        c_type, c_data = parse_header(self.request.META.get('CONTENT_TYPE', ''))
         encoding = self.request.encoding or settings.DEFAULT_CHARSET
 
-        if c_type in self.CONTENT_TYPES:
+        if self.request.content_type in self.CONTENT_TYPES:
             if not self.request.body:
                 return default
             return self.loads(self.request.body.decode(encoding))
 
         if self.request.method in ('PUT', 'PATCH'):
-            if c_type == 'application/x-www-form-urlencoded':
+            if self.request.content_type == 'application/x-www-form-urlencoded':
                 return QueryDict(self.request.body, encoding=encoding)
-            elif c_type == 'multipart/form-data':
-                return parse_multipart(self.request.body, c_data)
+            elif self.request.content_type == 'multipart/form-data':
+                return parse_multipart(self.request.body, self.request.content_data)
 
         return self.request.POST
-
-    def dumps(self, data, **kwargs):
-        '''How to parse content that matches our content types list.'''
-        kwargs.setdefault('cls', self.JSON_ENCODER)
-        return json.dumps(data, **kwargs)
 
     def loads(self, data, **kwargs):
         '''Serialise data for responses.'''
@@ -76,7 +60,7 @@ def flatten_errors(errors):
     '''
     return {
         field: [
-            error if isinstance(error, six.string_types) else (
+            error if isinstance(error, str) else (
                 error.message % error.params if error.params else error.message
             )
             for error in errors

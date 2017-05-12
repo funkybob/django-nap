@@ -1,10 +1,10 @@
-from nap.datamapper.models import ModelDataMapper
+from nap.mapper import ModelMapper
 from nap.rest import views
 
 from .models import Poll
 
 
-class PollMapper(ModelDataMapper):
+class PollMapper(ModelMapper):
     class Meta:
         model = Poll
         fields = ['question', 'pub_date']

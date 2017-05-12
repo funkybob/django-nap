@@ -1,5 +1,5 @@
 
-class Writer(object):
+class Writer:
     '''
     A generator friendly, unicode aware CSV encoder class built for speed.
 

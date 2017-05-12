@@ -2,11 +2,11 @@
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 
-from nap.datamapper import DataMapper, field, Field
-from nap.datamapper.filters import NotNullFilter, BooleanFilter, IntegerFilter
+from nap.mapper import Mapper, field, Field
+from nap.mapper.filters import NotNullFilter, BooleanFilter, IntegerFilter
 
 
-class TestMapper(DataMapper):
+class TestMapper(Mapper):
     @field
     def readonly(self):
         return True
@@ -52,7 +52,7 @@ class MapperTest(TestCase):
             m._apply({})
 
     def test_004_validation_error_params(self):
-        class DM(DataMapper):
+        class DM(Mapper):
             @field
             def f(self):
                 return None
@@ -74,7 +74,7 @@ class MapperTest(TestCase):
 class FilterTest(TestCase):
 
     def test_000_not_null(self):
-        class DM(DataMapper):
+        class DM(Mapper):
             f = Field('f', filters=[NotNullFilter])
             g = Field('g', filters=[NotNullFilter])
 
@@ -84,7 +84,7 @@ class FilterTest(TestCase):
             m._apply({'f': None, 'g': 1})
 
     def test_001_boolean(self):
-        class DM(DataMapper):
+        class DM(Mapper):
             f = Field('f', filters=[BooleanFilter])
             g = Field('g', filters=[BooleanFilter])
             h = Field('h', filters=[BooleanFilter])
@@ -102,7 +102,7 @@ class FilterTest(TestCase):
         self.assertTrue(m._obj.h is None)
 
     def test_002_integer(self):
-        class DM(DataMapper):
+        class DM(Mapper):
             f = Field('f', filters=[IntegerFilter])
             g = Field('g', filters=[IntegerFilter])
             h = Field('h', filters=[IntegerFilter])

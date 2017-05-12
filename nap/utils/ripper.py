@@ -2,7 +2,7 @@ from collections import namedtuple
 from operator import attrgetter
 
 
-class Ripper(object):
+class Ripper:
     '''
     Extremely light-weight serialiser for very simple cases.
 

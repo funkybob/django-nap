@@ -1,12 +1,10 @@
 
-from django import VERSION
 from django.core.exceptions import ValidationError
 from django.db.models.fields import NOT_PROVIDED
-from django.utils.six import with_metaclass
 
 from . import filters
+from .base import Mapper, MetaMapper as BaseMetaMapper
 from .fields import Field
-from .mappers import DataMapper, MetaMapper as BaseMetaMapper
 
 # Map of ModelField name -> list of filters
 FIELD_FILTERS = {
@@ -19,7 +17,7 @@ FIELD_FILTERS = {
 }
 
 
-class Options(object):
+class Options:
     def __init__(self, meta):
         self.model = getattr(meta, 'model', None)
         fields = getattr(meta, 'fields', [])
@@ -37,12 +35,13 @@ class MetaMapper(BaseMetaMapper):
         meta = Options(attrs.get('Meta', None))
 
         if meta.model is None:
-            if name not in ['NewBase', 'ModelDataMapper']:
+            if name != 'ModelMapper':
                 raise ValueError('model not defined on class Meta')
         else:
-            # XXX Does the top base have all fields?
+            existing = dict(bases[0]._fields)
 
             for model_field in meta.model._meta.fields:
+                # Don't auto-add fields defined on this class
                 if model_field.name in attrs:
                     continue
                 if model_field.name in meta.exclude:
@@ -55,8 +54,14 @@ class MetaMapper(BaseMetaMapper):
 
                 # XXX Magic for field types
                 kwargs = {}
-                kwargs['readonly'] = not model_field.editable or model_field.name in meta.readonly
-                if model_field.null is True and model_field.default is NOT_PROVIDED:
+                kwargs['readonly'] = (
+                    not model_field.editable
+                    or model_field.name in meta.readonly
+                )
+                if(
+                    model_field.null is True
+                    and model_field.default is NOT_PROVIDED
+                ):
                     kwargs['default'] = None
                 else:
                     kwargs['default'] = model_field.default
@@ -73,18 +78,19 @@ class MetaMapper(BaseMetaMapper):
                 if model_field.is_relation:
                     kwargs['filters'].insert(0, ModelFilter(model_field.related_model))
                 attrs[model_field.name] = Field(model_field.name, **kwargs)
-
+            # Inherit
+            attrs = dict(existing, **attrs)
         attrs['_meta'] = meta
 
-        return super(MetaMapper, mcs).__new__(mcs, name, bases, attrs)
+        return super().__new__(mcs, name, bases, attrs)
 
 
-class ModelDataMapper(with_metaclass(MetaMapper, DataMapper)):
+class ModelMapper(Mapper, metaclass=MetaMapper):
 
     def __init__(self, obj=None, **kwargs):
         if obj is None:
             obj = self._meta.model()
-        super(ModelDataMapper, self).__init__(obj, **kwargs)
+        super().__init__(obj, **kwargs)
 
     def __irshift__(self, other):
         '''
@@ -116,7 +122,10 @@ class ModelFilter(filters.Filter):
         try:
             return self.queryset.get(pk=value)
         except self.queryset.model.DoesNotExist:
-            raise ValidationError('Not a valid pk for {}: {}'.format(self.queryset.model._meta.verbose_name, value))
+            raise ValidationError('Not a valid pk for {}: {}'.format(
+                self.queryset.model._meta.verbose_name,
+                value
+            ))
 
     def from_python(self, value):
         return None if (value is None or value is NOT_PROVIDED) else value.pk

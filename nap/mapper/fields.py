@@ -14,13 +14,13 @@ class field(property):
         '''
         if not args:
             return partial(field, **kwargs)
-        return super(field, cls).__new__(cls, *args, **kwargs)
+        return super().__new__(cls, *args, **kwargs)
 
     def __init__(self, *args, **kwargs):
         self.required = kwargs.pop('required', False)
         self.default = kwargs.pop('default', NOT_PROVIDED)
         self.readonly = kwargs.pop('readonly', False)
-        super(field, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def __get__(self, instance, cls=None):
         if instance is None:
@@ -36,7 +36,7 @@ class field(property):
 class context_field(field):
     '''Special case of field that allows access to the Mapper itself'''
     def __init__(self, *args, **kwargs):
-        super(context_field, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.context = kwargs
 
     def __get__(self, instance, cls=None):
@@ -52,7 +52,7 @@ class context_field(field):
 
 class Field(field):
     '''
-    class V(DataMapper):
+    class V(Mapper):
         foo = Field('bar', default=1)
     '''
     def __init__(self, name, default=NOT_PROVIDED, filters=None,
@@ -83,28 +83,25 @@ class Field(field):
 
 
 class DigField(Field):
-    def __init__(self, *args, **kargs):
+    def __init__(self, *args, **kwargs):
         kwargs.setdefault('readonly', True)
-        super(DigField, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def __get__(self, instance, cls=None):
         if instance is None:
             return self
         return digattr(instance._obj, self.name, self.default)
 
-    def __set__(self, instance, value):
-        raise NotImplementedError
-
 
 class MapperField(Field):
     def __init__(self, *args, **kwargs):
         self.mapper = kwargs.pop('mapper')
-        super(MapperField, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def __get__(self, instance, cls=None):
         if instance is None:
             return self
-        value = super(MapperField, self).__get__(instance, cls)
+        value = super().__get__(instance, cls)
         mapper = self.mapper()
         return mapper << value
 

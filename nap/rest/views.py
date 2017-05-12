@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 from django.core.exceptions import ValidationError
 from django.views.generic import View
 from django.views.generic.detail import SingleObjectMixin
@@ -22,14 +20,14 @@ class NapView(View):
         return it.
         '''
         try:
-            return super(NapView, self).dispatch(*args, **kwargs)
+            return super().dispatch(*args, **kwargs)
         except http.BaseHttpResponse as exc:
             return exc
 
 
 class MapperMixin(JsonMixin):
     '''
-    Base class for generating JSON responses using DataMappers.
+    Base class for generating JSON responses using Mappers.
     '''
     response_class = http.JsonResponse
     content_type = 'application/json'
@@ -89,8 +87,8 @@ class MapperMixin(JsonMixin):
         Helper method to return an iterable of objects.
 
         If `object_list` is not passed, it will try to use `self.obect_list`.
-        If `self.object_list` is not set, it will call `self.get_object_list()`.
-
+        If `self.object_list` is not set, it will call
+        `self.get_object_list()`.
 
         If `mapper` is not passed, it will try to use `self.mapper`.  If
         `self.mapper` is not set, it will call `self.get_mapper()`.
@@ -113,27 +111,34 @@ class MapperMixin(JsonMixin):
             for obj in object_list
         ], **kwargs)
 
-    def accepted_response(self):
+    def accepted_response(self, **kwargs):
         '''
-        Shortcut to return an ``empty_response`` using a ``status`` of ``self.accepted_status``.
+        Shortcut to return an ``empty_response`` using a ``status`` of
+        ``self.accepted_status``.
         '''
-        return self.empty_response(status=self.accepted_status)
+        kwargs.setdefault('status', self.accepted_status)
+        return self.empty_response(**kwargs)
 
-    def created_response(self):
+    def created_response(self, **kwargs):
         '''
-        Shortcut to return a ``single_response`` using a ``status`` of ``self.created_status``.
+        Shortcut to return a ``single_response`` using a ``status`` of
+        ``self.created_status``.
         '''
-        return self.single_response(status=self.created_status)
+        kwargs.setdefault('status', self.created_status)
+        return self.single_response(**kwargs)
 
-    def deleted_response(self):
+    def deleted_response(self, **kwargs):
         '''
-        Shortcut to return an ``empty_response`` using a ``status`` of ``self.deleted_status``.
+        Shortcut to return an ``empty_response`` using a ``status`` of
+        ``self.deleted_status``.
         '''
-        return self.empty_response(status=self.deleted_status)
+        kwargs.setdefault('status', self.deleted_status)
+        return self.empty_response(**kwargs)
 
     def error_response(self, errors):
         '''
-        Helper method to return ``self.respone_class`` with a ``status`` of ``self.error_status``.
+        Helper method to return ``self.respone_class`` with a ``status`` of
+        ``self.error_status``.
 
         Will flatten ``errors`` using ``flatten_error``.
         '''
@@ -148,19 +153,20 @@ class ListMixin(MapperMixin, MultipleObjectMixin):
 
     def ok_response(self, **kwargs):
         '''
-        Shortcut to return a ``multiple_response`` with a ``status`` of ``self.ok_status``.
+        Shortcut to return a ``multiple_response`` with a ``status`` of
+        ``self.ok_status``.
         '''
         kwargs.setdefault('status', self.ok_status)
         return self.multiple_response(**kwargs)
 
 
-class ListGetMixin(object):
+class ListGetMixin:
 
     def get(self, request, *args, **kwargs):
         return self.ok_response()
 
 
-class ListPostMixin(object):
+class ListPostMixin:
 
     def post(self, request, *args, **kwargs):
         self.mapper = self.get_mapper(self.model())
@@ -194,13 +200,13 @@ class ObjectMixin(MapperMixin, SingleObjectMixin):
         return self.single_response(**kwargs)
 
 
-class ObjectGetMixin(object):
+class ObjectGetMixin:
 
     def get(self, request, *args, **kwargs):
         return self.ok_response()
 
 
-class ObjectPutMixin(object):
+class ObjectPutMixin:
 
     def put(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -223,7 +229,7 @@ class ObjectPutMixin(object):
         return self.error_response(errors)
 
 
-class ObjectPatchMixin(object):
+class ObjectPatchMixin:
 
     def patch(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -246,7 +252,7 @@ class ObjectPatchMixin(object):
         return self.error_response(errors)
 
 
-class ObjectDeleteMixin(object):
+class ObjectDeleteMixin:
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()

@@ -3,7 +3,6 @@ from inspect import classify_class_attrs
 
 from django.core.exceptions import ValidationError
 from django.db.models.fields import NOT_PROVIDED
-from django.utils.six import with_metaclass
 
 from .fields import field
 from .utils import DictObject
@@ -12,7 +11,7 @@ from .utils import DictObject
 class MetaMapper(type):
 
     def __new__(mcs, name, bases, attrs):
-        new_class = super(MetaMapper, mcs).__new__(mcs, name, bases, attrs)
+        new_class = super().__new__(mcs, name, bases, attrs)
         fields = {
             name: prop
             for name, kind, cls, prop in classify_class_attrs(new_class)
@@ -25,18 +24,18 @@ class MetaMapper(type):
         return new_class
 
 
-class DataMapper(with_metaclass(MetaMapper)):
+class Mapper(metaclass=MetaMapper):
     '''
-    DataMapper class.
+    Mapper class.
 
-    Provides a proxy class for retrieving and updating attributes on your objects.
+    Provides a proxy class for retrieving and updating attributes on your
+    objects.
     '''
     def __init__(self, obj=None, **kwargs):
         '''
         :param: obj Optionally bind to object
         :param: **kwargs Extra context (stored as self._context)
         '''
-
         if obj is None:
             obj = DictObject()
         self._obj = obj

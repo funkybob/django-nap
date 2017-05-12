@@ -3,7 +3,7 @@ import datetime
 from django.core.exceptions import ValidationError
 
 
-class Filter(object):
+class Filter:
     '''
     Provides casting and validation functions for Fields.
     '''
@@ -53,7 +53,7 @@ class FloatFilter(_CastFilter):
     type_class = float
 
 
-class TimeFilter(object):
+class TimeFilter:
     @staticmethod
     def to_python(value):
         if value is None or isinstance(value, datetime.time):
@@ -67,7 +67,7 @@ class TimeFilter(object):
         return value.replace(microsecond=0).isoformat()
 
 
-class DateFilter(object):
+class DateFilter:
     @staticmethod
     def to_python(value):
         if value is None or isinstance(value, datetime.date):
@@ -81,7 +81,7 @@ class DateFilter(object):
         return value.isoformat()
 
 
-class DateTimeFilter(object):
+class DateTimeFilter:
     @staticmethod
     def to_python(value):
         if value is None or isinstance(value, datetime.datetime):
