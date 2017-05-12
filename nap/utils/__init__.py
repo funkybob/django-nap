@@ -1,5 +1,5 @@
 import json
-from cgi import parse_multipart
+from cgi import parse_header, parse_multipart
 
 import django
 from django.http import QueryDict
@@ -36,17 +36,18 @@ class JsonMixin:
         from django.conf import settings
         encoding = self.request.encoding or settings.DEFAULT_CHARSET
 
-        if self.request.content_type in self.CONTENT_TYPES:
+        if django.VERSION < (1, 10):
+            content_type, content_data = parse_header(self.request.META.get('CONTENT_TYPE', ''))
+        else:
+            content_type = self.request.content_type
+            content_data = self.request.content_data
+
+        if content_type in self.CONTENT_TYPES:
             if not self.request.body:
                 return default
             return self.loads(self.request.body.decode(encoding))
 
         if self.request.method in ('PUT', 'PATCH'):
-            if django.VERSION < (1, 10):
-                content_type, content_data = parse_header(self.request.META.get('CONTENT_TYPE', ''))
-            else:
-                content_type = self.request.content_type
-                content_data = self.request.content_data
             if content_type == 'application/x-www-form-urlencoded':
                 return QueryDict(self.request.body, encoding=encoding)
             elif content_type == 'multipart/form-data':
