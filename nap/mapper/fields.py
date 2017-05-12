@@ -83,6 +83,9 @@ class Field(field):
 
 
 class DigField(Field):
+    '''
+    Use digattr to resolve values in a DTL compatible syntax.
+    '''
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('readonly', True)
         super().__init__(*args, **kwargs)
@@ -94,6 +97,11 @@ class DigField(Field):
 
 
 class MapperField(Field):
+    '''
+    A field that passes data through a Mapper.
+
+    Useful for handling nested models.
+    '''
     def __init__(self, *args, **kwargs):
         self.mapper = kwargs.pop('mapper')
         super().__init__(*args, **kwargs)
