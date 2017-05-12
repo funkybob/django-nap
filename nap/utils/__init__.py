@@ -1,7 +1,6 @@
 import json
 from cgi import parse_header, parse_multipart
 
-import django
 from django.http import QueryDict
 
 
@@ -36,11 +35,7 @@ class JsonMixin:
         from django.conf import settings
         encoding = self.request.encoding or settings.DEFAULT_CHARSET
 
-        if django.VERSION < (1, 11):
-            content_type, content_data = parse_header(self.request.META.get('CONTENT_TYPE', ''))
-        else:
-            content_type = self.request.content_type
-            content_data = self.request.content_data
+        content_type, content_data = parse_header(self.request.META.get('CONTENT_TYPE', ''))
 
         if content_type in self.CONTENT_TYPES:
             if not self.request.body:
