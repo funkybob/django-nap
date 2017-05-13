@@ -1,20 +1,10 @@
+import datetime
 
 from django.core.exceptions import ValidationError
 from django.db.models.fields import NOT_PROVIDED
 
-from . import filters
 from .base import Mapper, MetaMapper as BaseMetaMapper
-from .fields import Field
-
-# Map of ModelField name -> list of filters
-FIELD_FILTERS = {
-    'DateField': [filters.DateFilter],
-    'TimeField': [filters.TimeFilter],
-    'DateTimeField': [filters.DateTimeFilter],
-
-    'BooleanField': [filters.BooleanFilter],
-    'IntegerField': [filters.IntegerFilter],
-}
+from .fields import field
 
 
 class Options:
@@ -36,48 +26,42 @@ class MetaMapper(BaseMetaMapper):
 
         if meta.model is None:
             if name != 'ModelMapper':
-                raise ValueError('model not defined on class Meta')
+                raise ValueError('No model defined on class Meta.')
         else:
             existing = dict(bases[0]._fields)
 
-            for model_field in meta.model._meta.fields:
+            for f in meta.model._meta.get_fields():
                 # Don't auto-add fields defined on this class
-                if model_field.name in attrs:
+                if f.name in attrs:
                     continue
-                if model_field.name in meta.exclude:
+                if f.name in meta.exclude:
                     continue
                 if meta.fields != '__all__' and \
-                   model_field.name not in meta.fields:
+                   f.name not in meta.fields:
                     # Ensure model validation is told to exclude this
-                    meta.exclude.append(model_field.name)
+                    meta.exclude.append(f.name)
                     continue
 
                 # XXX Magic for field types
-                kwargs = {}
-                kwargs['readonly'] = (
-                    not model_field.editable
-                    or model_field.name in meta.readonly
-                )
-                if(
-                    model_field.null is True
-                    and model_field.default is NOT_PROVIDED
-                ):
-                    kwargs['default'] = None
+                kwargs = {
+                    'readonly': f.name in meta.readonly or not f.editable,
+                    'default': None if f.null and f.default is NOT_PROVIDED else f.default,
+                    'required': meta.required.get(f.name, not f.blank),
+                }
+
+                field_class = _Field
+                if f.is_relation:
+                    kwargs['model'] = f.related_model
+                    # OneToOneField or ForeignKey
+                    if f.one_to_one or f.many_to_one:
+                        field_class = ToOneField
+                    # M2M on this model
+                    elif f.many_to_many and not f.auto_created:
+                        field_class = ToManyField
                 else:
-                    kwargs['default'] = model_field.default
-                kwargs['required'] = meta.required.get(
-                    model_field.name,
-                    not model_field.blank,
-                )
-                kwargs['filters'] = FIELD_FILTERS.get(
-                    model_field.__class__.__name__,
-                    []
-                )[:]
-                if not model_field.null:
-                    kwargs['filters'].insert(0, filters.NotNullFilter)
-                if model_field.is_relation:
-                    kwargs['filters'].insert(0, ModelFilter(model_field.related_model))
-                attrs[model_field.name] = Field(model_field.name, **kwargs)
+                    field_class = FIELD_MAP.get(f.__class__.__name__, _Field)
+
+                attrs[f.name] = field_class(f.name, **kwargs)
             # Inherit
             attrs = dict(existing, **attrs)
         attrs['_meta'] = meta
@@ -109,23 +93,130 @@ class ModelMapper(Mapper, metaclass=MetaMapper):
                 self._errors.setdefault(k, []).extend(v)
 
 
-class ModelFilter(filters.Filter):
-    def __init__(self, model=None, queryset=None):
-        if model is None and queryset is None:
-            raise ValueError('Must specify either "model" or "queryset".')
-        if queryset:
-            self.queryset = queryset
-        else:
-            self.queryset = model._default_manager.all()
+class _Field(field):
+    def __init__(self, attr, *args, **kwargs):
+        self.attr = attr
+        # self.required = kwargs.pop('required', False)
+        # self.default = kwargs.pop('default', NOT_PROVIDED)
+        # self.readonly = kwargs.pop('readonly', False)
+        super().__init__(*args, **kwargs)
 
-    def to_python(self, value):
-        try:
-            return self.queryset.get(pk=value)
-        except self.queryset.model.DoesNotExist:
-            raise ValidationError('Not a valid pk for {}: {}'.format(
-                self.queryset.model._meta.verbose_name,
-                value
+    def __get__(self, instance, cls=None):
+        if instance is None:
+            return self
+        value = getattr(instance._obj, self.attr, self.default)
+        if value is NOT_PROVIDED:
+            raise AttributeError("'{}' has no attribute '{}'".format(
+                cls.__name__,
+                self.attr,
             ))
+        return self.get(value)
 
-    def from_python(self, value):
-        return None if (value is None or value is NOT_PROVIDED) else value.pk
+    def __set__(self, instance, value):
+        if self.readonly:
+            raise AttributeError('Field {.name} is read-only.'.format(self))
+        value = self.set(value)
+        setattr(instance._obj, self.attr, value)
+
+    def get(self, value):
+        return value
+
+    def set(self, value):
+        return value
+
+
+class BooleanField(_Field):
+    def set(self, value):
+        if value is None:
+            return value
+        if isinstance(value, bool):
+            return value
+        return value.lower() in (1, '1', 't', 'y', 'true')
+
+
+class IntegerField(_Field):
+    def get(self, value):
+        return int(value)
+
+    def set(self, value):
+        return int(value)
+
+
+class FloatField(_Field):
+    def get(self, value):
+        return float(value)
+
+    def set(self, value):
+        return float(value)
+
+
+class TimeField(_Field):
+    def get(self, value):
+        if value is None:
+            return value
+        return value.replace(microsecond=0).isoformat()
+
+    def set(self, value):
+        if value is None or isinstance(value, datetime.time):
+            return value
+            return datetime.datetime.strptime(value, '%H:%M:%S').time()
+
+
+class DateField(_Field):
+    def get(self, value):
+        if value is None:
+            return value
+        return value.isoformat()
+
+    def set(self, value):
+        if value is None or isinstance(value, datetime.date):
+            return value
+        return datetime.datetime.strptime(value, '%Y-%m-%d').date()
+
+
+class DateTimeField(_Field):
+    def get(self, value):
+        if value is None:
+            return value
+        return value.replace(microsecond=0).isoformat(' ')
+
+    def set(self, value):
+        if value is None or isinstance(value, datetime.datetime):
+            return value
+        return datetime.datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
+
+
+class RelatedField(field):
+    mapper = None
+
+    def __init__(self, *args, model=None, mapper=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.related_model = model
+        self.mapper = mapper
+
+
+class ToOneField(RelatedField):
+
+    def get(self, value):
+        if self.mapper:
+            return self.mapper(value)._reduce()
+        return value.pk
+
+    def set(self, value):
+        if self.mapper:
+            return self.mapper() << value
+        return self.model.objects.get(pk=value)
+
+
+class ToManyField(RelatedField):
+    pass
+
+
+FIELD_MAP = {
+    'IntegerField': IntegerField,
+    'FloatField': FloatField,
+    'BooleanField': BooleanField,
+    'DateField': DateField,
+    'TimeField': TimeField,
+    'DateTimeField': DateTimeField,
+}

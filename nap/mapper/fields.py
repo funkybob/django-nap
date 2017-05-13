@@ -50,16 +50,20 @@ class context_field(field):
         return self.fset(self, instance._obj, value)
 
 
+# Generic field properties:
+# - name
+# - default
+# - required
+# - read-only
+
 class Field(field):
     '''
     class V(Mapper):
         foo = Field('bar', default=1)
     '''
-    def __init__(self, name, default=NOT_PROVIDED, filters=None,
-                 required=True, readonly=False):
+    def __init__(self, name, default=NOT_PROVIDED, required=True, readonly=False):
         self.name = name
         self.default = default
-        self.filters = filters or []
         if readonly and required:
             raise ValueError("Field can not be both readonly and required.")
         self.required = required
@@ -69,16 +73,9 @@ class Field(field):
         if instance is None:
             return self
         value = getattr(instance._obj, self.name, self.default)
-        for filt in self.filters:
-            try:
-                value = filt.from_python(value)
-            except (TypeError, ValueError):
-                raise ValidationError('Invalid value')
         return value
 
     def __set__(self, instance, value):
-        for filt in self.filters[::-1]:
-            value = filt.to_python(value)
         setattr(instance._obj, self.name, value)
 
 

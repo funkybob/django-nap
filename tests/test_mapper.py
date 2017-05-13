@@ -3,7 +3,6 @@ from django.test import TestCase
 from django.core.exceptions import ValidationError
 
 from nap.mapper import Mapper, field, Field
-from nap.mapper.filters import NotNullFilter, BooleanFilter, IntegerFilter
 
 
 class TestMapper(Mapper):
@@ -69,55 +68,3 @@ class MapperTest(TestCase):
         with self.assertRaises(ValidationError) as cm:
             m._patch({'f': 'lorem'})
         self.assertEqual(cm.exception.messages, ["foo bar buz"])
-
-
-class FilterTest(TestCase):
-
-    def test_000_not_null(self):
-        class DM(Mapper):
-            f = Field('f', filters=[NotNullFilter])
-            g = Field('g', filters=[NotNullFilter])
-
-        m = DM()
-
-        with self.assertRaises(ValidationError):
-            m._apply({'f': None, 'g': 1})
-
-    def test_001_boolean(self):
-        class DM(Mapper):
-            f = Field('f', filters=[BooleanFilter])
-            g = Field('g', filters=[BooleanFilter])
-            h = Field('h', filters=[BooleanFilter])
-
-        m = DM()
-
-        m._apply({
-            'f': 'False',
-            'g': True,
-            'h': None,
-        })
-
-        self.assertFalse(m._obj.f)
-        self.assertTrue(m._obj.g)
-        self.assertTrue(m._obj.h is None)
-
-    def test_002_integer(self):
-        class DM(Mapper):
-            f = Field('f', filters=[IntegerFilter])
-            g = Field('g', filters=[IntegerFilter])
-            h = Field('h', filters=[IntegerFilter])
-
-        m = DM()
-
-        m._apply({
-            'f': 1,
-            'g': '1',
-            'h': None,
-        })
-
-        self.assertEqual(m._obj.f, 1)
-        self.assertEqual(m._obj.g, 1)
-        self.assertTrue(m._obj.h is None)
-
-        with self.assertRaises(ValidationError):
-            m._apply({'f': 'test'})

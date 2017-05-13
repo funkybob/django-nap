@@ -12,11 +12,16 @@ class MetaMapper(type):
 
     def __new__(mcs, name, bases, attrs):
         new_class = super().__new__(mcs, name, bases, attrs)
-        fields = {
+
+        new_fields = {
             name: prop
             for name, kind, cls, prop in classify_class_attrs(new_class)
             if isinstance(prop, field)
         }
+
+        # Make sure we don't forget fields defined on parents
+        fields = dict(bases[0]._fields) if bases else {}
+        fields.update(new_fields)
 
         new_class._fields = fields
         new_class._field_names = tuple(fields.keys())
@@ -118,8 +123,8 @@ class Mapper(metaclass=MetaMapper):
             if self._fields[name].readonly:
                 continue
 
-            required = getattr(self._fields[name], 'required', True)
-            default = getattr(self._fields[name], 'default', NOT_PROVIDED)
+            required = self._fields[name].required
+            default = self._fields[name].default
 
             try:
                 value = data[name]
