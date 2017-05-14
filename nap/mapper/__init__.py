@@ -1,5 +1,7 @@
-
 from .base import Mapper  # NOQA
-from .fields import DigField, Field, MapperField, context_field, field  # NOQA
+from .fields import (  # NOQA
+    BooleanField, DateField, DateTimeField, DigField, Field, FloatField,
+    IntegerField, MapperField, TimeField, context_field, field,
+)
 from .models import ModelMapper  # NOQA
 from .utils import DictObject  # NOQA

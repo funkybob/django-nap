@@ -1,8 +1,8 @@
 from django.core.exceptions import ValidationError
 from django.db.models.fields import NOT_PROVIDED
 
-from .base import Mapper, MetaMapper as BaseMetaMapper
 from . import fields
+from .base import Mapper, MetaMapper as BaseMetaMapper
 
 
 class Options:
