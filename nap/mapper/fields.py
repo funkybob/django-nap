@@ -1,6 +1,6 @@
+import datetime
 from functools import partial
 
-from django.core.exceptions import ValidationError
 from django.db.models.fields import NOT_PROVIDED
 
 from nap.utils import digattr
@@ -50,33 +50,106 @@ class context_field(field):
         return self.fset(self, instance._obj, value)
 
 
-# Generic field properties:
-# - name
-# - default
-# - required
-# - read-only
-
 class Field(field):
-    '''
-    class V(Mapper):
-        foo = Field('bar', default=1)
-    '''
-    def __init__(self, name, default=NOT_PROVIDED, required=True, readonly=False):
-        self.name = name
-        self.default = default
-        if readonly and required:
-            raise ValueError("Field can not be both readonly and required.")
-        self.required = required
-        self.readonly = readonly
+    def __init__(self, attr, *args, **kwargs):
+        self.attr = attr
+        super().__init__(*args, **kwargs)
 
     def __get__(self, instance, cls=None):
         if instance is None:
             return self
-        value = getattr(instance._obj, self.name, self.default)
-        return value
+        value = getattr(instance._obj, self.attr, self.default)
+        return self.get(value)
 
     def __set__(self, instance, value):
-        setattr(instance._obj, self.name, value)
+        if self.readonly:
+            raise AttributeError('Field {.name} is read-only.'.format(self))
+        value = self.set(value)
+        setattr(instance._obj, self.attr, value)
+
+    def get(self, value):
+        return value
+
+    def set(self, value):
+        return value
+
+
+class BooleanField(Field):
+    def set(self, value):
+        if value is None:
+            return value
+        if isinstance(value, bool):
+            return value
+        return value.lower() in (1, '1', 't', 'y', 'true')
+
+
+class IntegerField(Field):
+    def get(self, value):
+        return int(value)
+
+    def set(self, value):
+        return int(value)
+
+
+class FloatField(Field):
+    def get(self, value):
+        return float(value)
+
+    def set(self, value):
+        return float(value)
+
+
+class TimeField(Field):
+    def get(self, value):
+        if value is None:
+            return value
+        return value.replace(microsecond=0).isoformat()
+
+    def set(self, value):
+        if value is None or isinstance(value, datetime.time):
+            return value
+            return datetime.datetime.strptime(value, '%H:%M:%S').time()
+
+
+class DateField(Field):
+    def get(self, value):
+        if value is None:
+            return value
+        return value.isoformat()
+
+    def set(self, value):
+        if value is None or isinstance(value, datetime.date):
+            return value
+        return datetime.datetime.strptime(value, '%Y-%m-%d').date()
+
+
+class DateTimeField(Field):
+    def get(self, value):
+        if value is None:
+            return value
+        return value.replace(microsecond=0).isoformat(' ')
+
+    def set(self, value):
+        if value is None or isinstance(value, datetime.datetime):
+            return value
+        return datetime.datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
+
+
+class MapperField(Field):
+    '''
+    A field that passes data through a Mapper.
+
+    Useful for handling nested models.
+    '''
+    def __init__(self, *args, **kwargs):
+        self.mapper = kwargs.pop('mapper')
+        super().__init__(*args, **kwargs)
+
+    def get(self, value):
+        return self.mapper() << value
+
+    def set(self, value):
+        return value >> self.mapper()
 
 
 class DigField(Field):
@@ -91,25 +164,3 @@ class DigField(Field):
         if instance is None:
             return self
         return digattr(instance._obj, self.name, self.default)
-
-
-class MapperField(Field):
-    '''
-    A field that passes data through a Mapper.
-
-    Useful for handling nested models.
-    '''
-    def __init__(self, *args, **kwargs):
-        self.mapper = kwargs.pop('mapper')
-        super().__init__(*args, **kwargs)
-
-    def __get__(self, instance, cls=None):
-        if instance is None:
-            return self
-        value = super().__get__(instance, cls)
-        mapper = self.mapper()
-        return mapper << value
-
-    def __set__(self, instance, value):
-        mapper = self.mapper(instance)
-        mapper._update(value, update=True)
