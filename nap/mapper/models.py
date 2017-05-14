@@ -28,7 +28,8 @@ class MetaMapper(BaseMetaMapper):
         else:
             existing = dict(bases[0]._fields)
 
-            for f in meta.model._meta.get_fields():
+            # for f in meta.model._meta.get_fields():
+            for f in meta.model._meta.fields:
                 # Don't auto-add fields defined on this class
                 if f.name in attrs:
                     continue
@@ -40,12 +41,15 @@ class MetaMapper(BaseMetaMapper):
                     meta.exclude.add(f.name)
                     continue
 
-                # XXX Magic for field types
+                # Magic for field types
                 kwargs = {
                     'readonly': f.name in meta.readonly or not f.editable,
-                    'default': None if f.null and f.default is NOT_PROVIDED else f.default,
                     'required': meta.required.get(f.name, not f.blank),
                 }
+                if f.null and getattr(f, 'default', NOT_PROVIDED) is NOT_PROVIDED:
+                    kwargs['default'] = None
+                else:
+                    kwargs['default'] = f.default
 
                 if f.is_relation:
                     kwargs['model'] = f.related_model
@@ -90,7 +94,7 @@ class ModelMapper(Mapper, metaclass=MetaMapper):
                 self._errors.setdefault(k, []).extend(v)
 
 
-class RelatedField(fields.field):
+class RelatedField(fields.Field):
     mapper = None
 
     def __init__(self, *args, model=None, mapper=None, **kwargs):
@@ -113,7 +117,11 @@ class ToOneField(RelatedField):
 
 
 class ToManyField(RelatedField):
-    pass
+
+    def get(self, value):
+        if self.mapper:
+            m = mapper()
+            return [ m << obj for obj in iter(value) ]
 
 
 FIELD_MAP = {
