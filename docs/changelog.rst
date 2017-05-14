@@ -9,7 +9,19 @@ Current
 v0.21.0 (2017-05-??)
 ====================
 
-.. admonition:: Support for Django 1.7 is no longer tested.
+.. admonition:: Python and Django version support change
+
+   Support for Python2 has been dropped.
+
+   Support for Django 1.7 is no longer tested.
+
+.. warning:: API Breakage
+
+   Another large code reorganisation was undertaken.
+   `DataMapper` has been renamed to `Mapper`, and large amounts of its cod
+   have been rewritten.
+
+   Filters are no longer supported.
 
 Enhancements:
 
@@ -700,4 +712,3 @@ v0.1
 Enhancements:
 
 + Initial release, fraught with bugs :)
-

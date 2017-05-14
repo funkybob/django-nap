@@ -1,28 +1,29 @@
 Quick Start
 ===========
 
-Nap REST views work by combining DataMappers with composible Class-Based Views.
+Nap REST views work by combining Mappers with composible Class-Based Views.
 
 Let's see how you might got about providng an API for the Poll example from the
 Django tutorial.
 
-DataMapper/Views Quick Start
-----------------------------
+Mapper/Views Quick Start
+------------------------
 
-1. Create a DataMapper for your Model in mappers.py
+1. Create a Mapper for your Model in mappers.py
 
 This is very much like defining a ModelForm.
 
 .. code-block:: python
 
-    from nap import datamapper
+    from nap import mapper
 
     from . import models
 
 
-    class QuestionMapper(datamapper.ModelDataMapper):
+    class QuestionMapper(mapper.ModelMapper):
         class Meta:
             model = models.Question
+            fields = '__all__'
 
 2. Create some views in rest_views.py
 

@@ -6,7 +6,7 @@ Subpackages
 
 .. toctree::
 
-    nap.datamapper
+    nap.mapper
     nap.extras
     nap.rest
     nap.rpc

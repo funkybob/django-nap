@@ -1,10 +1,10 @@
-==============
-DataMapper API
-==============
+==========
+Mapper API
+==========
 
 All properties and methods are prefixed with _ to avoid polluting the namespace for your public fields.
 
-.. class:: DataMapper(obj=None, \**kwargs)
+.. class:: Mapper(obj=None, \**kwargs)
 
    .. attribute:: _fields
 
