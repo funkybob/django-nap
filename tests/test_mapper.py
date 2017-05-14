@@ -6,7 +6,7 @@ from nap.mapper import Mapper, field, Field
 
 
 class TestMapper(Mapper):
-    @field
+    @field(readonly=True)
     def readonly(self):
         return True
 
@@ -89,3 +89,11 @@ class MapperTest(TestCase):
 
         self.assertEqual(dp, {'f': 1})
         self.assertEqual(dc, {'f': 1, 'g': 2})
+
+    def test_006_shortcuts(self):
+        o = TestObj(value=0)
+        m = TestMapper(o)
+
+        oo = {'value': 1} >> m
+        self.assertTrue(o is oo)
+        self.assertEqual(o.value, 1)

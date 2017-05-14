@@ -61,7 +61,8 @@ class Mapper(metaclass=MetaMapper):
 
         >>> obj = data >> mapper
         '''
-        return self._patch(other)
+        self._patch(other)
+        return self._obj
 
     def _reduce(self):
         '''
