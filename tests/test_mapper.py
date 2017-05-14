@@ -68,3 +68,24 @@ class MapperTest(TestCase):
         with self.assertRaises(ValidationError) as cm:
             m._patch({'f': 'lorem'})
         self.assertEqual(cm.exception.messages, ["foo bar buz"])
+
+    def test_005_inheritance(self):
+        class Parent(Mapper):
+            @field
+            def f(self):
+                return self.f
+
+        class Child(Parent):
+            @field
+            def g(self):
+                return self.g
+
+        o = TestObj(f=1, g=2)
+        p = Parent(o)
+        c = Child(o)
+
+        dp = p << o
+        dc = c << o
+
+        self.assertEqual(dp, {'f': 1})
+        self.assertEqual(dc, {'f': 1, 'g': 2})
