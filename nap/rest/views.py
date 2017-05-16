@@ -182,10 +182,10 @@ class ListPostMixin:
     def post_invalid(self, errors):
         return self.error_response(errors)
 
-    def post_valid(self):
+    def post_valid(self, **kwargs):
         self.object.save()
 
-        return self.created_response()
+        return self.created_response(**kwargs)
 
 
 class BaseListView(ListMixin, NapView):
@@ -221,9 +221,9 @@ class ObjectPutMixin:
 
         return self.put_valid()
 
-    def put_valid(self):
+    def put_valid(self, **kwargs):
         self.object.save()
-        return self.ok_response()
+        return self.ok_response(**kwargs)
 
     def put_invalid(self, errors):
         return self.error_response(errors)
@@ -244,9 +244,9 @@ class ObjectPatchMixin:
 
         return self.patch_valid()
 
-    def patch_valid(self):
+    def patch_valid(self, **kwargs):
         self.object.save()
-        return self.ok_response()
+        return self.ok_response(**kwargs)
 
     def patch_invalid(self, errors):
         return self.error_response(errors)
