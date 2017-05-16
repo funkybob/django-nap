@@ -25,12 +25,18 @@ v0.30.0 (2017-05-??)
 
 Enhancements:
 
-- Added `readonly` attribute to `DataMapper.field`
-- Added `readonly` list to `ModelDataMapper.Meta`
+- Added `readonly` attribute to `Mapper.field`
+- Added `readonly` list to `ModelMapper.Meta`
+- All `MapperMixin.*_response` methods now accept kwargs, and try to
+  `setdefault` their default behaviour in it.
+- In PUT/POST REST views, the `*_valid` methods now accept kwargs and pass them
+  to their response class.
+- Added RPC Client example code.
+- Dropped deprecated test class.
 
 Bug Fixes:
 
-- Corrected `DataMapper` to work as documented for ``obj = data << dm``
+- Corrected `Mapper` to work as documented for ``obj = data << dm``
 
 -------
 History
