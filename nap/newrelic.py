@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 from newrelic.agent import (
     FunctionTrace, ObjectWrapper, callable_name, current_transaction,
     set_transaction_name,

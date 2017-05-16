@@ -39,7 +39,7 @@ Contents:
 
    quickstart
    ref/modules
-   datamapper/index
+   mapper/index
    rest/index
    rpc/index
    extras/index
@@ -54,4 +54,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-

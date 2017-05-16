@@ -1,18 +1,17 @@
-from __future__ import unicode_literals
 
+import http.client
 import re
 from collections import OrderedDict
+from urllib.parse import urlparse
 
 from django.core.exceptions import SuspiciousOperation
 from django.http import Http404, HttpResponse, JsonResponse  # NOQA
 from django.utils.encoding import iri_to_uri
-from django.utils.six.moves import http_client
-from django.utils.six.moves.urllib.parse import urlparse
 
 '''Add some missing HttpResponse sub-classes'''
 
 
-STATUS_CODES = list(http_client.responses.items()) + [
+STATUS_CODES = list(http.client.responses.items()) + [
     (308, 'PERMANENT REDIRECT'),
     (427, 'BAD GEOLOCATION'),
 ]
@@ -73,10 +72,10 @@ class HttpResponseRedirection(BaseHttpResponse):
     '''A base class for all 3xx responses.'''
 
 
-class LocationHeaderMixin(object):
+class LocationHeaderMixin:
     '''Many 3xx responses require a Location header'''
     def __init__(self, location, *args, **kwargs):
-        super(LocationHeaderMixin, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         parsed = urlparse(location)
         if parsed.scheme and parsed.scheme not in self.allowed_schemes:
             raise SuspiciousOperation(
@@ -158,7 +157,7 @@ class NotFound(HttpResponseClientError):
 
 class MethodNotAllowed(HttpResponseClientError):
     def __init__(self, permitted_methods, *args, **kwargs):
-        super(MethodNotAllowed, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self['Allow'] = ', '.join(permitted_methods)
 
     status_code = STATUS.METHOD_NOT_ALLOWED

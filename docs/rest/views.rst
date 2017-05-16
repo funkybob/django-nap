@@ -35,7 +35,7 @@ Base Classes
 
    .. attribute:: mapper_class
 
-      You must set this to the :class:`DataMapper` to use when processing
+      You must set this to the :class:`Mapper` to use when processing
       requests and responses.
 
    .. attribute:: ok_status
@@ -158,7 +158,7 @@ methods for the Poll model:
 
 .. code-block:: python
 
-   from nap.datamapper.models import ModelDataMapper
+   from nap.mapper import ModelMapper
    from nap.rest.views import (
        ObjectGetMixin, ObjectPutMixin, ObjectPatchMixin, ObjectDeleteMixin,
        BaseObjectView,
@@ -167,7 +167,7 @@ methods for the Poll model:
    from .models import Poll
 
 
-   class PollMapper(ModelDataMapper):
+   class PollMapper(ModelMapper):
        class Meta:
            model = Poll
            fields = ['question', 'pub_date']

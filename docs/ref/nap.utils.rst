@@ -12,14 +12,6 @@ nap.utils.ripper module
     :undoc-members:
     :show-inheritance:
 
-nap.utils.test module
----------------------
-
-.. automodule:: nap.utils.test
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 
 Module contents
 ---------------

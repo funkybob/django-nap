@@ -2,12 +2,11 @@
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 
-from nap.datamapper import DataMapper, field, Field
-from nap.datamapper.filters import NotNullFilter, BooleanFilter, IntegerFilter
+from nap.mapper import Mapper, field, Field
 
 
-class TestMapper(DataMapper):
-    @field
+class TestMapper(Mapper):
+    @field(readonly=True)
     def readonly(self):
         return True
 
@@ -52,7 +51,7 @@ class MapperTest(TestCase):
             m._apply({})
 
     def test_004_validation_error_params(self):
-        class DM(DataMapper):
+        class DM(Mapper):
             @field
             def f(self):
                 return None
@@ -70,54 +69,31 @@ class MapperTest(TestCase):
             m._patch({'f': 'lorem'})
         self.assertEqual(cm.exception.messages, ["foo bar buz"])
 
+    def test_005_inheritance(self):
+        class Parent(Mapper):
+            @field
+            def f(self):
+                return self.f
 
-class FilterTest(TestCase):
+        class Child(Parent):
+            @field
+            def g(self):
+                return self.g
 
-    def test_000_not_null(self):
-        class DM(DataMapper):
-            f = Field('f', filters=[NotNullFilter])
-            g = Field('g', filters=[NotNullFilter])
+        o = TestObj(f=1, g=2)
+        p = Parent(o)
+        c = Child(o)
 
-        m = DM()
+        dp = p << o
+        dc = c << o
 
-        with self.assertRaises(ValidationError):
-            m._apply({'f': None, 'g': 1})
+        self.assertEqual(dp, {'f': 1})
+        self.assertEqual(dc, {'f': 1, 'g': 2})
 
-    def test_001_boolean(self):
-        class DM(DataMapper):
-            f = Field('f', filters=[BooleanFilter])
-            g = Field('g', filters=[BooleanFilter])
-            h = Field('h', filters=[BooleanFilter])
+    def test_006_shortcuts(self):
+        o = TestObj(value=0)
+        m = TestMapper(o)
 
-        m = DM()
-
-        m._apply({
-            'f': 'False',
-            'g': True,
-            'h': None,
-        })
-
-        self.assertFalse(m._obj.f)
-        self.assertTrue(m._obj.g)
-        self.assertTrue(m._obj.h is None)
-
-    def test_002_integer(self):
-        class DM(DataMapper):
-            f = Field('f', filters=[IntegerFilter])
-            g = Field('g', filters=[IntegerFilter])
-            h = Field('h', filters=[IntegerFilter])
-
-        m = DM()
-
-        m._apply({
-            'f': 1,
-            'g': '1',
-            'h': None,
-        })
-
-        self.assertEqual(m._obj.f, 1)
-        self.assertEqual(m._obj.g, 1)
-        self.assertTrue(m._obj.h is None)
-
-        with self.assertRaises(ValidationError):
-            m._apply({'f': 'test'})
+        oo = {'value': 1} >> m
+        self.assertTrue(o is oo)
+        self.assertEqual(o.value, 1)

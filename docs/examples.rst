@@ -68,8 +68,8 @@ urls.py
 Case 2: Login View
 ==================
 
-Once you've defined a ``DataMapper`` for your `User` model, you can provide
-this simple Login endpoint:
+Once you've defined a ``Mapper`` for your `User` model, you can provide this
+simple Login endpoint:
 
 .. code-block:: python
 

@@ -1,45 +1,37 @@
-nap.datamapper package
+nap.mapper package
 ======================
 
 Submodules
 ----------
 
-nap.datamapper.fields module
+nap.mapper.fields module
 ----------------------------
 
-.. automodule:: nap.datamapper.fields
+.. automodule:: nap.mapper.fields
     :members:
     :undoc-members:
     :show-inheritance:
 
-nap.datamapper.filters module
+nap.mapper.base module
 -----------------------------
 
-.. automodule:: nap.datamapper.filters
+.. automodule:: nap.mapper.base
     :members:
     :undoc-members:
     :show-inheritance:
 
-nap.datamapper.mappers module
------------------------------
-
-.. automodule:: nap.datamapper.mappers
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-nap.datamapper.models module
+nap.mapper.models module
 ----------------------------
 
-.. automodule:: nap.datamapper.models
+.. automodule:: nap.mapper.models
     :members:
     :undoc-members:
     :show-inheritance:
 
-nap.datamapper.utils module
+nap.mapper.utils module
 ---------------------------
 
-.. automodule:: nap.datamapper.utils
+.. automodule:: nap.mapper.utils
     :members:
     :undoc-members:
     :show-inheritance:
@@ -48,7 +40,7 @@ nap.datamapper.utils module
 Module contents
 ---------------
 
-.. automodule:: nap.datamapper
+.. automodule:: nap.mapper
     :members:
     :undoc-members:
     :show-inheritance:

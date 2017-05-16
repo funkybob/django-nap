@@ -4,7 +4,7 @@ from django.http import StreamingHttpResponse
 from .simplecsv import Writer
 
 
-class ExportCsv(object):
+class ExportCsv:
     '''
     A factory class for Admin Actions to export a model as CSV.
 

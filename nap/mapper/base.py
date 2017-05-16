@@ -3,7 +3,6 @@ from inspect import classify_class_attrs
 
 from django.core.exceptions import ValidationError
 from django.db.models.fields import NOT_PROVIDED
-from django.utils.six import with_metaclass
 
 from .fields import field
 from .utils import DictObject
@@ -12,12 +11,17 @@ from .utils import DictObject
 class MetaMapper(type):
 
     def __new__(mcs, name, bases, attrs):
-        new_class = super(MetaMapper, mcs).__new__(mcs, name, bases, attrs)
-        fields = {
+        new_class = super().__new__(mcs, name, bases, attrs)
+
+        new_fields = {
             name: prop
             for name, kind, cls, prop in classify_class_attrs(new_class)
             if isinstance(prop, field)
         }
+
+        # Make sure we don't forget fields defined on parents
+        fields = dict(bases[0]._fields) if bases else {}
+        fields.update(new_fields)
 
         new_class._fields = fields
         new_class._field_names = tuple(fields.keys())
@@ -25,18 +29,18 @@ class MetaMapper(type):
         return new_class
 
 
-class DataMapper(with_metaclass(MetaMapper)):
+class Mapper(metaclass=MetaMapper):
     '''
-    DataMapper class.
+    Mapper class.
 
-    Provides a proxy class for retrieving and updating attributes on your objects.
+    Provides a proxy class for retrieving and updating attributes on your
+    objects.
     '''
     def __init__(self, obj=None, **kwargs):
         '''
         :param: obj Optionally bind to object
         :param: **kwargs Extra context (stored as self._context)
         '''
-
         if obj is None:
             obj = DictObject()
         self._obj = obj
@@ -57,7 +61,8 @@ class DataMapper(with_metaclass(MetaMapper)):
 
         >>> obj = data >> mapper
         '''
-        return self._patch(other)
+        self._patch(other)
+        return self._obj
 
     def _reduce(self):
         '''
@@ -119,8 +124,8 @@ class DataMapper(with_metaclass(MetaMapper)):
             if self._fields[name].readonly:
                 continue
 
-            required = getattr(self._fields[name], 'required', True)
-            default = getattr(self._fields[name], 'default', NOT_PROVIDED)
+            required = self._fields[name].required
+            default = self._fields[name].default
 
             try:
                 value = data[name]

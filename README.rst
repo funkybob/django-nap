@@ -1,6 +1,5 @@
 django-nap
 ==========
-[![Build Status](https://secure.travis-ci.org/funkybob/django-nap.png?branch=master)](http://travis-ci.org/funkybob/django-nap)
 
 Read The Docs: https://django-nap.readthedocs.io/en/latest/
 
@@ -11,7 +10,7 @@ An API library for Django
 A minimalist approach to object de/serialisers, RESTful views, and RPC views.
 
 Benefits
-========
+--------
 
 1. Modular
 
@@ -30,11 +29,11 @@ Overview
 ========
 
 Installing
-==========
+----------
 
 It is NOT necessary to add nap to your INSTALLED\_APPS.  It does not provide
 models, templates, template tags, or static files.
 
-Tests are currently run for Python 2.7, and 3.3-3.6.
+Tests are currently run for Python 3.3-3.6.
 
-Django versions from 1.7 to 1.11 are known to work.
+Django versions from 1.8 to 1.11 are known to work.

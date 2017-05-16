@@ -36,7 +36,7 @@ class RPCMixin(JsonMixin):
         '''
         method = request.META.get('HTTP_X_RPC_ACTION', None)
         if request.method != 'POST' or method is None:
-            return super(RPCMixin, self).dispatch(request, *args, **kwargs)
+            return super().dispatch(request, *args, **kwargs)
 
         func = getattr(self, method, None)
         if not is_rpc_method(func):
@@ -59,7 +59,7 @@ class RPCMixin(JsonMixin):
 
         Returns introspection data.
         '''
-        response = super(RPCMixin, self).options(request, *args, **kwargs)
+        response = super().options(request, *args, **kwargs)
         if self.permit_introspect:
             response['Content-Type'] = 'application/json'
             response.write(json.dumps(self._introspect()))
