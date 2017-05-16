@@ -6,7 +6,7 @@ Changelog
 Current
 -------
 
-v0.21.0 (2017-05-??)
+v0.30.0 (2017-05-??)
 ====================
 
 .. admonition:: Python and Django version support change
