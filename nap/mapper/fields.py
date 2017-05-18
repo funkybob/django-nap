@@ -20,6 +20,7 @@ class field(property):
         self.required = kwargs.pop('required', False)
         self.default = kwargs.pop('default', NOT_PROVIDED)
         self.readonly = kwargs.pop('readonly', False)
+        self.null = kwargs.pop('null', False)
         super().__init__(*args, **kwargs)
 
     def __get__(self, instance, cls=None):
@@ -110,7 +111,7 @@ class TimeField(Field):
     def set(self, value):
         if value is None or isinstance(value, datetime.time):
             return value
-            return datetime.datetime.strptime(value, '%H:%M:%S').time()
+        return datetime.datetime.strptime(value, '%H:%M:%S').time()
 
 
 class DateField(Field):
