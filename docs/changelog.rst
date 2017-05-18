@@ -6,7 +6,19 @@ Changelog
 Current
 -------
 
-v0.30.0 (2017-05-??)
+v0.30.1 (2017-05-18)
+====================
+
+Bug Fixes:
+- Include null in field constructor
+- Set null correctly in fields on ModelMapper
+- Handle null ForeignKey/OneToOneFields properly
+
+-------
+History
+-------
+
+v0.30.0 (2017-05-16)
 ====================
 
 .. admonition:: Python and Django version support change
@@ -37,10 +49,6 @@ Enhancements:
 Bug Fixes:
 
 - Corrected `Mapper` to work as documented for ``obj = data << dm``
-
--------
-History
--------
 
 v0.20.3 (2017-05-09)
 ====================
