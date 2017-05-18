@@ -9,10 +9,17 @@ Current
 v0.30.1 (2017-05-18)
 ====================
 
+Enhancements:
+- fields will now raise and error when trying to set a value with no setter.
+
 Bug Fixes:
 - Include null in field constructor
 - Set null correctly in fields on ModelMapper
 - Handle null ForeignKey/OneToOneFields properly
+
+Deprecations:
+- Dropped `nap.utils.digattr` and `nap.mapper.fields.DigField`
+- Typed fields no longer special case None
 
 -------
 History
