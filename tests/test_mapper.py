@@ -1,3 +1,4 @@
+from types import SimpleNamespace
 
 from django.test import TestCase
 from django.core.exceptions import ValidationError
@@ -14,16 +15,10 @@ class TestMapper(Mapper):
     required = Field('required', required=True)
 
 
-class TestObj(object):
-    def __init__(self, **kwargs):
-        for k, v in kwargs.items():
-            setattr(self, k, v)
-
-
 class MapperTest(TestCase):
 
     def test_000_assurance(self):
-        o = TestObj(readonly=False, value='foo')
+        o = SimpleNamespace(readonly=False, value='foo')
         m = TestMapper(o)
 
         d = m._reduce()
@@ -80,7 +75,7 @@ class MapperTest(TestCase):
             def g(self):
                 return self.g
 
-        o = TestObj(f=1, g=2)
+        o = SimpleNamespace(f=1, g=2)
         p = Parent(o)
         c = Child(o)
 
@@ -91,7 +86,7 @@ class MapperTest(TestCase):
         self.assertEqual(dc, {'f': 1, 'g': 2})
 
     def test_006_shortcuts(self):
-        o = TestObj(value=0)
+        o = SimpleNamespace(value=0)
         m = TestMapper(o)
 
         oo = {'value': 1} >> m
