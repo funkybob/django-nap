@@ -3,8 +3,6 @@ from functools import partial
 
 from django.db.models.fields import NOT_PROVIDED
 
-from nap.utils import digattr
-
 
 class field(property):
     '''A base class to compare against.'''
@@ -145,17 +143,3 @@ class MapperField(Field):
 
     def set(self, value):
         return value >> self.mapper()
-
-
-class DigField(Field):
-    '''
-    Use digattr to resolve values in a DTL compatible syntax.
-    '''
-    def __init__(self, *args, **kwargs):
-        kwargs.setdefault('readonly', True)
-        super().__init__(*args, **kwargs)
-
-    def __get__(self, instance, cls=None):
-        if instance is None:
-            return self
-        return digattr(instance._obj, self.name, self.default)

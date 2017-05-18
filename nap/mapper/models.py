@@ -1,4 +1,4 @@
-from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models.fields import NOT_PROVIDED
 
 from . import fields
