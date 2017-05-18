@@ -64,6 +64,8 @@ class Field(field):
     def __set__(self, instance, value):
         if self.readonly:
             raise AttributeError('Field {.name} is read-only.'.format(self))
+        if value is None and not self.null:
+            raise ValueError('Field {} may not be None'.format(self.name))
         value = self.set(value)
         setattr(instance._obj, self.attr, value)
 
