@@ -30,7 +30,7 @@ class field(property):
 
     def __set__(self, instance, value):
         if self.fset is None:
-            return
+            raise AttributeError("can't set attribute")
         self.fset(instance._obj, value)
 
 
@@ -64,9 +64,9 @@ class Field(field):
 
     def __set__(self, instance, value):
         if self.readonly:
-            raise AttributeError('Field {.name} is read-only.'.format(self))
+            raise AttributeError('Field is read-only.')
         if value is None and not self.null:
-            raise ValueError('Field {} may not be None'.format(self.name))
+            raise ValueError('Field may not be None')
         value = self.set(value)
         setattr(instance._obj, self.attr, value)
 
@@ -79,8 +79,6 @@ class Field(field):
 
 class BooleanField(Field):
     def set(self, value):
-        if value is None:
-            return value
         if isinstance(value, bool):
             return value
         return value.lower() in (1, '1', 't', 'y', 'true')
@@ -104,36 +102,30 @@ class FloatField(Field):
 
 class TimeField(Field):
     def get(self, value):
-        if value is None:
-            return value
         return value.replace(microsecond=0).isoformat()
 
     def set(self, value):
-        if value is None or isinstance(value, datetime.time):
+        if isinstance(value, datetime.time):
             return value
         return datetime.datetime.strptime(value, '%H:%M:%S').time()
 
 
 class DateField(Field):
     def get(self, value):
-        if value is None:
-            return value
         return value.isoformat()
 
     def set(self, value):
-        if value is None or isinstance(value, datetime.date):
+        if isinstance(value, datetime.date):
             return value
         return datetime.datetime.strptime(value, '%Y-%m-%d').date()
 
 
 class DateTimeField(Field):
     def get(self, value):
-        if value is None:
-            return value
         return value.replace(microsecond=0).isoformat(' ')
 
     def set(self, value):
-        if value is None or isinstance(value, datetime.datetime):
+        if isinstance(value, datetime.datetime):
             return value
         return datetime.datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
 
