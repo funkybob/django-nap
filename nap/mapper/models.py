@@ -1,4 +1,4 @@
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.db.models.fields import NOT_PROVIDED
 
 from . import fields
@@ -45,6 +45,7 @@ class MetaMapper(BaseMetaMapper):
                 kwargs = {
                     'readonly': f.name in meta.readonly or not f.editable,
                     'required': meta.required.get(f.name, not f.blank),
+                    'null': f.null,
                 }
                 if f.null and getattr(f, 'default', NOT_PROVIDED) is NOT_PROVIDED:
                     kwargs['default'] = None
@@ -108,6 +109,8 @@ class ToOneField(RelatedField):
     def get(self, value):
         if self.mapper:
             return self.mapper(value)._reduce()
+        if value is None:
+            return value
         return value.pk
 
     def set(self, value):
