@@ -42,7 +42,7 @@ class ExportCsv:
         else:
             filename = filename.format(
                 classname=admin.__class__.__name__,
-                model=admin.model._meta.module_name,
+                model=admin.model._meta.model_name,
                 app_label=admin.model._meta.app_label,
             )
         response['Content-Disposition'] = 'attachment; filename=%s' % filename
