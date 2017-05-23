@@ -155,3 +155,26 @@ class SingleObjectRestViewTest(TestCase):
         self.assertEqual(response.status_code, STATUS.NO_CONTENT)
         # make sure the poll isn't in the db
         self.assertFalse(Poll.objects.filter(pk=self.poll.pk).exists())
+
+
+class ChoiceListViewTest(TestCase):
+
+    def setUp(self):
+        self.question_data = {
+            'question': 'Default question',
+            'pub_date': '2015-01-01 00:00:00',
+        }
+        self.poll = Poll.objects.create(**self.question_data)
+
+    def test_get(self):
+        response = self.client.get('/rest/polls/{}/choice/'.format(self.poll.pk))
+        self.assertEqual(response.status_code, 200)
+
+    def test_post(self):
+        response = self.client.post('/rest/polls/{}/choice/'.format(self.poll.pk),
+                                    data=json.dumps({
+                                        'choice_text': 'Does this work?',
+                                        'poll': self.poll.pk,
+                                    }),
+                                    content_type='application/json')
+        self.assertEqual(response.status_code, 201)
