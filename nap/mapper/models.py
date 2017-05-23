@@ -1,4 +1,4 @@
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.core.exceptions import ValidationError
 from django.db.models.fields import NOT_PROVIDED
 
 from . import fields
@@ -124,7 +124,7 @@ class ToManyField(RelatedField):
     def get(self, value):
         if self.mapper:
             m = mapper()
-            return [ m << obj for obj in iter(value) ]
+            return [m << obj for obj in iter(value)]
 
 
 FIELD_MAP = {
