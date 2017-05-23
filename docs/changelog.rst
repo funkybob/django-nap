@@ -6,6 +6,19 @@ Changelog
 Current
 -------
 
+v0.30.2 (2017-05-23)
+====================
+
+Enhancements:
+- Began documenting the `extras` module.
+
+Bug Fixes:
+- Fixed ToOneField to reference `self.related_model` not `self.model`
+
+-------
+History
+-------
+
 v0.30.1 (2017-05-18)
 ====================
 
@@ -20,10 +33,6 @@ Bug Fixes:
 Deprecations:
 - Dropped `nap.utils.digattr` and `nap.mapper.fields.DigField`
 - Typed fields no longer special case None
-
--------
-History
--------
 
 v0.30.0 (2017-05-16)
 ====================

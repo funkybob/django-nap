@@ -5,9 +5,9 @@ class Writer:
 
     >>> csv = Writer(fields=['a', 'b', 'c'])
     >>> csv.write_headers()
-    u'a,b,c\n'
+    b'a,b,c\n'
     >>> csv.write([1, '2,', 'c'])
-    u'1,"2,",c\n'
+    b'1,"2,",c\n'
     '''
 
     # What to put between fields

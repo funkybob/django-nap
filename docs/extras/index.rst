@@ -9,3 +9,5 @@ There are some extra tools provided to ease your development of APIs.
 
    http
    newrelic
+   simplecsv
+   actions
