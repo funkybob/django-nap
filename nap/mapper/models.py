@@ -116,7 +116,7 @@ class ToOneField(RelatedField):
     def set(self, value):
         if self.mapper:
             return self.mapper() << value
-        return self.model.objects.get(pk=value)
+        return self.related_model.objects.get(pk=value)
 
 
 class ToManyField(RelatedField):
