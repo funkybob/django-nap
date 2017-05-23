@@ -19,3 +19,5 @@ class ActionTestCase(TestCase):
 
         resp = action(SimpleNamespace(model=models.Choice), None, models.Choice.objects.all())
         output = resp.getvalue()
+        for field in M._fields:
+            self.assertTrue(field in output)
