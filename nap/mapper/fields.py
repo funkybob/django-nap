@@ -31,6 +31,11 @@ class field(property):
             raise AttributeError("can't set attribute")
         self.fset(instance._obj, value)
 
+    def setter(self, func):
+        kwargs = self.__dict__.copy()
+        kwargs.pop('__doc__')
+        return self.__class__(self.fget, func, **kwargs)
+
 
 class context_field(field):
     '''Special case of field that allows access to the Mapper itself'''

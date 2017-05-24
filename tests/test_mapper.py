@@ -92,3 +92,30 @@ class MapperTest(TestCase):
         oo = {'value': 1} >> m
         self.assertTrue(o is oo)
         self.assertEqual(o.value, 1)
+
+    def test_007_required_on_apply(self):
+        class M(Mapper):
+            @field(required=True)
+            def f(self):
+                return self.f
+
+            @f.setter
+            def f(self, value):
+                self.f = value
+
+            @field(required=True, default=0)
+            def g(self):
+                return self.g
+
+            @g.setter
+            def g(self, value):
+                self.g = value
+
+        o = SimpleNamespace(f=0, g=1)
+        m = M(o)
+
+        with self.assertRaises(ValidationError):
+            m._apply({})
+
+        m._apply({'f': 1})
+        self.assertEqual(o.g, 0)
