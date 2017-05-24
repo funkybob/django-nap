@@ -14,6 +14,7 @@ Enhancements:
 
 Bug Fixes:
 - Fixed ToOneField to reference `self.related_model` not `self.model`
+- Using @foo.setter on a field will now retail other keyword arguments.
 
 -------
 History
