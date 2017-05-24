@@ -155,3 +155,20 @@ class FieldTestCase(TestCase):
 
         m.foo = now
         self.assertEqual(o.bar, now)
+
+    def test_context_field(self):
+        class M(Mapper):
+            @fields.context_field(context={'factor': 10})
+            def scaled(self, instance):
+                return instance.value * self.context['factor']
+
+            @scaled.setter
+            def scaled(self, instance, value):
+                instance.value = value // self.context['factor']
+
+        o = SimpleNamespace(value=1)
+        m = M(o)
+
+        self.assertEqual(m.scaled, 10)
+        m.scaled = 20
+        self.assertEqual(o.value, 2)

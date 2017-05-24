@@ -11,7 +11,7 @@ class field(property):
         Allow specifying keyword arguments when used as a decorator.
         '''
         if not args:
-            return partial(field, **kwargs)
+            return partial(cls, **kwargs)
         return super().__new__(cls, *args, **kwargs)
 
     def __init__(self, *args, **kwargs):
@@ -40,8 +40,8 @@ class field(property):
 class context_field(field):
     '''Special case of field that allows access to the Mapper itself'''
     def __init__(self, *args, **kwargs):
+        self.context = kwargs.pop('context', {})
         super().__init__(*args, **kwargs)
-        self.context = kwargs
 
     def __get__(self, instance, cls=None):
         if instance is None:
@@ -50,7 +50,7 @@ class context_field(field):
 
     def __set__(self, instance, value):
         if self.fset is None:
-            return
+            raise AttributeError("can't set attribute")
         return self.fset(self, instance._obj, value)
 
 
