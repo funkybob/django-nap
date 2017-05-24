@@ -1,4 +1,6 @@
-from django.test import TestCase
+from django.test import TestCase, LiveServerTestCase
+
+from nap.rpc import client
 
 import json
 
@@ -49,3 +51,13 @@ class RPCTest(TestCase):
     def test_bad_action(self):
         r = self.call(None, action='bad')
         self.assertEqual(r.status_code, 412)
+
+
+class RPCClientTest(LiveServerTestCase):
+
+    def setUp(self):
+        self.rpc = client.RPCClient(self.live_server_url + '/rpc/')
+
+    def test_echo(self):
+        resp = self.rpc.echo(foo='bar')
+        self.assertEqual(resp, {'foo': 'bar'})
