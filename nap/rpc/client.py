@@ -9,17 +9,14 @@ class RPCProxy:
         self.name = name
 
     def __call__(self, **kwargs):
-        try:
-            resp = self.client.session.post(
-                self.client.endpoint,
-                data=json.dumps(kwargs),
-                headers={
-                    'X-Rpc-Action': self.name,
-                    'Content-Type': 'application/json',
-                },
-            )
-        except:
-            raise
+        resp = self.client.session.post(
+            self.client.endpoint,
+            data=json.dumps(kwargs),
+            headers={
+                'X-Rpc-Action': self.name,
+                'Content-Type': 'application/json',
+            },
+        )
         return resp.json()
 
 
