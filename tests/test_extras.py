@@ -1,6 +1,7 @@
 from types import SimpleNamespace
 
 from django.test import TestCase
+from django.utils import timezone
 
 from . import models
 
@@ -10,10 +11,22 @@ from nap.extras import actions
 
 class ActionTestCase(TestCase):
     def test_smoke(self):
+        poll = models.Poll.objects.create(question='Does this show?', pub_date=timezone.now())
+        models.Choice.objects.create(poll=poll, choice_text='First Choice.')
+
         class M(mapper.ModelMapper):
             class Meta:
                 model = models.Choice
                 fields = '__all__'
+                exclude = ('id',)
+
+            @mapper.field
+            def poll(self):
+                return self.poll.question
+
+            @mapper.field
+            def votes(self):
+                return str(self.votes)
 
         action = actions.ExportCsv(M)
 
