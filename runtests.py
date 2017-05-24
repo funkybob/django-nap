@@ -22,6 +22,7 @@ if not settings.configured:
         ),
         MIDDLEWARE_CLASSES=[],
         ROOT_URLCONF='tests.urls',
+        STATIC_URL='/static/',
     )
 
 

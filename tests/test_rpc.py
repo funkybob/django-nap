@@ -56,7 +56,7 @@ class RPCTest(TestCase):
 class RPCClientTest(LiveServerTestCase):
 
     def setUp(self):
-        self.rpc = client.RPCClient(self.live_server_url + '/rpc/')
+        self.rpc = client.RPCClient('%s%s' % (self.live_server_url, '/rpc/'))
 
     def test_echo(self):
         resp = self.rpc.echo(foo='bar')
