@@ -119,3 +119,35 @@ class MapperTest(TestCase):
 
         m._apply({'f': 1})
         self.assertEqual(o.g, 0)
+
+    def test__008_default(self):
+        class M(Mapper):
+            @field(default=1)
+            def g(self):
+                return self.f
+
+            @g.setter
+            def g(self, value):
+                self.f = value
+
+        o = SimpleNamespace(f=None)
+        m = M(o)
+
+        m._apply({})
+        self.assertEqual(o.f, 1)
+
+    def test_009_callable_default(self):
+        class M(Mapper):
+            @field(default=lambda: 1)
+            def g(self):
+                return self.f
+
+            @g.setter
+            def g(self, value):
+                self.f = value
+
+        o = SimpleNamespace(f=None)
+        m = M(o)
+
+        m._apply({})
+        self.assertEqual(o.f, 1)
