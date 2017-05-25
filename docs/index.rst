@@ -43,7 +43,6 @@ Contents:
    rest/index
    rpc/index
    extras/index
-   testing
    tutorial/index
    examples
    changelog

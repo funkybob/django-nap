@@ -31,19 +31,24 @@ This is very much like defining a ModelForm.
 
     from nap.rest import views
 
-    from . import mappers
+    from . import mappers, models
+
+    class QuestionMixin:
+        model = models.Question
+        mapper_class = mappers.QuestionMapper
 
 
-    class QuestionListView(views.ListGetMixin,
+    class QuestionListView(QuestionMixin,
+                           views.ListGetMixin,
                            views.ListPostMixin,
                            views.BaseListView):
-        mapper_class = mappers.QuestionMapper
+        pass
 
-
-    class QuestionObjectView(views.ObjectGetMixin,
+    class QuestionObjectView(QuestionMixin,
+                             views.ObjectGetMixin,
                              views.ObjectPutMixin,
                              views.BaseObjectView):
-        mapper_class = mappers.QuestionMapper
+        pass
 
 The `BaseListView` provides the core of any object list view, deriving from
 Django's `MultipleObjectMixin`.  Then we mix in the default handlers for

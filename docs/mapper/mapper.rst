@@ -2,7 +2,8 @@
 Mapper API
 ==========
 
-All properties and methods are prefixed with _ to avoid polluting the namespace for your public fields.
+All properties and methods are prefixed with _ to avoid polluting the
+namespace for your public fields.
 
 .. class:: Mapper(obj=None, \**kwargs)
 

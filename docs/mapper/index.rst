@@ -1,21 +1,21 @@
-===========
+=======
 Mappers
-===========
+=======
 
-As the name suggests, a Mapper will map properties on themselves to your
+As the name suggests, a `Mapper` will map properties on themselves to your
 object. They allow you to easily write proxy objects, primarily for converting
 between serialised (JSON) and live (Python) formats of your resources.
 
 .. Warning::
-    Since a Mapper instance retain a reference to the object they are bound to,
-    even when using << syntax, instances MUST NOT be shared between threads.
+    Since a Mapper instance retains a reference to the object they are bound
+    to, even when using << syntax, instances MUST NOT be shared between
+    threads.
 
-
-Field decorator: get/set
+field decorator: get/set
 ========================
 
-Mappers work using Python's descriptor protocol, which is most commonly used
-via the `property` built-in. This gives you full control over a Mapper's
+`Mappers` work using Python's descriptor protocol, which is most commonly used
+via the ``property`` built-in. This gives you full control over a Mapper's
 properties. When constructing a Mapper you can pass an object for it to "bind"
 to. All attribute access to the Mapper fields will proxy to this bound object.
 
@@ -56,7 +56,7 @@ Here's an example to illustrate some of these concepts:
 The decorator `field` works exactly like `property`, however it will operate on
 the "bound" object, not the Mapper. The Field class covers simpler cases, as
 well as allowing easier control. Field's first argument is the name of the
-property on the bound object it gets/sets.
+attribute on the bound object it gets/sets.
 
 Accessing extra state
 ---------------------
@@ -87,29 +87,26 @@ For simple cases where the descriptor protocol is overkill.
    :param required: Is this field required? Default: True
    :param readonly: Can the field be updated? Default: True
 
+There are also typed fields:
 
-DigField
---------
+- BooleanField
+- IntegerField
+- FloatField
+- TimeField
+- DateField
+- DateTimeField
 
-DigFields 'dig' out the value in a similar style to the dotted lookup syntax in
-Django's templates
-
-.. class:: DigField(instance, required=True, default=NOT_PROVIDED)
-
-    :param instance: Reference to field on another instance using dot notation
-    :param default: The value to use if the source value is absent.
-    :param required: Is this field required? Default: True
+These will ensure the values stored are of the correct type, as well as being
+presented to JSON in a usable format.
 
 MapperField
 -----------
 
 Used when serialising a model that has a foreign key relation.
 
-.. class:: MapperField(mapper, required=True, default=NOT_PROVIDED)
+.. class:: MapperField(mapper, **kwargs)
 
-    :param mapper: A Mapper that will serialise the field value.
-    :param instance: Reference to a field on another instance using dot notation.
-    :param default: The value to use if the source value is absent.
+    :param mapper: A Mapper that will de/serialise the field value.
 
 
 Mapper functions
@@ -215,13 +212,13 @@ updated object.
 ModelMappers
 ============
 
-A ModelMapper will automatically create a Mapper for a Django model. A
-ModelMapper behaves very similar to a Django ModelForm, you control it by
-setting some fields in an inner Meta class.
+A ``ModelMapper`` will automatically create a ``Mapper`` for a Django model. A
+``ModelMapper`` behaves very similar to a Django ``ModelForm``, you control it
+by setting some fields in an inner ``Meta`` class.
 
 The fields that can be set are:
 
-.. class:: ModelMapper
+.. class:: Meta
 
    .. attribute:: model
 
@@ -231,7 +228,8 @@ The fields that can be set are:
    .. attribute:: fields
 
       Default: []
-      The list of fields to use. You can set it to '__all__' to map all fields.
+      The list of fields to use. You can set it to '__all__' to map all
+      fields.
 
    .. attribute:: exclude
 
@@ -241,8 +239,8 @@ The fields that can be set are:
    .. attribute:: required
 
       Default: {}
-      The list of overrides of default required values for fields inferred from
-      the model.  It does not influence @field declarations.
+      A map to override required values for fields auto-created from the
+      Model.
 
    .. attribute:: readonly
       The list of fields which are read only.
@@ -316,7 +314,7 @@ field:
             model = models.Person
             fields = '__all__'
 
-        @mapper.field
+        @mapper.field(readonly=True)
         def uuid(self):
             return str(self.uuid) # Remember: self refers to the bound object.
 
