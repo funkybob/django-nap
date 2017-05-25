@@ -1,6 +1,7 @@
 import json
 from cgi import parse_header, parse_multipart
 
+from django.core.serializers.json import DjangoJSONEncoder
 from django.http import QueryDict
 
 
@@ -50,3 +51,12 @@ def flatten_errors(errors):
         ]
         for field, errors in errors.items()
     }
+
+
+class NapJSONEncoder(DjangoJSONEncoder):
+
+    def default(self, o):
+        m = getattr(o, '__json__', None)
+        if callable(m):
+            return m()
+        return super().default(o)
