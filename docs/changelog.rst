@@ -11,6 +11,7 @@ v0.30.2 (2017-05-23)
 
 Enhancements:
 - Began documenting the `extras` module.
+- Added `nap.utils.NapJSONEncoder` to support `__json__` protocol.
 
 Bug Fixes:
 - Fixed ToOneField to reference `self.related_model` not `self.model`
