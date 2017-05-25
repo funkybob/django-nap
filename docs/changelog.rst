@@ -16,7 +16,8 @@ Bug Fixes:
 - Fixed ToOneField to reference `self.related_model` not `self.model`
 - Using @foo.setter on a field will now retail other keyword arguments.
 - RPCClient now sets Content-Type on request.
-
+- Fixed __new__ on field so subclasses work.
+- Reworked context_field to work properly, and match docs.
 
 -------
 History

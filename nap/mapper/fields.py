@@ -39,19 +39,15 @@ class field(property):
 
 class context_field(field):
     '''Special case of field that allows access to the Mapper itself'''
-    def __init__(self, *args, **kwargs):
-        self.context = kwargs.pop('context', {})
-        super().__init__(*args, **kwargs)
-
     def __get__(self, instance, cls=None):
         if instance is None:
             return self
-        return self.fget(self, instance._obj)
+        return self.fget(instance, instance._obj)
 
     def __set__(self, instance, value):
         if self.fset is None:
             raise AttributeError("can't set attribute")
-        return self.fset(self, instance._obj, value)
+        return self.fset(instance, instance._obj, value)
 
 
 class Field(field):

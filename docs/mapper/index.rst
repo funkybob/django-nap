@@ -63,7 +63,7 @@ Accessing extra state
 
 Sometimes when serialising an object, you need to provide additional state.
 This can be done using a ``context_field``, which subclasses ``field`` and
-additionally passes the `Mapper` instance to the getter and setter methos.
+additionally passes the `Mapper` instance to the getter and setter methods.
 
 Any extra `kwargs` passed when the `Mapper` is instanciated are stored on the
 instance in `self._context`.
