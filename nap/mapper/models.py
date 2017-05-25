@@ -123,7 +123,7 @@ class ToManyField(RelatedField):
 
     def get(self, value):
         if self.mapper:
-            m = mapper()
+            m = self.mapper()
             return [m << obj for obj in iter(value)]
 
 
