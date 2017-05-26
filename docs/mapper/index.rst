@@ -5,6 +5,7 @@ Mappers
 .. toctree::
    :maxdepth: 2
 
+   fields
    mapper
 
 As the name suggests, a `Mapper` will map properties on themselves to your
@@ -58,61 +59,7 @@ Here's an example to illustrate some of these concepts:
     person = Person('Jane', 'Doe', 22, True)
     mapper = PersonMapper(person)
 
-The decorator `field` works exactly like `property`, however it will operate on
-the "bound" object, not the Mapper. The Field class covers simpler cases, as
-well as allowing easier control. Field's first argument is the name of the
-attribute on the bound object it gets/sets.
-
-Accessing extra state
----------------------
-
-Sometimes when serialising an object, you need to provide additional state.
-This can be done using a ``context_field``, which subclasses ``field`` and
-additionally passes the `Mapper` instance to the getter and setter methods.
-
-Any extra `kwargs` passed when the `Mapper` is instanciated are stored on the
-instance in `self._context`.
-
-Mapper Fields
-=============
-
-Mappers use the declarative syntax familiar from Django Models and Forms.
-
-These are the valid supported types:
-
-Field
------
-
-For simple cases where the descriptor protocol is overkill.
-
-.. class:: Field(name, required=True, default=NOT_PROVIDED, filters=None)
-
-   :param attr: The name of the attribute on the bound object it gets/sets.
-   :param default: The value to use if the source value is absent.
-   :param required: Is this field required? Default: True
-   :param readonly: Can the field be updated? Default: True
-
-There are also typed fields:
-
-- BooleanField
-- IntegerField
-- FloatField
-- TimeField
-- DateField
-- DateTimeField
-
-These will ensure the values stored are of the correct type, as well as being
-presented to JSON in a usable format.
-
-MapperField
------------
-
-Used when serialising a model that has a foreign key relation.
-
-.. class:: MapperField(mapper, \**kwargs)
-
-    :param mapper: A Mapper that will de/serialise the field value.
-
+See `Fields`_ for more details.
 
 Mapper functions
 ================
@@ -322,22 +269,3 @@ field:
         @mapper.field(readonly=True)
         def uuid(self):
             return str(self.uuid) # Remember: self refers to the bound object.
-
-Relation Fields
----------------
-
-To help with relations, the models module includes two extra field types:
-
-- ToOneField
-- ToManyField
-
-Both accept the same extra arguments:
-
-.. class:: RelatedField()
-
-   :param related_model: The model this field relates to
-
-   :param mapper: (Optional) the mapper to use to reduce instances.
-
-When the mapper is omitted, only the Primary Key of the related model will be
-used.
