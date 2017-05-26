@@ -10,7 +10,8 @@ the "bound" object, not the Mapper.
 
 .. class:: field()
    :param required: Is this field required? Default: True
-   :param default: The value to use if the source value is absent.
+   :param default: The value to use if the source value is absent. May be a
+                   callable that takes no arguments.
    :param readonly: Can the field be updated? Default: True
    :param null: Is None a valid valie? Default: False
 
