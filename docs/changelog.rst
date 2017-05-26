@@ -12,6 +12,9 @@ v0.30.5 (2017-05-26)
 Enhancements:
 - Added pagination support to `MapperMixin.multiple_response`
 
+Bug Fixes:
+- Call `all()` on `Manager` instances in `ToManyfield`
+
 -------
 History
 -------
