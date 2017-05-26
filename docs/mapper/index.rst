@@ -104,7 +104,7 @@ MapperField
 
 Used when serialising a model that has a foreign key relation.
 
-.. class:: MapperField(mapper, **kwargs)
+.. class:: MapperField(mapper, \**kwargs)
 
     :param mapper: A Mapper that will de/serialise the field value.
 
@@ -317,6 +317,25 @@ field:
         @mapper.field(readonly=True)
         def uuid(self):
             return str(self.uuid) # Remember: self refers to the bound object.
+
+Relation Fields
+---------------
+
+To help with relations, the models module includes two extra field types:
+
+- ToOneField
+- ToManyField
+
+Both accept the same extra arguments:
+
+.. class:: RelatedField()
+
+   :param related_model: The model this field relates to
+
+   :param mapper: (Optional) the mapper to use to reduce instances.
+
+When the mapper is omitted, only the Primary Key of the related model will be
+used.
 
 .. toctree::
    :maxdepth: 2
