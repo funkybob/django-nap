@@ -6,6 +6,16 @@ Changelog
 Current
 -------
 
+v0.30.5 (2017-05-26)
+====================
+
+Enhancements:
+- Added pagination support to `MapperMixin.multiple_response`
+
+-------
+History
+-------
+
 v0.30.4 (2017-05-25)
 ====================
 
@@ -15,10 +25,6 @@ Enhancements:
 Bug Fixes:
 - Fixed __new__ on field so subclasses work.
 - Reworked context_field to work properly, and match docs.
-
--------
-History
--------
 
 v0.30.3 (2017-05-24)
 ====================
