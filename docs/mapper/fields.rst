@@ -2,10 +2,44 @@
 Fields
 ======
 
+The `field` decorator
+---------------------
+
+The `field` decorator works exactly like `property`, however it will operate on
+the "bound" object, not the Mapper.
+
+.. class:: field()
+   :param required: Is this field required? Default: True
+   :param default: The value to use if the source value is absent.
+   :param readonly: Can the field be updated? Default: True
+   :param null: Is None a valid valie? Default: False
+
+The decorator can be used bare, or with arguments:
+
+.. code-block:: python
+
+    class M(Mapper):
+
+        @mapper.field
+        def foo(self):
+            return self.bar
+
+        @mapper.field(default=0)
+        def baz(self):
+            return self.qux
+
+        @baz.setter
+        def baz(self, value):
+            self.qux = value
+
+As you can see, both the getter and setter of a `field` are defined the same
+way as with `property`.
+
 Basic fields
 ------------
 
-For simple cases where the descriptor protocol is overkill.
+For simple cases where the descriptor protocol is overkill, there is the
+`Field` class.
 
 .. class:: Field(...)
 
@@ -14,6 +48,12 @@ For simple cases where the descriptor protocol is overkill.
    :param default: The value to use if the source value is absent.
    :param readonly: Can the field be updated? Default: True
    :param null: Is None a valid valie? Default: False
+
+.. code-block:: python
+
+    class M(Mapper):
+        foo = Field('bar')
+        baz = Field('qux', default=0)
 
 There are also typed fields:
 
@@ -26,20 +66,6 @@ There are also typed fields:
 
 These will ensure the values stored are of the correct type, as well as being
 presented to JSON in a usable format.
-
-The `field` decorator
----------------------
-
-The `field` decorator works exactly like `property`, however it will operate on
-the "bound" object, not the Mapper. The Field class covers simpler cases, as
-well as allowing easier control. Field's first argument is the name of the
-attribute on the bound object it gets/sets.
-
-.. class:: field()
-   :param required: Is this field required? Default: True
-   :param default: The value to use if the source value is absent.
-   :param readonly: Can the field be updated? Default: True
-   :param null: Is None a valid valie? Default: False
 
 Accessing extra state
 ---------------------
@@ -92,7 +118,6 @@ Both accept the same extra arguments:
 .. class:: RelatedField()
 
    :param related_model: The model this field relates to
-
    :param mapper: (Optional) the mapper to use to reduce instances.
 
 When the mapper is omitted, only the Primary Key of the related model will be
