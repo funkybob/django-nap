@@ -49,6 +49,8 @@ class ChoiceListView(ChoiceMixin,
                      views.ListPostMixin,
                      views.BaseListView):
 
+    paginate_by = 1
+
     def get_queryset(self):
         return super().get_queryset().filter(poll__id=self.kwargs['poll_id'])
 

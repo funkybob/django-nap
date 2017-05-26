@@ -119,7 +119,7 @@ class MapperMixin(JsonMixin):
             if is_paginated:
                 meta = {
                     'offset': page.start_index() - 1,
-                    'page': page.numer,
+                    'page': page.number,
                     'total': paginator.count,
                 }
             else:

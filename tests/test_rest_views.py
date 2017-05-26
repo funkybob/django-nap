@@ -2,7 +2,7 @@ from django.test import TestCase
 import json
 from nap.http import STATUS
 
-from .models import Poll
+from .models import Poll, Choice
 
 
 class ListRestViewTest(TestCase):
@@ -178,3 +178,11 @@ class ChoiceListViewTest(TestCase):
                                     }),
                                     content_type='application/json')
         self.assertEqual(response.status_code, 201)
+
+    def test_paginate(self):
+        choices = [
+            Choice.objects.create(poll=self.poll),
+            Choice.objects.create(poll=self.poll),
+        ]
+        response = self.client.get('/rest/polls/{}/choice/'.format(self.poll.pk))
+        self.assertEqual(response.status_code, 200)
