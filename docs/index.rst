@@ -38,7 +38,6 @@ Contents:
    :maxdepth: 2
 
    quickstart
-   ref/modules
    mapper/index
    rest/index
    rpc/index
