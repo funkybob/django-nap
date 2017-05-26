@@ -48,6 +48,8 @@ a new Django app inside the todoproject.
     cd todoproject
     python manage.py startapp todoapp
 
+Don't forget to add 'todoapp' to settings.INSTALLED_APPS!
+
 That's great, our project directory is all set up and ready for us to start
 creating the models that we will use in our application.
 
