@@ -1,13 +1,13 @@
-===================
-DataMapper Tutorial
-===================
+===============
+Mapper Tutorial
+===============
 
 In this tutorial we will write a small django-nap powered RESTful service for a
 to-do list application. The tutorial has been tested against Django (1.8.3) and
-django-nap (0.14.5.1).
+django-nap (0.30.4).
 
 Instead of using a more 'traditional' `Serialiser` based approach to building
-the service, we will use nap's powerful `Datamappers` and Django CBV mixins.
+the service, we will use nap's powerful `Mappers` and Django CBV mixins.
 
 1. Setup
 ========
@@ -90,21 +90,21 @@ window execute the following commands:
 Awesome let's move on to the next step.
 
 
-3. DataMappers
-===================
+3. Mappers
+==========
 
-We need DataMappers to reduce Python objects into simple data types supported
-by JSON and back again. nap's `DataMappers` are an alternative approach to
+We need Mappers to reduce Python objects into simple data types supported by
+JSON and back again. nap's `Mappers` are an alternative approach to
 traditional `Serialisers`. They serve the same function, but do it in slightly
-different ways. A `DataMapper` will map properties on itself to your object.
-This allows you to easily convert from JSON to Python objects and vice-versa.
+different ways. A `Mapper` will map properties on itself to your object. This
+allows you to easily convert from JSON to Python objects and vice-versa.
 
-DataMapper for User
--------------------
+Mapper for User
+---------------
 
-Let's start by creating a `DataMapper` for the `User` model so that you can get
-a better feel for how it works. A `ModelDataMapper` is a shortcut that creates
-a `DataMapper` and automatically generates a set of fields for you based on the
+Let's start by creating a `Mapper` for the `User` model so that you can get a
+better feel for how it works. A `ModelMapper` is a shortcut that creates a
+`Mapper` and automatically generates a set of fields for you based on the
 model. Similarly to how `ModelForms` and `Forms` relate.
 
 Let's create a new file in the todoapp directory called mappers.py and add the
@@ -114,89 +114,88 @@ following code to your todoapp/mappers.py file:
 
     from django.contrib.auth.models import User
 
-    from nap import datamapper
+    from nap import mapper
 
 
-    class UserMapper(datamapper.ModelDataMapper):
+    class UserMapper(mapper.ModelMapper):
         class Meta:
             model = User
             fields = '__all__'
 
-The `ModelDataMapper` will create a DataMapper for us and all we need to tell
-it is which model we want to map, and which fields to use. As you can see we
-have told the `ModelDataMapper` to use __all__ of the User fields.
+The `ModelMapper` will create a Mapper for us and all we need to tell it is
+which model we want to map, and which fields to use. As you can see we have
+told the `ModelMapper` to use __all__ of the User fields.
 
-DataMapper for List
+Mapper for List
 -------------------
 
-Next let's add a `ModelDataMapper` for the `List` model. This should be very
-similar to the `ModelDataMapper` we created for the User model. Your
+Next let's add a `ModelMapper` for the `List` model. This should be very
+similar to the `ModelMapper` we created for the User model. Your
 todoapp/mappers.py file should now look like this:
 
 .. code-block:: python
 
     from django.contrib.auth.models import User
 
-    from nap import datamapper
+    from nap import mapper
 
     from . import models # Don't forget this
 
 
-    class UserMapper(datamapper.ModelDataMapper):
+    class UserMapper(mapper.ModelMapper):
         class Meta:
             model = User
             fields = '__all__'
 
 
-    class ListMapper(datamapper.ModelDataMapper):
+    class ListMapper(mapper.ModelMapper):
         class Meta:
             model = models.List
             fields = '__all__'
 
-DataMapper for Item
--------------------
+Mapper for Item
+---------------
 
-Next let's add a `ModelDataMapper` for the Item model. This ones a little
-different though because there are some more complicated fields in the `Item`
-model than there are in our `User` and `List` models. Let's start by
-implementing the parts of the `ItemMapper` we know. We're going to add a
-`ModelDataMapper` for `Item` to our code in the todoapp/mappers.py file so that
-it looks like this:
+Next let's add a `ModelMapper` for the Item model. This ones a little different
+though because there are some more complicated fields in the `Item` model
+than there are in our `User` and `List` models. Let's start by implementing the
+parts of the `ItemMapper` we know. We're going to add a `ModelMapper` for
+`Item` to our code in the todoapp/mappers.py file so that it looks like this:
 
 .. code-block:: python
 
     from django.contrib.auth.models import User
 
-    from nap import datamapper
+    from nap import mapper
 
     from . import models
 
 
-    class UserMapper(datamapper.ModelDataMapper):
+    class UserMapper(mapper.ModelMapper):
         class Meta:
             model = User
             fields = '__all__'
 
 
-    class ListMapper(datamapper.ModelDataMapper):
+    class ListMapper(mapper.ModelMapper):
         class Meta:
             model = models.List
             fields = '__all__'
 
 
-    class ItemMapper(datamapper.ModelDataMapper):
+    class ItemMapper(mapper.ModelMapper):
         class Meta:
             model = models.Item
             fields = '__all__'
             exclude = ['owner', 'list']
 
 As you can see we've defined the model and fields we want, but this time we're
-also telling the `ModelDataMapper` which fields to exclude. We're going to
-exclude the more complicated Foreign Key fields, owner and list, and deal with
-them later.
+also telling the `ModelMapper` which fields to exclude. We're going to exclude
+the more complicated Foreign Key fields, owner and list, and deal with them
+later.
 
-Now that we've got our `DataMappers` implemented for all of our models, we can
-go on to create the URLs and views for our RESTful service.
+Now that we've got our `Mappers` implemented for all of our models, we can go
+on to create the URLs and views for our RESTful service.
 
 
 4. Class-Based Views and URLs
@@ -397,7 +396,7 @@ Recap: list of List
 -------------------
 
 So a quick recap of what we've done before we move on. We've created a `List`
-database model and a `ModelDataMapper` that maps our Python models to JSON and
+database model and a `ModelMapper` that maps our Python models to JSON and
 vice-versa. We've created a ListListView, which handles both GETing all our
 List instances in the database and POSTing new instances to our database. We've
 also then mapped our /api/list/ url to that view which allows external clients
@@ -524,7 +523,7 @@ views:
 5. Update Mappers
 =================
 
-Lets start modifying our `DataMappers` so that we can serialise any extra
+Lets start modifying our `Mappers` so that we can serialise any extra
 fields, including related field sets and Foreign Key fields.
 
 ListMapper: List item_set()
@@ -533,18 +532,18 @@ ListMapper: List item_set()
 If we were writing a client application to consume the /api/list/ API endpoint,
 we would probably want to include all of the Item's that are in a List.
 Essentially that means we want to define a proxy field on the model, which
-means we're going to add another field called ``items`` to our DataMapper.
+means we're going to add another field called ``items`` to our Mapper.
 
 Your ListMapper class in todoapp/mappers.py should look like this now:
 
 .. code-block:: python
 
-    class ListMapper(datamapper.ModelDataMapper):
+    class ListMapper(mapper.ModelMapper):
         class Meta:
             model = models.List
             fields = '__all__'
 
-        @datamapper.field
+        @mapper.field
         def items(self):
             'Produces a list of dicts with pk and title.'
             return self.item_set.all()
@@ -559,12 +558,12 @@ Change the return line of the item so that your class looks like this:
 
 .. code-block:: python
 
-    class ListMapper(datamapper.ModelDataMapper):
+    class ListMapper(mapper.ModelMapper):
         class Meta:
             model = models.List
             fields = '__all__'
 
-        @datamapper.field
+        @mapper.field
         def items(self):
             'Produces a list of dicts with pk and title.'
             return list(
@@ -590,20 +589,20 @@ Update your ItemMapper in todoapp/mappers.py to look like this:
 
 .. code-block:: python
 
-    class ItemMapper(datamapper.ModelDataMapper):
+    class ItemMapper(mapper.ModelMapper):
         class Meta:
             model = models.Item
             fields = '__all__'
             exclude = ['owner', 'list']
 
-        @datamapper.field
+        @mapper.field
         def owner_id(self):
             return self.owner_id
 
-We're now telling the DataMapper to include an owner_id field in the JSON
+We're now telling the Mapper to include an owner_id field in the JSON
 representation of an Item, and to return the owner_id (which is the primary key
 of the owner field). Lets also now add the set functionality for this field.
-This will tell the DataMapper how to take a JSON payload with an owner_id value
+This will tell the Mapper how to take a JSON payload with an owner_id value
 and actually set the owner field on the model instance. Again we'll use the
 built in decorators to perform this, we'll use the ``setter`` decorator to
 provide the set functionality.
@@ -612,13 +611,13 @@ Update your ItemMapper in todoapp/mappers.py to look like this:
 
 .. code-block:: python
 
-    class ItemMapper(datamapper.ModelDataMapper):
+    class ItemMapper(mapper.ModelMapper):
         class Meta:
             model = models.Item
             fields = '__all__'
             exclude = ['owner', 'list']
 
-        @datamapper.field
+        @mapper.field
         def owner_id(self):
             return self.owner_id
 
@@ -632,7 +631,7 @@ Update your ItemMapper in todoapp/mappers.py to look like this:
 Recap
 -----
 
-You can see that we have modified our `DataMappers` to use the ``field`` and
+You can see that we have modified our `Mappers` to use the ``field`` and
 ``setter`` decorators to provide the get/set functionality. The ``field``
 decorator extends the builtin ``property``, and so supports ``@x.setter`` and
 ``@x.deleter`` for setting the setter and deleter functions.

@@ -4,4 +4,4 @@ Tutorials
 
 .. toctree::
 
-   datamapper
+   mapper
