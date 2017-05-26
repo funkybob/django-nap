@@ -106,10 +106,30 @@ class MapperMixin(JsonMixin):
         if mapper is None:
             mapper = self.get_mapper()
 
-        return self.response_class([
-            mapper << obj
-            for obj in object_list
-        ], **kwargs)
+        page_size = self.get_paginate_by(object_list)
+        if page_size:
+            paginator, page, queryset, is_paginated = self.paginate_queryset(object_list, page_size)
+        else:
+            paginator = page = None
+            is_paginated = False
+
+        data = [mapper << obj for obj in object_list]
+
+        if page_size:
+            if is_paginated:
+                meta = {
+                    'offset': page.start_index() - 1,
+                    'page': page.number,
+                    'total': paginator.count,
+                }
+            else:
+                meta = {}
+            return self.response_class({
+                'meta': meta,
+                'data': data,
+            }, **kwargs)
+
+        return self.response_class(data, **kwargs)
 
     def accepted_response(self, **kwargs):
         '''
