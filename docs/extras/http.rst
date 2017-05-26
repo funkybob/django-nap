@@ -130,4 +130,5 @@ Http404 versus http.NotFound
 ============================
 
 Generally in your API, you'll want to prefer http.NotFound for returning a 404
-response.  This avoids being caught by the normal 404 handling, so it won't invoke your handler404.
+response.  This avoids being caught by the normal 404 handling, so it won't
+invoke your handler404.
