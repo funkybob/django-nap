@@ -8,6 +8,7 @@ class Writer:
     b'a,b,c\n'
     >>> csv.write([1, '2,', 'c'])
     b'1,"2,",c\n'
+
     '''
 
     # What to put between fields
