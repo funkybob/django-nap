@@ -2,6 +2,11 @@
 Mappers
 =======
 
+.. toctree::
+   :maxdepth: 2
+
+   mapper
+
 As the name suggests, a `Mapper` will map properties on themselves to your
 object. They allow you to easily write proxy objects, primarily for converting
 between serialised (JSON) and live (Python) formats of your resources.
@@ -336,8 +341,3 @@ Both accept the same extra arguments:
 
 When the mapper is omitted, only the Primary Key of the related model will be
 used.
-
-.. toctree::
-   :maxdepth: 2
-
-   mapper

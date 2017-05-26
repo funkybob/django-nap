@@ -105,9 +105,29 @@ HttpResponse.  This is a personal preference, in that typically you'd use:
     ...
         return http.Accept(...)
 
+except_response
+---------------
+
+In case you want to use these raiseable responses in your own views, Nap
+provides a `except_response` decorator.
+
+.. code-block:: python
+
+    import http
+
+    @http.except_response
+    def myview(request):
+        try:
+            obj = Thing.objects.get(user=request.user)
+        except:
+            raise http.BadRequest()
+        return render(...)
+
+The decorator will catch any `http.BaseHttpResponse` exceptions and return them
+as the views response.
+
 Http404 versus http.NotFound
 ============================
 
 Generally in your API, you'll want to prefer http.NotFound for returning a 404
 response.  This avoids being caught by the normal 404 handling, so it won't invoke your handler404.
-

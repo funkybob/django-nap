@@ -74,4 +74,4 @@ Where the list view has ``POST`` to create a new record, the object view has
             name='question-detail'),
     ]
 
-And we're done.  You can how access your Question model!
+And we're done.  You can now access your Question model!
