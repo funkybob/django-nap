@@ -1,4 +1,5 @@
 from django.core.exceptions import ValidationError
+from django.db.models import Manager
 from django.db.models.fields import NOT_PROVIDED
 
 from . import fields
@@ -122,6 +123,8 @@ class ToOneField(RelatedField):
 class ToManyField(RelatedField):
 
     def get(self, value):
+        if isinstance(value, Manager):
+            value = value.all()
         if self.mapper:
             m = self.mapper()
             return [m << obj for obj in iter(value)]
