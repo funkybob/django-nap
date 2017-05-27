@@ -12,6 +12,7 @@ v0.30.5 (2017-05-25)
 Enhancements:
 - Added pagination support to `MapperMixin.multiple_response`
 - Import all fields into mapper namespace
+- Allow passing \**kwargs to all CBV `valid_FOO` methods.
 
 Bug Fixes:
 - Call `all()` on `Manager` instances in `ToManyfield`
