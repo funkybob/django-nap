@@ -11,9 +11,13 @@ v0.30.5 (2017-05-26)
 
 Enhancements:
 - Added pagination support to `MapperMixin.multiple_response`
+- Import all fields into mapper namespace
 
 Bug Fixes:
 - Call `all()` on `Manager` instances in `ToManyfield`
+
+Deprecations:
+- Removed `newrelic` module, as it was only to support Publishers.
 
 -------
 History
