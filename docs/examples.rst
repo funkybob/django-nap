@@ -23,45 +23,65 @@ models.py
         tags = TaggableManager(blank=True)
 
 
-serialiser.py
+mappers.py
 -------------
 
 .. code-block:: python
 
-    from nap import serialiser
-    from nap.serialiser import fields
+    from nap import mapper
 
-    class PostSerialiser(serialiser.ModelSerialiser):
+    class PostMapper(mapper.ModelMapper):
         class Meta:
             model = models.Post
 
-        tags = fields.Field()
-
-        def deflate_tags(self, obj, \**kwargs):
-            '''Turn the tags into a flat list of names'''
-            return [tag.name for tag in obj.tags.all()]
+        @mapper.field(readonly=True)
+        def tags(self):
+            return list(obj.tags.values_list('name', flat=True))
 
 
-publishers.py
+views.py
 -------------
 
 .. code-block:: python
 
-    from nap import rest
-    from .serialiser import PostSerialiser
+    from nap.rest import views
 
-    class PostPublisher(rest.ModelPublisher):
-        serialiser = PostSerialiser()
+    from . import mappers, models
+
+
+    class PostMixin:
+        model = models.Post
+        mapper_class = mappers.PostMapper
+
+
+    class PostList(PostMixin,
+                   views.ListGetMixin,
+                   views.BaseListMixin):
+        paginate_by = 12
+
+
+    class PostDetail(PostMixin,
+                     views.ObjectGetMixin,
+                     views.BaseObjectMixin):
+        pass
 
 urls.py
 -------
 
 .. code-block:: python
+    from django.conf.urls import include, url
 
-    from .publishers import PostPublisher
+    from . import views
 
     urlpatterns = [
-        (r'^api/', include(PostPublisher.patterns())),
+        (r'^api/', include([
+            url(r'^post/$',
+                views.PostList.as_view(),
+                name='post-list'),
+            url(r'^post/(?P<pk>\d+)/$',
+                views.PostDetail.as_view(),
+                name='post-detail'),
+        ])),
     ]
 
 
