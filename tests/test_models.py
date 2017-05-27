@@ -10,6 +10,12 @@ from . import models
 
 class ModelMapperTestCase(TestCase):
 
+    def test_basics(self):
+
+        with self.assertRaises(ValueError):
+            class M(ModelMapper):
+                pass
+
     def test_safe_default(self):
 
         class M(ModelMapper):

@@ -4,6 +4,7 @@ from django.db import models
 class Poll(models.Model):
     question = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published')
+    kill_date = models.DateTimeField(blank=True, null=True)
 
 
 class Choice(models.Model):

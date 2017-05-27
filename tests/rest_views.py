@@ -8,7 +8,7 @@ from .models import Poll, Choice
 class PollMapper(ModelMapper):
     class Meta:
         model = Poll
-        fields = ['question', 'pub_date']
+        fields = ['question', 'pub_date', 'kill_date']
 
 
 class ChoiceMapper(ModelMapper):

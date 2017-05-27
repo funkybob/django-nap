@@ -59,14 +59,18 @@ class Field(field):
         if instance is None:
             return self
         value = getattr(instance._obj, self.attr, self.default)
+        if self.null and value is None:
+            return value
         return self.get(value)
 
     def __set__(self, instance, value):
         if self.readonly:
             raise AttributeError('Field is read-only.')
-        if value is None and not self.null:
-            raise ValueError('Field may not be None')
-        value = self.set(value)
+        if value is None:
+            if not self.null:
+                raise ValueError('Field may not be None')
+        else:
+            value = self.set(value)
         setattr(instance._obj, self.attr, value)
 
     def get(self, value):
@@ -132,8 +136,6 @@ class DateTimeField(Field):
 class MapperField(Field):
     '''
     A field that passes data through a Mapper.
-
-    Useful for handling nested models.
     '''
     def __init__(self, *args, **kwargs):
         self.mapper = kwargs.pop('mapper')
