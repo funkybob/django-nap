@@ -280,10 +280,10 @@ class ObjectDeleteMixin:
 
         return self.delete_valid()
 
-    def delete_valid(self):
+    def delete_valid(self, **kwargs):
         self.object.delete()
 
-        return self.deleted_response()
+        return self.deleted_response(**kwargs)
 
 
 class BaseObjectView(ObjectMixin, NapView):
