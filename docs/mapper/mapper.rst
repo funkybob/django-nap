@@ -20,7 +20,7 @@ namespace for your public fields.
       Returns a dict containing all the field values on the currently bound
       object.
 
-   .. method:: _clean(data, full)
+   .. method:: _clean(data, full=True)
 
       Allows whole-object validation.
 

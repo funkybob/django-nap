@@ -35,16 +35,23 @@ Base Classes
 
    .. attribute:: mapper_class
 
-      You must set this to the :class:`Mapper` to use when processing
-      requests and responses.
+      You must set this to the :class:`Mapper` to use when processing requests
+      and responses.
 
    .. attribute:: ok_status
+
       Default: nap.http.STATUS.ACCEPTED
+
    .. attribute:: accepted_status
+
       Default: nap.http.STATUS.CREATED
+
    .. attribute:: created_status
+
       Default: nap.http.STATUS.NO_CONTENT
+
    .. attribute:: error_status
+
       Default: nap.http.STATUS.BAD_REQUEST
 
       HTTP Status codes to use for different response types.
@@ -62,6 +69,7 @@ Base Classes
       Return a response with a single object.
 
       Will use self.object if `object` is not passed.
+
       Will use self.mapper if `mapper` is not passed.
 
    .. method:: multiple_response(\**kwargs)
@@ -71,15 +79,15 @@ Base Classes
       Will use self.object_list if 'object_list' is not passed.
       Will use self.mapper if `mapper` is not passed.
 
-   .. method:: accepted_response()
+   .. method:: accepted_response(\**kwargs)
 
       Returns an empty response with ``self.accepted_status``
 
-   .. method:: created_response()
+   .. method:: created_response(\**kwargs)
 
       Returns a single response with ``self.created_status``.
 
-   .. method:: deleted_response()
+   .. method:: deleted_response(\**kwargs)
 
       Returns an empty response with ``self.deleted_status``.
 
@@ -95,7 +103,7 @@ List Classes
 
    Base list mixin, extends Django's MultipleObjectMixin.
 
-   .. method:: ok_response()
+   .. method:: ok_response(\**kwargs)
 
    Calls ``self.list_response(status=self.ok_response)``
 
@@ -108,7 +116,7 @@ List Classes
    Provides ``post()`` for lists.
 
    .. method:: post_invalid(errors)
-   .. method:: post_valid()
+   .. method:: post_valid(\**kwargs)
 
 .. class:: BaseListView(ListMixin, View)
 
@@ -120,7 +128,7 @@ Single Object Classes
 
    Base single object mixin, extends Django's SingleObjectMixin.
 
-   .. method:: ok_response()
+   .. method:: ok_response(\**kwargs)
 
       Calls self.single_response(status=self.ok_status)
 
@@ -132,21 +140,21 @@ Single Object Classes
 
    Provides ``put()`` for single objects.
 
-   .. method:: put_valid()
+   .. method:: put_valid(\**kwargs)
    .. method:: put_invalid(errors)
 
 .. class:: ObjectPatchMixin
 
    Provides ``patch()`` for single objects.
 
-   .. method:: patch_valid()
+   .. method:: patch_valid(\**kwargs)
    .. method:: patch_invalid(errors)
 
 .. class:: ObjectDeleteMixin
 
    Provides ``delete()`` for single objects.
 
-   .. method:: delete_valid()
+   .. method:: delete_valid(\**kwargs)
 
 .. class:: BaseObjectView(ObjectMixin, View)
 
