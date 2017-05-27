@@ -292,7 +292,7 @@ Adding GET functionality: list of List
 We do however want to use ``nap.rest.views.ListGetMixin`` which provides the
 get() method for lists. This means the HTTP verb GET can now be used with our
 view. We need to update our ``ListListView(views.BaseListView)`` class to
-include the ``ListGetMixin`` so lets do that.
+include the ``ListGetMixin`` so let's do that.
 
 Update your todoapp/rest_views.py file to look like this:
 
