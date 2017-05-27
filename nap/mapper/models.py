@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.db.models import Manager
 from django.db.models.fields import NOT_PROVIDED
+from django.db import transaction
 
 from . import fields
 from .base import Mapper, MetaMapper as BaseMetaMapper
@@ -128,6 +129,17 @@ class ToManyField(RelatedField):
         if self.mapper:
             m = self.mapper()
             return [m << obj for obj in iter(value)]
+
+    def __set__(self, instance, value):
+        if self.readonly:
+            raise AttributeError('Field is read-only.')
+        if value is None:
+            if not self.null:
+                raise ValueError('Field may not be None')
+        else:
+            value = self.set(value)
+        with transaction.atomic():
+            getattr(instance._obj, self.attr).set(value)
 
 
 FIELD_MAP = {
