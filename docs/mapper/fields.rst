@@ -9,6 +9,7 @@ The `field` decorator works exactly like `property`, however it will operate on
 the "bound" object, not the Mapper.
 
 .. class:: field()
+
    :param required: Is this field required? Default: True
    :param default: The value to use if the source value is absent. May be a
                    callable that takes no arguments.
@@ -80,6 +81,7 @@ Any extra `kwargs` passed when the `Mapper` is instanciated are stored on the
 mapper instance in `self._context`.
 
 .. class:: context_field()
+
    :param required: Is this field required? Default: True
    :param default: The value to use if the source value is absent.
    :param readonly: Can the field be updated? Default: True

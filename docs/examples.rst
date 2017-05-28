@@ -69,6 +69,7 @@ urls.py
 -------
 
 .. code-block:: python
+
     from django.conf.urls import include, url
 
     from . import views
@@ -128,3 +129,12 @@ simple Login endpoint:
 
 Note that it decorates `as_view` with `ensure_csrf_token`.  This ensures the
 CSRF token is set if your site is a SPA.
+
+You could even use the ``DELETE`` HTTP method for logout.
+
+.. code-block:: python
+
+        def delete(self, request):
+            auth.logout(request)
+            return self.deleted_response()
+
