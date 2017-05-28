@@ -38,11 +38,11 @@ Contents:
    :maxdepth: 2
 
    quickstart
+   tutorial/index
    mapper/index
    rest/index
    rpc/index
    extras/index
-   tutorial/index
    examples
    changelog
 
