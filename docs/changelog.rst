@@ -6,6 +6,16 @@ Changelog
 Current
 -------
 
+v0.30.6 (2016-05-??)
+
+Enhancements:
+- Added custom __set__ method for `ToManyField` so it can call `set` on the
+  manager.
+
+-------
+History
+-------
+
 v0.30.5 (2017-05-27)
 ====================
 
@@ -19,10 +29,6 @@ Bug Fixes:
 
 Deprecations:
 - Removed `newrelic` module, as it was only to support Publishers.
-
--------
-History
--------
 
 v0.30.4 (2017-05-25)
 ====================
