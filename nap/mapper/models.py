@@ -28,12 +28,14 @@ class MetaMapper(BaseMetaMapper):
             if name != 'ModelMapper':
                 raise ValueError('No model defined on class Meta.')
         else:
-            existing = dict(bases[0]._fields)
+            existing = attrs.copy()
+            for base in reversed(bases):
+                existing.update(base._fields)
 
             # for f in meta.model._meta.get_fields():
             for f in meta.model._meta.fields:
-                # Don't auto-add fields defined on this class
-                if f.name in attrs:
+                # Don't auto-add fields defined on this class or our parents
+                if f.name in existing:
                     continue
                 if f.name in meta.exclude:
                     continue
