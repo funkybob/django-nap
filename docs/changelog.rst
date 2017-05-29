@@ -14,6 +14,7 @@ Enhancements:
 
 Bug Fixes:
 - Don't replace inherited fields with auto-added model fields.
+- Return a list of PKs if no Mapper provided to ToManyField
 
 -------
 History
