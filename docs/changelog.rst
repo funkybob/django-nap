@@ -6,7 +6,7 @@ Changelog
 Current
 -------
 
-v0.30.6 (2016-05-??)
+v0.30.6 (2016-05-29)
 
 Enhancements:
 - Added custom __set__ method for `ToManyField` so it can call `set` on the
