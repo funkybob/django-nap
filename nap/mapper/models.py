@@ -131,6 +131,7 @@ class ToManyField(RelatedField):
         if self.mapper:
             m = self.mapper()
             return [m << obj for obj in iter(value)]
+        return [obj.pk for obj in iter(value)]
 
     def __set__(self, instance, value):
         if self.readonly:
