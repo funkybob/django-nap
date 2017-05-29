@@ -1,17 +1,19 @@
-from nap.mapper import ModelMapper
+from nap import mapper
 from nap.rest import views
 from nap.shortcuts import get_object_or_404
 
 from .models import Poll, Choice
 
 
-class PollMapper(ModelMapper):
+class PollMapper(mapper.ModelMapper):
     class Meta:
         model = Poll
         fields = ['question', 'pub_date', 'kill_date']
 
+    choices = mapper.ToManyField('choice_set')
 
-class ChoiceMapper(ModelMapper):
+
+class ChoiceMapper(mapper.ModelMapper):
     class Meta:
         model = Choice
         fields = '__all__'

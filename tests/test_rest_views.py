@@ -27,8 +27,8 @@ class ListRestViewTest(TestCase):
         self.assertEqual(response['Content-Type'], 'application/json')
 
         data = json.loads(response.content.decode())
-        self.assertEqual(data[0], self.question_1)
-        self.assertEqual(data[1], self.question_2)
+        self.assertEqual(data[0], dict(self.question_1, choices=[]))
+        self.assertEqual(data[1], dict(self.question_2, choices=[]))
 
     def test_post(self):
         request_data = {}
@@ -60,7 +60,7 @@ class ListRestViewTest(TestCase):
         self.assertEqual(response.status_code, STATUS.CREATED)
         self.assertEqual(response['Content-Type'], 'application/json')
         data = json.loads(response.content.decode())
-        self.assertEqual(data, request_data)
+        self.assertEqual(data, dict(request_data, choices=[]))
 
 
 class SingleObjectRestViewTest(TestCase):
@@ -105,7 +105,7 @@ class SingleObjectRestViewTest(TestCase):
         self.assertEqual(response.status_code, STATUS.OK)
         self.assertEqual(response['Content-Type'], 'application/json')
         data = json.loads(response.content.decode())
-        self.assertEqual(data, dict(request_data, kill_date=None))
+        self.assertEqual(data, dict(request_data, choices=[], kill_date=None))
         # reload poll from db and see that it's updated
         poll = Poll.objects.get(pk=self.poll.pk)
         self.assertEqual(poll.question, request_data['question'])
@@ -124,6 +124,7 @@ class SingleObjectRestViewTest(TestCase):
             'question': self.default_question,
             'pub_date': self.default_pub_date,
             'kill_date': None,
+            'choices': [],
         })
         # reload poll from db and see that it's updated
         poll = Poll.objects.get(pk=self.poll.pk)
@@ -142,6 +143,7 @@ class SingleObjectRestViewTest(TestCase):
             'question': request_data['question'],
             'pub_date': self.default_pub_date,
             'kill_date': None,
+            'choices': [],
         })
         # reload poll from db and see that it's updated
         poll = Poll.objects.get(pk=self.poll.pk)
@@ -155,7 +157,7 @@ class SingleObjectRestViewTest(TestCase):
         self.assertEqual(response.status_code, STATUS.OK)
         self.assertEqual(response['Content-Type'], 'application/json')
         data = json.loads(response.content.decode())
-        self.assertEqual(data, dict(request_data, kill_date=None))
+        self.assertEqual(data, dict(request_data, choices=[], kill_date=None))
         # reload poll from db and see that it's updated
         poll = Poll.objects.get(pk=self.poll.pk)
         self.assertEqual(poll.question, request_data['question'])
