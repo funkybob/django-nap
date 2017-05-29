@@ -12,6 +12,9 @@ Enhancements:
 - Added custom __set__ method for `ToManyField` so it can call `set` on the
   manager.
 
+Bug Fixes:
+- Don't replace inherited fields with auto-added model fields.
+
 -------
 History
 -------
