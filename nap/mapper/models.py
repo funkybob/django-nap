@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
+from django.db import transaction
 from django.db.models import Manager
 from django.db.models.fields import NOT_PROVIDED
-from django.db import transaction
 
 from . import fields
 from .base import Mapper, MetaMapper as BaseMetaMapper
