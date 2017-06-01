@@ -1,5 +1,6 @@
 import json
 from cgi import parse_header, parse_multipart
+from inspect import isgenerator
 
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import QueryDict
@@ -53,9 +54,25 @@ def flatten_errors(errors):
     }
 
 
+class List(list):
+    def __init__(self, gen):
+        self.gen = gen
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        return next(self.gen)
+
+    def __bool__(self):
+        return True
+
+
 class NapJSONEncoder(DjangoJSONEncoder):
 
     def default(self, o):
+        if isgenerator(o):
+            return List(o)
         m = getattr(o, '__json__', None)
         if callable(m):
             return m()
