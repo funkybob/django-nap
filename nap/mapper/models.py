@@ -26,7 +26,6 @@ class MetaMapper(BaseMetaMapper):
             meta = attrs['Meta']
         else:
             for base in bases:
-                print(name, base, getattr(base, 'Meta', None))
                 try:
                     meta = base.Meta
                 except AttributeError:
