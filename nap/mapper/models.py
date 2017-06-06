@@ -22,10 +22,25 @@ class Options:
 class MetaMapper(BaseMetaMapper):
 
     def __new__(mcs, name, bases, attrs):
-        meta = Options(attrs.get('Meta', None))
+        if 'Meta' in attrs:
+            meta = attrs['Meta']
+        else:
+            for base in bases:
+                print(name, base, getattr(base, 'Meta', None))
+                try:
+                    meta = base.Meta
+                except AttributeError:
+                    pass
+                else:
+                    break
+            else:
+                if bases != (Mapper,):
+                    raise RuntimeError('No Meta defined for ModelMapper')
+                meta = object()
+        meta = Options(meta)
 
         if meta.model is None:
-            if name != 'ModelMapper':
+            if bases != (Mapper,):
                 raise ValueError('No model defined on class Meta.')
         else:
             existing = attrs.copy()

@@ -12,9 +12,14 @@ class ModelMapperTestCase(TestCase):
 
     def test_basics(self):
 
-        with self.assertRaises(ValueError):
+        with self.assertRaises(RuntimeError):
             class M(ModelMapper):
                 pass
+
+        with self.assertRaises(ValueError):
+            class M(ModelMapper):
+                class Meta:
+                    pass
 
     def test_safe_default(self):
 
