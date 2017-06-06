@@ -6,7 +6,20 @@ Changelog
 Current
 -------
 
+v0.30.7 (2016-06-??)
+====================
+
+Enhancements:
+- Allow `ModelMapper` to inherit its `Meta` from a parent.
+- Add ``nap.http.StreamingJSONResponse``.
+- Add tools to help support generators in JSON encoding
+
+-------
+History
+-------
+
 v0.30.6 (2016-05-29)
+====================
 
 Enhancements:
 - Added custom __set__ method for `ToManyField` so it can call `set` on the
@@ -15,10 +28,6 @@ Enhancements:
 Bug Fixes:
 - Don't replace inherited fields with auto-added model fields.
 - Return a list of PKs if no Mapper provided to ToManyField
-
--------
-History
--------
 
 v0.30.5 (2017-05-27)
 ====================
