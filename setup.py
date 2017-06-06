@@ -5,13 +5,13 @@ with open('README.rst') as fin:
 
 setup(
     name='django-nap',
-    version='0.30.6',
+    version='0.30.7',
     description='A light REST tool for Django',
     long_description=readme,
     author='Curtis Maloney',
     author_email='curtis@tinbrain.net',
     url='http://github.com/funkybob/django-nap',
-    keywords=['django', 'json', 'rest'],
+    keywords=['django', 'json', 'rest', 'api'],
     packages = find_packages(exclude=('tests*',)),
     zip_safe=False,
     classifiers = [
@@ -22,6 +22,8 @@ setup(
         'Programming Language :: Python',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         # 'Programming Language :: Python :: Implementation :: PyPy',
     ],
     requires = [
