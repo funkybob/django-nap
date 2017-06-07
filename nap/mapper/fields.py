@@ -42,12 +42,12 @@ class context_field(field):
     def __get__(self, instance, cls=None):
         if instance is None:
             return self
-        return self.fget(instance, instance._obj)
+        return self.fget(instance._obj, instance._context)
 
     def __set__(self, instance, value):
         if self.fset is None:
             raise AttributeError("can't set attribute")
-        return self.fset(instance, instance._obj, value)
+        return self.fset(instance._obj, value, instance._context)
 
 
 class Field(field):

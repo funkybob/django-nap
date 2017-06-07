@@ -9,10 +9,16 @@ Current
 v0.30.7 (2016-06-??)
 ====================
 
+.. admonition::
+
+   The prototype for `context_field` has been changed.
+
 Enhancements:
 - Allow `ModelMapper` to inherit its `Meta` from a parent.
 - Add ``nap.http.StreamingJSONResponse``.
 - Add tools to help support generators in JSON encoding
+- Changed `context_field` to pass the Mapper._context as the last argument to
+  the getter and setter methods.
 
 -------
 History

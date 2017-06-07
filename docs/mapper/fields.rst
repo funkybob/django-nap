@@ -74,11 +74,8 @@ Accessing extra state
 
 Sometimes when serialising an object, you need to provide additional state.
 This can be done using a ``context_field``, which subclasses ``field``, but
-passes the `Mapper` instance as `self` to the getter and setter methods, and
-the bound object as the seond argument.
-
-Any extra `kwargs` passed when the `Mapper` is instanciated are stored on the
-mapper instance in `self._context`.
+passes any extra ``kwargs`` that were pased to `Mapper` instance `context` to
+the getter and setter methods as an extra argument.
 
 .. class:: context_field()
 
@@ -93,11 +90,11 @@ The following is an example from the test suite:
 
    class M(Mapper):
        @fields.context_field
-       def scaled(self, obj):
-           return obj.value * self._context['factor']
+       def scaled(self, context):
+           return self.value * context['factor']
 
        @scaled.setter
-       def scaled(self, obj, value):
+       def scaled(self, value, context):
            obj.value = value // self._context['factor']
 
    m = M(o, factor=10)

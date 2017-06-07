@@ -159,12 +159,12 @@ class FieldTestCase(TestCase):
     def test_context_field(self):
         class M(Mapper):
             @fields.context_field
-            def scaled(self, obj):
-                return obj.value * self._context['factor']
+            def scaled(self, context):
+                return self.value * context['factor']
 
             @scaled.setter
-            def scaled(self, obj, value):
-                obj.value = value // self._context['factor']
+            def scaled(self, value, context):
+                self.value = value // context['factor']
 
         o = SimpleNamespace(value=1)
         m = M(o, factor=10)
