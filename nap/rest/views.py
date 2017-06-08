@@ -33,11 +33,6 @@ class MapperMixin(JsonMixin):
     content_type = 'application/json'
     mapper_class = None
 
-    # Defaults for safety
-    object = None
-    object_list = None
-    mapper = None
-
     ok_status = http.STATUS.OK
     accepted_status = http.STATUS.ACCEPTED
     created_status = http.STATUS.CREATED
@@ -72,12 +67,14 @@ class MapperMixin(JsonMixin):
         Returns a `self.response_class` instance, passed ``mapper << obj``,
         along with `**kwargs`.
         '''
-        obj = kwargs.pop('object', self.object)
-        if obj is None:
+        try:
+            obj = kwargs.pop('object', self.object)
+        except AttributeError:
             obj = self.get_object()
 
-        mapper = kwargs.pop('mapper', self.mapper)
-        if mapper is None:
+        try:
+            mapper = kwargs.pop('mapper', self.mapper)
+        except AttributeError:
             mapper = self.get_mapper(obj)
 
         return self.response_class(mapper << obj, **kwargs)
@@ -98,12 +95,14 @@ class MapperMixin(JsonMixin):
         '''
         kwargs.setdefault('safe', False)
 
-        object_list = kwargs.pop('object_list', self.object_list)
-        if object_list is None:
+        try:
+            object_list = kwargs.pop('object_list', self.object_list)
+        except AttributeError:
             object_list = self.get_queryset()
 
-        mapper = kwargs.pop('mapper', self.mapper)
-        if mapper is None:
+        try:
+            mapper = kwargs.pop('mapper', self.mapper)
+        except AttributeError:
             mapper = self.get_mapper()
 
         page_size = self.get_paginate_by(object_list)
