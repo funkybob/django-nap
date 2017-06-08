@@ -65,10 +65,13 @@ class MapperTest(TestCase):
         self.assertEqual(cm.exception.messages, ["foo bar buz"])
 
     def test_005_inheritance(self):
-        class Parent(Mapper):
+        class GrandParent(Mapper):
             @field
             def f(self):
                 return self.f
+
+        class Parent(GrandParent):
+            pass
 
         class Child(Parent):
             @field
