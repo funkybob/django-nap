@@ -5,7 +5,7 @@ from django.utils import timezone
 
 from . import models
 
-from nap import mapper
+from nap import mapper, http
 from nap.extras import actions
 
 
@@ -32,5 +32,12 @@ class ActionTestCase(TestCase):
 
         resp = action(SimpleNamespace(model=models.Choice), None, models.Choice.objects.all())
         output = resp.getvalue()
-        # for field in M._fields:
-        #     self.assertTrue(field in output)
+        for field in M._fields:
+            self.assertTrue(field in output.decode('utf-8'))
+
+
+class HttpTest(TestCase):
+    def test_405(self):
+        resp = http.MethodNotAllowed(['GET', 'POST'])
+        self.assertEqual(resp.status_code, 405)
+        self.assertEqual(resp['Allow'], 'GET, POST')
