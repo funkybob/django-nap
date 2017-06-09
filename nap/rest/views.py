@@ -120,7 +120,7 @@ class MapperMixin(JsonMixin):
             data = {
                 'meta': meta,
                 'data': data,
-            })
+            }
 
         return self.response_class(data, **kwargs)
 
