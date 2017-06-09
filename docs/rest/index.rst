@@ -68,16 +68,28 @@ Base Classes
 
       Return a response with a single object.
 
-      Will use self.object if `object` is not passed.
+      Will use `self.object` if `object` is not passed, or call
+      `self.get_object` if `self.object` does not exist.
 
-      Will use self.mapper if `mapper` is not passed.
+      Will use `self.mapper` if `mapper` is not passed, or call
+      `self.get_mapper` if `self.mapper` does not exist.
 
    .. method:: multiple_response(\**kwargs)
 
       Return a response with a list of objects.
 
-      Will use self.object_list if 'object_list' is not passed.
-      Will use self.mapper if `mapper` is not passed.
+      Will use `self.object_list` if `object_list` is not passed, or call
+      `self.get_queryset()` if `self.object_list` does not exist.
+
+      Will use `self.mapper` if `mapper` is not passed, or call
+      `self.get_mapper()` if `self.mapper` does not exist.
+
+      Will apply pagination if `self.paginate_by` is set or `self.include_meta`
+      is True.
+
+   .. method:: get_meta(page)
+
+      Returns pagination metadata for paginated lists.
 
    .. method:: accepted_response(\**kwargs)
 
@@ -106,10 +118,6 @@ List Classes
    .. method:: ok_response(\**kwargs)
 
    Calls ``self.list_response(status=self.ok_response)``
-
-   .. method:: get_meta(page)
-
-  Returns pagination metadata for paginated lists.
 
 
 .. class:: ListGetMixin
