@@ -6,22 +6,29 @@ Changelog
 Current
 -------
 
+v0.30.9 (2016-06-09)
+====================
+
+Enhancements:
+
+- Add `MapperMixin.include_meta` as an override to including meta in responses.
+
+-------
+History
+-------
+
 v0.30.8 (2016-06-09)
 ====================
 
 Enhancements:
 
-- `ListGetView.get_meta(page)` was added to allow customising of meta-data in
+- `MapperMixin.get_meta(page)` was added to allow customising of meta-data in
   response.
 
 Deprecations:
 
 - `MapperMixin` no longer provides default values of None for `mapper`,
   `object` and `object_list`.
-
--------
-History
--------
 
 v0.30.7 (2016-06-07)
 ====================
