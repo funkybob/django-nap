@@ -6,32 +6,48 @@ Changelog
 Current
 -------
 
+v0.30.8 (2016-06-09)
+====================
+
+Enhancements:
+
+- `ListGetView.get_meta(page)` was added to allow customising of meta-data in
+  response.
+
+Deprecations:
+
+- `MapperMixin` no longer provides default values of None for `mapper`,
+  `object` and `object_list`.
+
+-------
+History
+-------
+
 v0.30.7 (2016-06-07)
 ====================
 
-.. admonition::
+.. admonition:: The prototype for `context_field` has been changed.
 
-   The prototype for `context_field` has been changed.
+   See documentation for details.
 
 Enhancements:
+
 - Allow `ModelMapper` to inherit its `Meta` from a parent.
 - Add ``nap.http.StreamingJSONResponse``.
 - Add tools to help support generators in JSON encoding
 - Changed `context_field` to pass the Mapper._context as the last argument to
   the getter and setter methods.
 
--------
-History
--------
-
 v0.30.6 (2016-05-29)
 ====================
 
 Enhancements:
+
 - Added custom __set__ method for `ToManyField` so it can call `set` on the
   manager.
 
 Bug Fixes:
+
 - Don't replace inherited fields with auto-added model fields.
 - Return a list of PKs if no Mapper provided to ToManyField
 
@@ -39,23 +55,28 @@ v0.30.5 (2017-05-27)
 ====================
 
 Enhancements:
+
 - Added pagination support to `MapperMixin.multiple_response`
 - Import all fields into mapper namespace
 - Allow passing \**kwargs to all CBV `valid_FOO` methods.
 
 Bug Fixes:
+
 - Call `all()` on `Manager` instances in `ToManyfield`
 
 Deprecations:
+
 - Removed `newrelic` module, as it was only to support Publishers.
 
 v0.30.4 (2017-05-25)
 ====================
 
 Enhancements:
+
 - Added `nap.utils.NapJSONEncoder` to support `__json__` protocol.
 
 Bug Fixes:
+
 - Fixed __new__ on field so subclasses work.
 - Reworked context_field to work properly, and match docs.
 
@@ -65,6 +86,7 @@ v0.30.3 (2017-05-24)
 Enhancements:
 
 Bug Fixes:
+
 - Using @foo.setter on a field will now retain other keyword arguments.
 - RPCClient now sets Content-Type on request.
 
@@ -72,23 +94,28 @@ v0.30.2 (2017-05-23)
 ====================
 
 Enhancements:
+
 - Began documenting the `extras` module.
 
 Bug Fixes:
+
 - Fixed ToOneField to reference `self.related_model` not `self.model`
 
 v0.30.1 (2017-05-18)
 ====================
 
 Enhancements:
+
 - fields will now raise and error when trying to set a value with no setter.
 
 Bug Fixes:
+
 - Include null in field constructor
 - Set null correctly in fields on ModelMapper
 - Handle null ForeignKey/OneToOneFields properly
 
 Deprecations:
+
 - Dropped `nap.utils.digattr` and `nap.mapper.fields.DigField`
 - Typed fields no longer special case None
 

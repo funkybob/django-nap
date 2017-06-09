@@ -107,6 +107,11 @@ List Classes
 
    Calls ``self.list_response(status=self.ok_response)``
 
+   .. method:: get_meta(page)
+
+  Returns pagination metadata for paginated lists.
+
+
 .. class:: ListGetMixin
 
    Provides ``get()`` for lists.
