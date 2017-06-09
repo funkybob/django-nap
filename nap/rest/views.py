@@ -32,6 +32,7 @@ class MapperMixin(JsonMixin):
     response_class = http.JsonResponse
     content_type = 'application/json'
     mapper_class = None
+    include_meta = False
 
     ok_status = http.STATUS.OK
     accepted_status = http.STATUS.ACCEPTED
@@ -114,12 +115,12 @@ class MapperMixin(JsonMixin):
 
         data = [mapper << obj for obj in object_list]
 
-        if page_size:
+        if page_size or self.include_meta:
             meta = self.get_meta(page)
-            return self.response_class({
+            data = {
                 'meta': meta,
                 'data': data,
-            }, **kwargs)
+            })
 
         return self.response_class(data, **kwargs)
 
