@@ -34,24 +34,35 @@ class RPCMixin(JsonMixin):
 
         Otherwise behaves as normal.
         '''
-        method = request.META.get('HTTP_X_RPC_ACTION', None)
-        if request.method != 'POST' or method is None:
-            return super().dispatch(request, *args, **kwargs)
+        function_name = request.META.get('HTTP_X_RPC_ACTION', None)
+        if request.method == 'POST' and function_name is not None:
+            try:
+                return self.dispatch_rpc(request, function_name)
+            except http.BaseHttpResponse as e:
+                return e
 
-        func = getattr(self, method, None)
+        return super().dispatch(request, *args, **kwargs)
+
+    def dispatch_rpc(self, request, function_name):
+        func = getattr(self, function_name, None)
         if not is_rpc_method(func):
             return http.PreconditionFailed()
 
+        data = self.get_request_data({})
+        sig = inspect.signature(func)
+
         try:
-            data = self.get_request_data({})
-            # Ensure data is valid for passing as **kwargs
-            (lambda **kwargs: None)(**data)
-        except (ValueError, TypeError):
-            return http.BadRequest()
+            sig.bind(**data)
+        except TypeError as e:
+            return http.BadRequest(e.args[0])
 
         resp = self.execute(func, data)
 
         return http.JsonResponse(resp)
+
+    def execute(self, handler, data):
+        '''Helpful hook to ease wrapping the handler'''
+        return handler(**data)
 
     def options(self, request, *args, **kwargs):
         '''
@@ -78,10 +89,6 @@ class RPCMixin(JsonMixin):
                 'defaults': argspec.defaults,
             }
         return methods
-
-    def execute(self, handler, data):
-        '''Helpful hook to ease wrapping the handler'''
-        return handler(**data)
 
 
 class RPCView(RPCMixin, View):
