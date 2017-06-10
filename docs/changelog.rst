@@ -12,6 +12,8 @@ v0.30.9 (2016-06-09)
 Enhancements:
 
 - Add `MapperMixin.include_meta` as an override to including meta in responses.
+- Moved `StreamingJSONResponse` into `nap.http.response`
+- Moved `except_response` into `nap.http.decorators`
 
 -------
 History

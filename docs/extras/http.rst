@@ -113,9 +113,9 @@ provides a `except_response` decorator.
 
 .. code-block:: python
 
-    import http
+    from nap.http.decorators import except_response
 
-    @http.except_response
+    @except_response
     def myview(request):
         try:
             obj = Thing.objects.get(user=request.user)
