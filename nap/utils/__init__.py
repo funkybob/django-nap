@@ -7,6 +7,11 @@ from django.http import QueryDict
 
 from .. import http
 
+try:
+    from json import JSONDecodeError
+except ImportError:
+    JSONDecodeError = ValueError
+
 
 class JsonMixin:
     '''
@@ -27,7 +32,7 @@ class JsonMixin:
                 return default
             try:
                 return self.loads(self.request.body.decode(encoding))
-            except json.JSONDecodeError:
+            except JSONDecodeError:
                 raise http.BadRequest()
 
         if self.request.method in ('PUT', 'PATCH'):
