@@ -5,6 +5,8 @@ from inspect import isgenerator
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import QueryDict
 
+from .. import http
+
 
 class JsonMixin:
     '''
@@ -23,7 +25,10 @@ class JsonMixin:
         if content_type in self.CONTENT_TYPES:
             if not self.request.body:
                 return default
-            return self.loads(self.request.body.decode(encoding))
+            try:
+                return self.loads(self.request.body.decode(encoding))
+            except json.JSONDecodeError:
+                raise http.BadRequest()
 
         if self.request.method in ('PUT', 'PATCH'):
             if content_type == 'application/x-www-form-urlencoded':
