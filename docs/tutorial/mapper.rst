@@ -86,7 +86,7 @@ window execute the following commands:
 
 .. code-block:: python
 
-    python manage.py makemigration
+    python manage.py makemigrations
     python manage.py migrate
 
 Awesome let's move on to the next step.
