@@ -19,7 +19,7 @@ activating it:
 
 .. code-block:: python
 
-    virtualenv nap-todo
+    virtualenv -p python3 nap-todo
     source nap-todo/bin/activate
 
 If you see `(nap-todo)` prefixed to all of your terminal commands you'll know
