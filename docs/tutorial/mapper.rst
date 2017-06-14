@@ -445,7 +445,6 @@ The todoapp/rest_views.py file should now look like this:
 
 .. code:: python
 
-    from nap import auth
     from nap.rest import views
 
     from . import mappers
