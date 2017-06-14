@@ -246,7 +246,6 @@ the "List of endpoints in words" section the url will handle.
     from django.conf.urls import include, url
 
     from . import views
-    from . import rest_views
 
 
     urlpatterns = [
@@ -261,12 +260,11 @@ Writing the view: list of List
 -------------------------------
 
 Now that we know what endpoints we are planning to build, and what each will
-need to do we can create the views that will process the requests. Let's create
-a new file called rest_views.py in the todoapp directory. We're going to start
-by implementing (1) which requires us to: "get a list of all of the ``List``
-resources"
+need to do we can create the views that will process the requests. We're going
+to start by implementing (1) which requires us to: "get a list of all of the
+``List`` resources".
 
-Lets add the following code to the todoapp/rest_views.py file:
+Lets add the following code to the todoapp/views.py file:
 
 .. code-block:: python
 
@@ -276,9 +274,14 @@ Lets add the following code to the todoapp/rest_views.py file:
     from . import models
 
 
-    class ListListView(views.BaseListView):
+    class ListMixin:
         model = models.List
         mapper_class = mappers.ListMapper
+
+
+    class ListListView(ListMixin,
+                       views.BaseListView):
+        pass
 
 Given we want to get a list of all the List resources, we will use the
 ``nap.rest.views.BaseListView`` as a starting point. The BaseListView combines
@@ -294,7 +297,7 @@ get() method for lists. This means the HTTP verb GET can now be used with our
 view. We need to update our ``ListListView(views.BaseListView)`` class to
 include the ``ListGetMixin`` so let's do that.
 
-Update your todoapp/rest_views.py file to look like this:
+Update your todoapp/views.py file to look like this:
 
 .. code-block:: python
 
@@ -304,9 +307,15 @@ Update your todoapp/rest_views.py file to look like this:
     from . import models
 
 
-    class ListListView(views.ListGetMixin, views.BaseListView):
+    class ListMixin:
         model = models.List
         mapper_class = mappers.ListMapper
+
+
+    class ListListView(ListMixin,
+                       views.ListGetMixin,
+                       views.BaseListView):
+        pass
 
 Adding POST functionality: list of List
 ---------------------------------------
@@ -316,8 +325,8 @@ Lists, we'd POST to the same url (/api/list/). That's as simple as including
 the ``ListPostMixin`` to the ``ListListView``. This will provide the post()
 method which will allow us to use the POST HTTP verb.
 
-Let's go ahead and do that now. Update your todoapp/rest_views.py file to look
-like this:
+Let's go ahead and do that now. Update your todoapp/views.py file to look like
+this:
 
 .. code-block:: python
 
@@ -327,7 +336,15 @@ like this:
     from . import models
 
 
-    class ListListView(views.ListPostMixin, views.ListGetMixin, views.BaseListView):
+    class ListMixin:
+        model = models.List
+        mapper_class = mappers.ListMapper
+
+
+    class ListListView(ListMixin,
+                       views.ListPostMixin,
+                       views.ListGetMixin,
+                       views.BaseListView):
         model = models.List
         mapper_class = mappers.ListMapper
 
@@ -347,11 +364,10 @@ Update your todoapp/urls.py to look like this:
     from django.views.decorators.csrf import csrf_exempt
 
     from . import views
-    from . import rest_views
 
 
     urlpatterns = [
-        url(r'^list/$', csrf_exempt(rest_views.ListListView.as_view())),
+        url(r'^list/$', csrf_exempt(views.ListListView.as_view())),
         # /api/list/<id>/ # GET will deal with (3)
         # /api/item/ # GET will deal with (4) and POST will deal with (5)
         # /api/item/<id>/ # GET will deal with (6)
@@ -418,19 +434,14 @@ SingleObjectMixin) with View. From the Django docs: "SingleObjectMixin provides
 a mechanism for looking up an object associated with the current HTTP request."
 Again, this sounds like what we need!
 
-Lets add the following code to the todoapp/rest_views.py file:
+Lets add the following code to the todoapp/views.py file:
 
 .. code:: python
 
-    from nap.rest import views
 
-    from . import mappers
-    from . import models
-
-
-    class ListObjectView(views.BaseObjectView):
-        model = models.List
-        mapper_class = mappers.ListMapper
+    class ListObjectView(ListMixin,
+                         views.BaseObjectView):
+        pass
 
 
 Adding GET functionality: object of List
@@ -441,7 +452,7 @@ Class-Based View. Lets add GET functionality to our ListObjectView. In a
 similar fashion to how we have done throughout this tutorial we'll simply
 include one of the powerful mixins. Namely, the ListObjectView mixin.
 
-The todoapp/rest_views.py file should now look like this:
+The todoapp/views.py file should now look like this:
 
 .. code:: python
 
@@ -451,14 +462,22 @@ The todoapp/rest_views.py file should now look like this:
     from . import models
 
 
-    class ListListView(views.ListPostMixin, views.ListGetMixin, views.BaseListView):
+    class ListMixin:
         model = models.List
         mapper_class = mappers.ListMapper
 
 
-    class ListObjectView(views.ObjectGetMixin, views.BaseObjectView):
-        model = models.List
-        mapper_class = mappers.ListMapper
+    class ListListView(ListMixin,
+                       views.ListPostMixin,
+                       views.ListGetMixin,
+                       views.BaseListView):
+        pass
+
+
+    class ListObjectView(ListMixin,
+                         views.ObjectGetMixin,
+                         views.BaseObjectView):
+        pass
 
 
 Defining the URL: object of List
@@ -471,7 +490,7 @@ Add this url to your todoapp/urls.py file:
 
 .. code-block:: python
 
-    url(r'^list/(?P<pk>\d+)/$', csrf_exempt(rest_views.ListObjectView.as_view())),
+    url(r'^list/(?P<pk>\d+)/$', csrf_exempt(views.ListObjectView.as_view())),
 
 Again we're using the csrf_exempt() decorator for the sake of this tutorial.
 
@@ -499,26 +518,35 @@ for that below, but I recommend you try do it yourself first! Note, the code
 below excludes the more complicated foreign key fields which we will build
 together.
 
-Add the following to todoapp/rest_views.py:
+Add the following to todoapp/views.py:
 
 .. code-block:: python
 
-    class ItemListView(views.ListPostMixin, views.ListGetMixin, views.BaseListView):
+    class ItemMixin:
         model = models.Item
         mapper_class = mappers.ItemMapper
 
 
-    class ItemObjectView(views.ObjectGetMixin, views.BaseObjectView):
-        model = models.Item
-        mapper_class = mappers.ItemMapper
+    class ItemListView(ItemMixin,
+                       views.ListPostMixin,
+                       views.ListGetMixin,
+                       views.BaseListView):
+        pass
+
+
+    class ItemObjectView(ItemMixin,
+                         views.ObjectGetMixin,
+                         views.BaseObjectView):
+        pass
+
 
 Don't forget to update todoapp/urls.py with the URL tuples that will call these
 views:
 
 .. code-block:: python
 
-    url(r'^item/$', csrf_exempt(rest_views.ItemListView.as_view())),
-    url(r'^item/(?P<pk>\d+)/$', csrf_exempt(rest_views.ItemObjectView.as_view())),
+    url(r'^item/$', csrf_exempt(views.ItemListView.as_view())),
+    url(r'^item/(?P<pk>\d+)/$', csrf_exempt(views.ItemObjectView.as_view())),
 
 
 5. Update Mappers
@@ -650,7 +678,7 @@ to control the permissions of any handler method. We're going to create a login
 view that will authorise a user using the Django authentication system. This
 means we'll be able to make use of Django's inbuilt forms too.
 
-In your rest_views.py add the following class:
+In your views.py add the following class:
 
 .. code-block:: python
 
@@ -688,63 +716,48 @@ when already logged in will log the User out.
 7. Permissions
 ==============
 
-Now that we have created an authorisation endpoint and view, we can decorate
-some of our views to control permissions to them. This is achieved by using the
-``permit`` decorator.
+Now that we have created an authorisation endpoint and view, we can now
+leverage Django's build in authentication mixins to control access.
 
 We've decided we only want to allow logged in users to post new messages, so we
-override post() method of the ListListView class which is provided by the
-ListPostMixin class. Permissions can be set on a per method basis, for example
-the following set-up will allow POSTing only if authorised.
+mix in the `UserPassesTestMixin` to the ListListView class.  All we need is to
+add a `test_func` to only check if a user is authentencated if it's a POST.
 
 .. code-block:: python
 
-    from nap import auth
-    from nap.rest import views
+    from django.contrib.auth.mixins import UserPassesTestMixin
 
-    from . import mappers
-    from . import models
+    ...
 
+    class ListListView(UserPassesTestMixin,
+                       ListMixin,
+                       views.ListPostMixin,
+                       views.ListGetMixin,
+                       views.BaseListView):
 
-    class ListListView(views.ListPostMixin, views.ListGetMixin, views.BaseListView):
-        model = models.List
-        mapper_class = mappers.ListMapper
+        def test_func(self):
+            if self.request.method == 'POST':
+                return self.user.is_authenticated:
+            return True
 
-        @auth.permit_logged_in
-        def post(self, *args, **kwargs):
-            return super(ListListView, self).post(*args, **kwargs)
 
 Let's update our Item related views to only allow authorised Users to GET and
-POST. We'll override the get() and post() methods for the ItemListView.
+POST. We'll use Dango's provided `LoginRequiredMixin`.
 
-Update the ItemListView class in todoapp/rest_views.py to look like this:
-
-.. code-block:: python
-
-    class ItemListView(views.ListPostMixin, views.ListGetMixin, views.BaseListView):
-        model = models.Item
-        mapper_class = mappers.ItemMapper
-
-        @auth.permit_logged_in
-        def get(self, *args, **kwargs):
-            return super(ItemListView, self).get(*args, **kwargs)
-
-        @auth.permit_logged_in
-        def post(self, *args, **kwargs):
-             return super(ItemListView, self).get(*args, **kwargs)
-
-Next we'll override the get() method of the ItemObjectView class. Update the
-ItemObjectView class in todoapp/rest_views.py to look like this:
+Update the ItemListView class in todoapp/views.py to look like this:
 
 .. code-block:: python
+    from django.contrib.auth.mixins import LoginRequiredMixin
 
-    class ItemObjectView(views.ObjectGetMixin, views.BaseObjectView):
-        model = models.Item
-        mapper_class = mappers.ItemMapper
+    ...
 
-        @auth.permit_logged_in
-        def get(self, *args, **kwargs):
-            return super(ItemObjectView, self).get(*args, **kwargs)
+    class ItemListView(LoginRequiredMixin,
+                       ItemMixin,
+                       views.ListPostMixin,
+                       views.ListGetMixin,
+                       views.BaseListView):
+        pass
+
 
 8. Finished!
 ============
