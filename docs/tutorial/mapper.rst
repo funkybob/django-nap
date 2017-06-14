@@ -747,6 +747,7 @@ POST. We'll use Dango's provided `LoginRequiredMixin`.
 Update the ItemListView class in todoapp/views.py to look like this:
 
 .. code-block:: python
+
     from django.contrib.auth.mixins import LoginRequiredMixin
 
     ...
