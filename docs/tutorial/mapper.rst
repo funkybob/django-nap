@@ -1,6 +1,6 @@
-===============
-Mapper Tutorial
-===============
+===================
+Old Mapper Tutorial
+===================
 
 In this tutorial we will write a small django-nap powered RESTful service for a
 to-do list application. The tutorial has been tested against Django (1.8.3) and
