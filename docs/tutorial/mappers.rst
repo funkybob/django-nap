@@ -83,17 +83,16 @@ We can define mapper fields that do "work" as simply as we would add ``property`
 
 .. code-block:: python
 
-    from django.utils import timezone
-
+    from djanog.utils.timesince import timesince
 
     class QuestionMapper(mapper.ModelMapper):
         class Meta:
             model = models.Question
             fields = '__all__'
 
-    @mapper.field
-    def age(self):
-        return timezone.now() - self.pub_date
+        @mapper.field
+        def age(self):
+            return timesince(self.pub_date)
 
 Of interest here is that the `self` passed to the getter function is not the
 `QuestionMapper` class, but the object it is bound to - that is, our model
@@ -130,3 +129,34 @@ Alternatively, ``_patch`` is used to update only the fields provided.
 Any validation errors raised by fields will be gathered and passed in a single
 ValidationError exception at the end of processing. The errors will also be
 stored on the Mapper instance as ``_errors``.
+
+Readonly fields
+---------------
+
+But wait!  We don't want to let people alter the Question a Choice is assignd
+to!
+
+We need to mark that field as read only.
+
+For fields discovered from models, we can override their readonly nature in
+the Meta:
+
+.. code-block:: python
+
+    class ChoiceMapper(maper.ModelMapper):
+        class Meta:
+            model = models.Choice
+            fields = '__all__'
+            readonly = {
+                'question': True,
+            }
+
+And for a `field`, we can pass an argument when declaring it:
+
+.. code-block:: python
+
+    @mapper.field(readonly=True)
+    def age(self):
+        return timesince(self.pub_date)
+
+This will mean `_apply` and `_patch` will ignore values for this field.
