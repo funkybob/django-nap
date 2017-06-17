@@ -63,6 +63,11 @@ This works both ways.  We can set values on our model via the mapper:
     >>> m.question_text = "So, what is new?"
     >>> q.question_text
     'So, what is new?'
+    >>> m.pub_date = '1975-11-05 23:30:00'
+    >>> q.pub_date
+    datetime.datetime(1975, 11, 5, 23, 30)
+
+See that the ISO-8601 string was converted back to a datetime instance.
 
 There's also a helpful function to grab all the defined fields and return them as a dict:
 
