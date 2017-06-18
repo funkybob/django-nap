@@ -90,7 +90,7 @@ We can define mapper fields that do "work" as simply as we would add ``property`
 .. code-block:: python
    :caption: polls/mappers.py
 
-    from djanog.utils.timesince import timesince
+    from django.utils.timesince import timesince
 
     class QuestionMapper(mapper.ModelMapper):
         class Meta:
