@@ -19,6 +19,7 @@ Question Mapper
 So let's start with the `QuestionMapper`.  Create a new file in your poll/ app, and call it "mappers.py"
 
 .. code-block:: python
+   :caption: polls/mappers.py
 
     from nap import mapper
 
@@ -87,6 +88,7 @@ What if, as well as the publication date, we want to provide the age?
 We can define mapper fields that do "work" as simply as we would add ``property`` to a class:
 
 .. code-block:: python
+   :caption: polls/mappers.py
 
     from djanog.utils.timesince import timesince
 
@@ -110,6 +112,7 @@ Choice Mapper
 The `ChoiceMapper` is just as simple:
 
 .. code-block:: python
+   :caption: polls/mappers.py
 
     class ChoiceMapper(maper.ModelMapper):
         class Meta:
@@ -131,7 +134,7 @@ dict, this will be treated as an error.
 
 Alternatively, ``_patch`` is used to update only the fields provided.
 
-Any validation errors raised by fields will be gathered and passed in a single
+Any validation errors raised by fields will be gathered and raised in a single
 ValidationError exception at the end of processing. The errors will also be
 stored on the Mapper instance as ``_errors``.
 
@@ -147,6 +150,7 @@ For fields discovered from models, we can override their readonly nature in
 the Meta:
 
 .. code-block:: python
+   :caption: polls/mappers.py
 
     class ChoiceMapper(maper.ModelMapper):
         class Meta:
@@ -159,6 +163,7 @@ the Meta:
 And for a `field`, we can pass an argument when declaring it:
 
 .. code-block:: python
+   :caption: polls/mappers.py
 
     @mapper.field(readonly=True)
     def age(self):
