@@ -99,6 +99,9 @@ We can ask our mapper to render a list of related records using a `ToMany` field
 
       choices = mapper.ToManyField('choice_set')
 
+The `ToManyField` will check if its value is a ``django.db.models.Manager``,
+and call `.all()` on it if it is.
+
 And now out output will look something like this:
 
 .. code-block:: json
@@ -116,7 +119,6 @@ And now out output will look something like this:
 By default, a `ToManyField` will only render the primary keys of the related
 objects. If you want to control how it's serialised, just specify a mapper on
 the field.
-
 
 .. code-block:: python
    :caption: polls/mappers.py
