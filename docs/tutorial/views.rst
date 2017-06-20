@@ -9,7 +9,10 @@ Now it's time to make our data visible to the outside world.
 Question List
 -------------
 
-First, let's add our question list view.
+Now it's time to add our question list endpoint.
+
+First, we'll define a common ``QuestionMixin`` class to help hold common
+definitions for list and object views:
 
 .. code-block:: python
    :caption: polls/views.py
@@ -22,28 +25,37 @@ First, let's add our question list view.
         model = models.Question
         mapper_class = mappers.QuestionMapper
 
+Next we'll define our ``QuestionListView``, based on this and the
+``BaseListView`` fron nap:
 
-   class QuestionListView(QuestionMixin,
-                          views.ListGetMixin,
-                          views.BaseListView):
-      pass
+.. code-block:: python
+   :caption: polls/views.py
 
-So, we've defined a common `QuestionMixin` class to help hold common
-definitions for list and object views, and a `QuestionListView`.
+    class QuestionListView(QuestionMixin,
+                           views.BaseListView):
+        pass
 
-This view is composed of our `QuestionMixin`, and two classes from
-``django.nap.rest.views``: `ListGetMixin` and `BaeListView`
+As it is, this view won't do anything, as it has no ``get``, ``post`` or other
+methods.  What it does provide is Django's ``MultipleObjectMixin``, along with
+nap's ``MapperMixin`` and ``NapView`` classes.
 
-The `BaseListView` class provides common functionality for all list views,
-including Django's `MultipleObjectMixin`.
+To add the default GET behavior for a list, we mix in the ``ListGetMixin``:
+
+.. code-block:: python
+   :caption: polls/views.py
+
+    class QuestionListView(QuestionMixin,
+                           views.ListGetMixin,
+                           views.BaseListView):
+        pass
 
 The `ListGetMixin` adds a simple `get` method, which will return a list of
 mapped instances of our model.
 
-Let's add our new view to the existing ones, but with a 'api/' prefix:
+Let's add our new view to the existing urls, but with a 'api/' prefix:
 
 .. code-block:: python
-   :caption: urls.py
+   :caption: polls/urls.py
 
    from django.conf.urls import url
 
