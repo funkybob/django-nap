@@ -5,7 +5,7 @@ with open('README.rst') as fin:
 
 setup(
     name='django-nap',
-    version='0.30.8',
+    version='0.30.9',
     description='A light REST tool for Django',
     long_description=readme,
     author='Curtis Maloney',
