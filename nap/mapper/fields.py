@@ -1,6 +1,7 @@
 import datetime
 from functools import partial
 
+from django.core.exceptions import ValidationError
 from django.db.models.fields import NOT_PROVIDED
 
 
@@ -70,7 +71,10 @@ class Field(field):
             if not self.null:
                 raise ValueError('Field may not be None')
         else:
-            value = self.set(value)
+            try:
+                value = self.set(value)
+            except ValueError:
+                raise ValidationError('Invalid value')
         setattr(instance._obj, self.attr, value)
 
     def get(self, value):
