@@ -6,7 +6,19 @@ Changelog
 Current
 -------
 
-v0.30.9 (2016-06-??)
+v0.30.9 (2016-07-??)
+====================
+
+Bug Fixes:
+
+- A ``TypeError`` raised in ``nap.mapper.Field.set`` will now be caught and
+  raised as a ``ValidationError``.
+
+-------
+History
+-------
+
+v0.30.9 (2016-06-26)
 ====================
 
 Enhancements:
@@ -14,10 +26,6 @@ Enhancements:
 - Add `MapperMixin.include_meta` as an override to including meta in responses.
 - Moved `StreamingJSONResponse` into `nap.http.response`
 - Moved `except_response` into `nap.http.decorators`
-
--------
-History
--------
 
 v0.30.8 (2016-06-09)
 ====================
