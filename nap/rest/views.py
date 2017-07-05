@@ -4,6 +4,7 @@ from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.list import MultipleObjectMixin
 
 from .. import http
+from ..http.decorators import except_response
 from ..utils import JsonMixin, flatten_errors
 
 
@@ -14,15 +15,13 @@ class NapView(View):
     Catches any http exceptions raised, and returns them.
     '''
 
-    def dispatch(self, *args, **kwargs):
+    @classmethod
+    def as_view(cls, **initkwargs):
         '''
         If any code raises one of our HTTP responses, we should catch and
         return it.
         '''
-        try:
-            return super().dispatch(*args, **kwargs)
-        except http.BaseHttpResponse as exc:
-            return exc
+        return except_response(super().as_view(**initkwargs))
 
 
 class MapperMixin(JsonMixin):
