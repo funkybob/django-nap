@@ -9,6 +9,11 @@ Current
 v0.30.9 (2016-07-??)
 ====================
 
+Enhancements:
+
+- NapView now decorates the as_view response with except_response, instead of
+  overriding dispatch.
+
 Bug Fixes:
 
 - A ``TypeError`` raised in ``nap.mapper.Field.set`` will now be caught and
