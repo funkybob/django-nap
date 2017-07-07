@@ -17,7 +17,7 @@ class ModelMapperTestCase(TestCase):
                 pass
 
         with self.assertRaises(ValueError):
-            class M(ModelMapper):
+            class N(ModelMapper):
                 class Meta:
                     pass
 
@@ -64,3 +64,21 @@ class ModelMapperTestCase(TestCase):
         self.assertTrue('choice_text' in M._fields)
         self.assertTrue('votes' in M._fields)
         self.assertFalse(isinstance(M._fields['votes'], Field))
+
+    def test_ineritance(self):
+        class M(ModelMapper):
+            class Meta:
+                model = models.Choice
+                fields = ('choice_text',)
+
+        class N(M):
+            votes = Field('votes')
+
+        self.assertTrue('choice_text' in N._fields)
+
+        class O(N):
+            @field
+            def text_len(self):
+                return len(self.choice_text)
+
+        self.assertEqual(len(O._fields), 3)

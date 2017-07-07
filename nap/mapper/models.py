@@ -43,8 +43,7 @@ class MetaMapper(BaseMetaMapper):
                 raise ValueError('No model defined on class Meta.')
         else:
             existing = attrs.copy()
-            for base in reversed(bases):
-                existing.update(base._fields)
+            existing.update(bases[0]._fields)
 
             # for f in meta.model._meta.get_fields():
             for f in meta.model._meta.fields:
