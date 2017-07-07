@@ -13,6 +13,7 @@ Enhancements:
 
 - NapView now decorates the as_view response with except_response, instead of
   overriding dispatch.
+- Simplified code that builds ModelMapper
 
 Bug Fixes:
 
