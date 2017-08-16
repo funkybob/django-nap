@@ -6,11 +6,13 @@ Changelog
 Current
 -------
 
-v0.30.9 (2016-07-??)
+v0.30.10 (2016-08-??)
 ====================
 
 Enhancements:
 
+- JsonMixin will use request.content_type and request.content_params in Django
+  1.10+, instead of parsing them itself.
 - NapView now decorates the as_view response with except_response, instead of
   overriding dispatch.
 - Simplified code that builds ModelMapper
