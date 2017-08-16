@@ -2,6 +2,7 @@ import json
 from cgi import parse_header, parse_multipart
 from inspect import isgenerator
 
+from django import VERSION
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import QueryDict
 
@@ -25,7 +26,11 @@ class JsonMixin:
         from django.conf import settings
         encoding = self.request.encoding or settings.DEFAULT_CHARSET
 
-        content_type, content_data = parse_header(self.request.META.get('CONTENT_TYPE', ''))
+        if VERSION < (1, 10):
+            content_type, content_params = parse_header(self.request.META.get('CONTENT_TYPE', ''))
+        else:
+            content_type = self.request.content_type
+            content_params = self.request.content_params
 
         if content_type in self.CONTENT_TYPES:
             if not self.request.body:
@@ -39,7 +44,7 @@ class JsonMixin:
             if content_type == 'application/x-www-form-urlencoded':
                 return QueryDict(self.request.body, encoding=encoding)
             elif content_type == 'multipart/form-data':
-                return parse_multipart(self.request.body, content_data)
+                return parse_multipart(self.request.body, content_params)
 
         return self.request.POST
 
