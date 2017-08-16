@@ -16,6 +16,7 @@ Enhancements:
 - NapView now decorates the as_view response with except_response, instead of
   overriding dispatch.
 - Simplified code that builds ModelMapper
+- RPCView now uses NapView to handle exception responses.
 
 Bug Fixes:
 
