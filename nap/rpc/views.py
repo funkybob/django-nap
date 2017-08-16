@@ -2,9 +2,8 @@
 import inspect
 import json
 
-from django.views.generic import View
-
 from nap import http
+from nap.rest.views import NapView
 from nap.utils import JsonMixin
 
 RPC_MARKER = '_rpc'
@@ -36,10 +35,7 @@ class RPCMixin(JsonMixin):
         '''
         function_name = request.META.get('HTTP_X_RPC_ACTION', None)
         if request.method == 'POST' and function_name is not None:
-            try:
-                return self.dispatch_rpc(request, function_name)
-            except http.BaseHttpResponse as e:
-                return e
+            return self.dispatch_rpc(request, function_name)
 
         return super().dispatch(request, *args, **kwargs)
 
@@ -91,6 +87,6 @@ class RPCMixin(JsonMixin):
         return methods
 
 
-class RPCView(RPCMixin, View):
+class RPCView(RPCMixin, NapView):
     '''Courtesy class to avoid having to mix it yourself.'''
     pass
