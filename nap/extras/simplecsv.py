@@ -10,29 +10,29 @@ class Writer:
     b'1,"2,",c\n'
 
     '''
+    __slots__ = ('fields', 'headers', 'SEP', 'QUOTE', 'ESCQUOTE', 'LINEBREAK', 'ENCODING', 'escape_field')
 
-    # What to put between fields
-    SEP = u','
-    # What to wrap fields in, if they contain SEP
-    QUOTE = u'"'
-    # What to replace a QUOTE in a field with
-    ESCQUOTE = QUOTE + QUOTE
-    # What to put between records
-    LINEBREAK = u'\n'
-    ENCODING = 'utf-8'
-
-    fields = []
-
-    def __init__(self, **opts):
+    def __init__(self, fields,
+                 headers=None,
+                 SEP = u',',                # What to put between fields
+                 QUOTE = u'"',              # What to wrap fields in, if they contain SEP
+                 ESCQUOTE = None,           # What to replace a QUOTE in a field with
+                 LINEBREAK = u'\n',         # What to put between records
+                 ENCODING = 'utf-8',
+        ):
         '''
         opts MUST contain 'fields', a list of field names.
         opts may also include 'headers', a list of field headings.
         opts MAY override any of the above configurables.
         '''
-        self.__dict__.update(opts)
+        self.fields = fields
+        self.headers = headers or fields
+        self.SEP = SEP
+        self.QUOTE = QUOTE
+        self.ESCQUOTE = ESCQUOTE or QUOTE + QUOTE
+        self.LINEBREAK = LINEBREAK
+        self.ENCODING = ENCODING
 
-    def write(self, values):
-        '''Write a row of values'''
         def escape_field(val, SEP=self.SEP, QUOTE=self.QUOTE, ESCQ=self.ESCQUOTE):
             '''
             Escape separator and quote values, and wrap with quotes if needed
@@ -45,8 +45,11 @@ class Writer:
             if SEP in val or QUOTE in val:
                 return QUOTE + val + QUOTE
             return val
+        self.escape_field = escape_field
 
-        line = self.SEP.join(map(escape_field, values)) + self.LINEBREAK
+    def write(self, values):
+        '''Write a row of values'''
+        line = self.SEP.join(map(self.escape_field, values)) + self.LINEBREAK
         if self.ENCODING:
             line = line.encode(self.ENCODING)
         return line
@@ -57,4 +60,4 @@ class Writer:
 
     def write_headers(self):
         '''Write a row of headers.'''
-        return self.write(getattr(self, 'headers', self.fields))
+        return self.write(self.headers)
