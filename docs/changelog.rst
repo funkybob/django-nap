@@ -17,6 +17,7 @@ Enhancements:
   overriding dispatch.
 - Simplified code that builds ModelMapper
 - RPCView now uses NapView to handle exception responses.
+- Micro-optimsations for ``nap.extras.simplecsv.Writer``
 
 Bug Fixes:
 
