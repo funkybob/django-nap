@@ -21,8 +21,8 @@ Enhancements:
 
 Bug Fixes:
 
-- A ``TypeError`` raised in ``nap.mapper.Field.set`` will now be caught and
-  raised as a ``ValidationError``.
+- A ``TypeError`` or ``ValueError`` raised in ``nap.mapper.Field.set`` will now
+  be caught and raised as a ``ValidationError``.
 
 -------
 History

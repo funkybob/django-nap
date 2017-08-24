@@ -73,7 +73,7 @@ class Field(field):
         else:
             try:
                 value = self.set(value)
-            except ValueError:
+            except (TypeError, ValueError):
                 raise ValidationError('Invalid value')
         setattr(instance._obj, self.attr, value)
 
