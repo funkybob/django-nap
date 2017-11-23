@@ -38,12 +38,13 @@ class MetaMapper(BaseMetaMapper):
                 meta = object()
         meta = Options(meta)
 
+        cls = super().__new__(mcs, name, bases, attrs)
+
         if meta.model is None:
             if bases != (Mapper,):
                 raise ValueError('No model defined on class Meta.')
         else:
-            existing = attrs.copy()
-            existing.update(bases[0]._fields)
+            existing = set(cls._field_names)
 
             # for f in meta.model._meta.get_fields():
             for f in meta.model._meta.fields:
@@ -80,12 +81,15 @@ class MetaMapper(BaseMetaMapper):
                 else:
                     field_class = FIELD_MAP.get(f.__class__.__name__, fields.Field)
 
-                attrs[f.name] = field_class(f.name, **kwargs)
-            # Inherit
-            attrs = dict(existing, **attrs)
-        attrs['_meta'] = meta
+                field = field_class(f.name, **kwargs)
+                setattr(cls, f.name, field)
+                cls._fields[f.name] = field
 
-        return super().__new__(mcs, name, bases, attrs)
+        cls._field_names = tuple(cls._fields)
+
+        setattr(cls, '_meta', meta)
+
+        return cls
 
 
 class ModelMapper(Mapper, metaclass=MetaMapper):
