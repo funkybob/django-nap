@@ -122,3 +122,7 @@ Both accept the same extra arguments:
 
 When the mapper is omitted, only the Primary Key of the related model will be
 used.
+
+The ``ToManyField`` will work on any iterable, however if it's passed a
+``Manager`` it will call ``.all()`` before iterating it. This makes it ideally
+suited for ``ManyToMany`` and reverse ``ForeignKey`` accessors.
