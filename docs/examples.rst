@@ -108,7 +108,7 @@ Login endpoint:
 
         @classonlymethod
         def as_view(cls, *args, **kwargs):
-            view = super(LoginView, cls).as_view(*args, **kwargs)
+            view = super().as_view(*args, **kwargs)
             return ensure_csrf_token(view)
 
         def get(self, request):
@@ -118,8 +118,6 @@ Login endpoint:
             return http.Forbidden()
 
         def post(self, request):
-            if request.user.is_authenticated():
-                auth.logout(request)
             form = AuthenticationForm(request, self.get_request_data({}))
             if form.is_valid():
                 auth.login(request, form.get_user())
