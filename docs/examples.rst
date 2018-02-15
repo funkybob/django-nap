@@ -99,6 +99,7 @@ Login endpoint:
     from django.utils.decorators import classonlymethod
     from django.views.decorators.csrf import ensure_csrf_cookie
 
+    from nap import http
     from nap.rest import views
 
     from . import mappers
