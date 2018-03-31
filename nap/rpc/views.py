@@ -24,6 +24,12 @@ class RPCMixin(JsonMixin):
     '''Mix in to a standard View to provide RPC actions'''
     permit_introspect = False
 
+    def post(self, request):
+        '''
+        Dummy post to show the View it's OK to POST.
+        '''
+        pass
+
     def dispatch(self, request, *args, **kwargs):
         '''
         Check if this is a POST and has the X-RPC-Action header.

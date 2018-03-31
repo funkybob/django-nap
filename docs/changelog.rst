@@ -6,7 +6,19 @@ Changelog
 Current
 -------
 
-v0.30.10 (2016-08-??)
+v0.30.11 (2017-03-31)
+=====================
+
+Bug Fixes:
+
+- Added a dummy `post` method to ``nap.rpc.views.RpcMixin`` so ``View``
+  believes `POST` is acceptable.
+
+-------
+History
+-------
+
+v0.30.10 (2017-08-24)
 ====================
 
 Enhancements:
@@ -24,11 +36,7 @@ Bug Fixes:
 - A ``TypeError`` or ``ValueError`` raised in ``nap.mapper.Field.set`` will now
   be caught and raised as a ``ValidationError``.
 
--------
-History
--------
-
-v0.30.9 (2016-06-26)
+v0.30.9 (2017-06-26)
 ====================
 
 Enhancements:
@@ -37,7 +45,7 @@ Enhancements:
 - Moved `StreamingJSONResponse` into `nap.http.response`
 - Moved `except_response` into `nap.http.decorators`
 
-v0.30.8 (2016-06-09)
+v0.30.8 (2017-06-09)
 ====================
 
 Enhancements:
@@ -50,7 +58,7 @@ Deprecations:
 - `MapperMixin` no longer provides default values of None for `mapper`,
   `object` and `object_list`.
 
-v0.30.7 (2016-06-07)
+v0.30.7 (2017-06-07)
 ====================
 
 .. admonition:: The prototype for `context_field` has been changed.
@@ -65,7 +73,7 @@ Enhancements:
 - Changed `context_field` to pass the Mapper._context as the last argument to
   the getter and setter methods.
 
-v0.30.6 (2016-05-29)
+v0.30.6 (2017-05-29)
 ====================
 
 Enhancements:
