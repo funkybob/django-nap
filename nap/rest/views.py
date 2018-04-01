@@ -105,7 +105,7 @@ class MapperMixin(JsonMixin):
             object_list = kwargs.pop('object_list')
         except KeyError:
             try:
-                object_list = self.object_list)
+                object_list = self.object_list
             except AttributeError:
                 object_list = self.get_queryset()
 
@@ -115,7 +115,7 @@ class MapperMixin(JsonMixin):
             try:
                 mapper = self.mapper
             except AttributeError:
-                mapper = self.get_mapper(obj)
+                mapper = self.get_mapper()
 
         page_size = self.get_paginate_by(object_list)
         if page_size:
