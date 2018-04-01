@@ -9,10 +9,15 @@ Current
 v0.30.11 (2017-03-31)
 =====================
 
+Enhancements:
+
+- Simplify ``nam.mapper.base.MetaMapper`` discovering fields.
+- Simplify ``nap.mapper.models.MetaMapper`` accordingly.
+
 Bug Fixes:
 
 - Added a dummy `post` method to ``nap.rpc.views.RpcMixin`` so ``View``
-  believes `POST` is acceptable.
+  believes `POST` is an acceptable method.
 - Fix fallback when looking for object/object_list/mapper in REST views.
 
 -------
