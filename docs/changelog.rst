@@ -13,6 +13,7 @@ Bug Fixes:
 
 - Added a dummy `post` method to ``nap.rpc.views.RpcMixin`` so ``View``
   believes `POST` is acceptable.
+- Fix fallback when looking for object/object_list/mapper in REST views.
 
 -------
 History
