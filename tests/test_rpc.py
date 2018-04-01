@@ -52,7 +52,7 @@ class RPCTest(TestCase):
         self.assertEqual(data, {'foo': ['bar']})
 
     def test_no_action(self):
-        r = self.call(None, action=None)
+        r = self.call({}, action=None)
         self.assertEqual(r.status_code, STATUS.METHOD_NOT_ALLOWED)
 
     def test_bad_action(self):
