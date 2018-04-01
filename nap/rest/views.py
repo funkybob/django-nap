@@ -68,7 +68,7 @@ class MapperMixin(JsonMixin):
         along with `**kwargs`.
         '''
         try:
-            obj = kwargs['object']
+            obj = kwargs.pop('object')
         except KeyError:
             try:
                 obj = self.object
@@ -76,7 +76,7 @@ class MapperMixin(JsonMixin):
                 obj = self.get_object()
 
         try:
-            mapper = kwargs['mapper']
+            mapper = kwargs.pop('mapper')
         except KeyError:
             try:
                 mapper = self.mapper
@@ -102,7 +102,7 @@ class MapperMixin(JsonMixin):
         kwargs.setdefault('safe', False)
 
         try:
-            object_list = kwargs['object_list']
+            object_list = kwargs.pop('object_list')
         except KeyError:
             try:
                 object_list = self.object_list)
@@ -110,7 +110,7 @@ class MapperMixin(JsonMixin):
                 object_list = self.get_queryset()
 
         try:
-            mapper = kwargs['mapper']
+            mapper = kwargs.pop('mapper')
         except KeyError:
             try:
                 mapper = self.mapper
