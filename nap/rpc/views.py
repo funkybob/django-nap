@@ -28,7 +28,7 @@ class RPCMixin(JsonMixin):
         '''
         Dummy post to show the View it's OK to POST.
         '''
-        pass
+        return http.MethodNotAllowed(self._allowed_methods())
 
     def dispatch(self, request, *args, **kwargs):
         '''
