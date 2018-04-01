@@ -68,14 +68,20 @@ class MapperMixin(JsonMixin):
         along with `**kwargs`.
         '''
         try:
-            obj = kwargs.pop('object', self.object)
-        except AttributeError:
-            obj = self.get_object()
+            obj = kwargs['object']
+        except KeyError:
+            try:
+                obj = self.object
+            except AttributeError:
+                obj = self.get_object()
 
         try:
-            mapper = kwargs.pop('mapper', self.mapper)
-        except AttributeError:
-            mapper = self.get_mapper(obj)
+            mapper = kwargs['mapper']
+        except KeyError:
+            try:
+                mapper = self.mapper
+            except AttributeError:
+                mapper = self.get_mapper(obj)
 
         return self.response_class(mapper << obj, **kwargs)
 
@@ -96,14 +102,20 @@ class MapperMixin(JsonMixin):
         kwargs.setdefault('safe', False)
 
         try:
-            object_list = kwargs.pop('object_list', self.object_list)
-        except AttributeError:
-            object_list = self.get_queryset()
+            object_list = kwargs['object_list']
+        except KeyError:
+            try:
+                object_list = self.object_list)
+            except AttributeError:
+                object_list = self.get_queryset()
 
         try:
-            mapper = kwargs.pop('mapper', self.mapper)
-        except AttributeError:
-            mapper = self.get_mapper()
+            mapper = kwargs['mapper']
+        except KeyError:
+            try:
+                mapper = self.mapper
+            except AttributeError:
+                mapper = self.get_mapper(obj)
 
         page_size = self.get_paginate_by(object_list)
         if page_size:
