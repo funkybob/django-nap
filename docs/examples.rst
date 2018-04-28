@@ -110,7 +110,7 @@ Login endpoint:
         @classonlymethod
         def as_view(cls, *args, **kwargs):
             view = super().as_view(*args, **kwargs)
-            return ensure_csrf_token(view)
+            return ensure_csrf_cookie(view)
 
         def get(self, request):
             '''Returns the current user's details'''
@@ -126,7 +126,7 @@ Login endpoint:
             return self.error_response(form.errors)
 
 
-Note that it decorates `as_view` with `ensure_csrf_token`.  This ensures the
+Note that it decorates `as_view` with `ensure_csrf_cookie`.  This ensures the
 CSRF token is set if your site is a SPA.
 
 You could even use the ``DELETE`` HTTP method for logout.
