@@ -1,3 +1,5 @@
+from functools import update_wrapper
+
 from . import BaseHttpResponse
 
 
@@ -7,6 +9,7 @@ class except_response:
     '''
     def __init__(self, func):
         self.func = func
+        update_wrapper(self, func)
 
     def __call__(self, request, *args, **kwargs):
         try:
