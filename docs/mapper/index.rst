@@ -195,6 +195,8 @@ The fields that can be set are:
       Model.
 
    .. attribute:: readonly
+
+      Defailt: []
       The list of fields which are read only.
 
       Must not conflict with `required`.

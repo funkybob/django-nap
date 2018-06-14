@@ -6,6 +6,18 @@ Changelog
 Current
 -------
 
+v0.30.12 (2018-??-??)
+=====================
+
+Bug Fixes:
+
+- Make `except_response` use `functools.update_wrapper` to not disguise the
+  view function.
+
+-------
+History
+-------
+
 v0.30.11 (2017-03-31)
 =====================
 
@@ -19,10 +31,6 @@ Bug Fixes:
 - Added a dummy `post` method to ``nap.rpc.views.RpcMixin`` so ``View``
   believes `POST` is an acceptable method.
 - Fix fallback when looking for object/object_list/mapper in REST views.
-
--------
-History
--------
 
 v0.30.10 (2017-08-24)
 ====================
