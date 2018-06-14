@@ -175,28 +175,33 @@ The fields that can be set are:
    .. attribute:: model
 
       Default: None
+
       The model this ``Mapper`` is for
 
    .. attribute:: fields
 
       Default: []
+
       The list of fields to use. You can set it to '__all__' to map all
       fields.
 
    .. attribute:: exclude
 
       Default: []
+
       The list of fields to exclude from the Model
 
    .. attribute:: required
 
       Default: {}
+
       A map to override required values for fields auto-created from the
       Model.
 
    .. attribute:: readonly
 
-      Defailt: []
+      Default: []
+
       The list of fields which are read only.
 
       Must not conflict with `required`.
