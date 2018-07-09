@@ -57,6 +57,8 @@ class JsonMixin:
 def flatten_errors(errors):
     '''
     Utility function to turn an ErrorDict into a dict of lists of strings.
+
+    Django 2.0 introduced ErrorDict.get_json_data()
     '''
     return {
         field: [

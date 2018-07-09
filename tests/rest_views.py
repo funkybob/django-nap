@@ -28,7 +28,7 @@ class PollMixin(object):
 class PollListView(PollMixin,
                    views.ListGetMixin,
                    views.ListPostMixin,
-                   views.BaseListView):
+                   views.ListBaseView):
     pass
 
 
@@ -37,7 +37,7 @@ class SinglePollView(PollMixin,
                      views.ObjectPutMixin,
                      views.ObjectPatchMixin,
                      views.ObjectDeleteMixin,
-                     views.BaseObjectView):
+                     views.ObjectBaseView):
     pass
 
 
@@ -49,7 +49,7 @@ class ChoiceMixin:
 class ChoiceListView(ChoiceMixin,
                      views.ListGetMixin,
                      views.ListPostMixin,
-                     views.BaseListView):
+                     views.ListBaseView):
 
     paginate_by = 1
 
