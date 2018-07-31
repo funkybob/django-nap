@@ -19,12 +19,21 @@ class ListMixin(MapperMixin, MultipleObjectMixin):
 class ListGetMixin:
 
     def get(self, request, *args, **kwargs):
+        '''
+        Returns an ok_response
+        '''
         return self.ok_response()
 
 
 class ListPostMixin:
 
     def post(self, request, *args, **kwargs):
+        '''
+        Handle POST on a List view.
+
+        Validates the data against the `model_class`, and calls `post_valid` or
+        `post_invalid` as appropriate.
+        '''
         self.mapper = self.get_mapper(self.model())
         self.data = self.get_request_data()
 
@@ -36,13 +45,26 @@ class ListPostMixin:
         return self.post_valid()
 
     def post_invalid(self, errors):
+        '''
+        Called on invalid POST data.
+
+        Returns an `error_response`.
+        '''
         return self.error_response(errors)
 
-    def post_valid(self, **kwargs):
+    def post_valid(self):
+        '''
+        Called on valid POST data.
+
+        Saves self.object and returns a `created_response`.
+        '''
         self.object.save()
 
         return self.created_response(**kwargs)
 
 
 class ListBaseView(ListMixin, NapView):
+    '''
+    A Subclass of ListMixin and NapView.
+    '''
     pass
