@@ -116,7 +116,7 @@ class MapperMixin(JsonMixin):
 
         page_size = self.get_paginate_by(object_list)
         if page_size:
-            paginator, page, queryset, is_paginated = self.paginate_queryset(object_list, page_size)
+            paginator, page, object_list, is_paginated = self.paginate_queryset(object_list, page_size)
         else:
             paginator = page = None
             is_paginated = False

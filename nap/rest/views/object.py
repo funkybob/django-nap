@@ -1,8 +1,8 @@
 from django.core.exceptions import ValidationError
 from django.views.generic.detail import SingleObjectMixin
 
-
 from .base import MapperMixin, NapView
+
 
 # Object views
 class ObjectMixin(MapperMixin, SingleObjectMixin):

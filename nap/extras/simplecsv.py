@@ -14,12 +14,12 @@ class Writer:
 
     def __init__(self, fields,
                  headers=None,
-                 SEP = u',',                # What to put between fields
-                 QUOTE = u'"',              # What to wrap fields in, if they contain SEP
-                 ESCQUOTE = None,           # What to replace a QUOTE in a field with
-                 LINEBREAK = u'\n',         # What to put between records
-                 ENCODING = 'utf-8',
-        ):
+                 SEP=u',',                  # What to put between fields
+                 QUOTE=u'"',                # What to wrap fields in, if they contain SEP
+                 ESCQUOTE=None,             # What to replace a QUOTE in a field with
+                 LINEBREAK=u'\n',           # What to put between records
+                 ENCODING='utf-8',
+                 ):
         '''
         opts MUST contain 'fields', a list of field names.
         opts may also include 'headers', a list of field headings.
