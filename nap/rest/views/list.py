@@ -52,7 +52,7 @@ class ListPostMixin:
         '''
         return self.error_response(errors)
 
-    def post_valid(self):
+    def post_valid(self, **kwargs):
         '''
         Called on valid POST data.
 
