@@ -117,7 +117,7 @@ Both accept the same extra arguments:
 
 .. class:: RelatedField()
 
-   :param related_model: The model this field relates to
+   :param model: The model this field relates to
    :param mapper: (Optional) the mapper to use to reduce instances.
 
 When the mapper is omitted, only the Primary Key of the related model will be
