@@ -2,7 +2,7 @@ from django.views.generic import View
 
 from nap import http
 from nap.http.decorators import except_response
-from nap.utils import JsonMixin, flatten_errors
+from nap.utils import JsonMixin
 
 
 class NapView(View):
@@ -170,9 +170,9 @@ class MapperMixin(JsonMixin):
         Helper method to return ``self.respone_class`` with a ``status`` of
         ``self.error_status``.
 
-        Will flatten ``errors`` using ``flatten_error``.
+        Will flatten ``errors`` using ``get_json_data``.
         '''
         return self.response_class(
-            flatten_errors(errors),
+            errors.get_json_data(),
             status=self.error_status,
         )

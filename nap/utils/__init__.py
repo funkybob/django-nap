@@ -1,13 +1,13 @@
 import json
-from cgi import parse_header, parse_multipart
+from cgi import FieldStorage
 from inspect import isgenerator
 
-from django import VERSION
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import QueryDict
 
 from .. import http
 
+# JSONDecodeError was added in Python 3.5
 try:
     from json import JSONDecodeError
 except ImportError:
@@ -26,11 +26,8 @@ class JsonMixin:
         from django.conf import settings
         encoding = self.request.encoding or settings.DEFAULT_CHARSET
 
-        if VERSION < (1, 10):
-            content_type, content_params = parse_header(self.request.META.get('CONTENT_TYPE', ''))
-        else:
-            content_type = self.request.content_type
-            content_params = self.request.content_params
+        content_type = self.request.content_type
+        content_params = self.request.content_params
 
         if content_type in self.CONTENT_TYPES:
             if not self.request.body:
@@ -44,7 +41,12 @@ class JsonMixin:
             if content_type == 'application/x-www-form-urlencoded':
                 return QueryDict(self.request.body, encoding=encoding)
             elif content_type == 'multipart/form-data':
-                return parse_multipart(self.request.body, content_params)
+                return FieldStorage(
+                    self.request,
+                    headers=self.request.META,
+                    strict_parsing=True,
+                    encoding=encoding,
+                )
 
         return self.request.POST
 
@@ -54,24 +56,10 @@ class JsonMixin:
         return json.loads(data, **kwargs)
 
 
-def flatten_errors(errors):
-    '''
-    Utility function to turn an ErrorDict into a dict of lists of strings.
-
-    Django 2.0 introduced ErrorDict.get_json_data()
-    '''
-    return {
-        field: [
-            error if isinstance(error, str) else (
-                error.message % error.params if error.params else error.message
-            )
-            for error in errors
-        ]
-        for field, errors in errors.items()
-    }
-
-
 class List(list):
+    '''
+    A list-alike for generators to fool json.dump.
+    '''
     def __init__(self, gen):
         self.gen = gen
 

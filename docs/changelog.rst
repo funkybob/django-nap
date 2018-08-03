@@ -6,8 +6,28 @@ Changelog
 Current
 -------
 
-v0.30.12 (2018-??-??)
-=====================
+v0.40.0 (2018-??-??)
+====================
+
+.. admonition:: Python and Django version support change
+
+   As of this release, Django 2.0+ is required.
+
+   As a result, Python 3.4+ is also required.
+
+Enhancements:
+
+- Mappers now use ``django.forms.utils.ErrorDict`` and
+  ``django.forms.utils.ErrorList`` for errors.
+- ``nap.views.rest.MapperMixin.error_response`` now calls ``get_json_data`` on
+  the errors passed to it.
+- ``nap.utils.JsonMixin.get_request_data`` now uses ``cgi.FieldStorage`` to
+  parse request data, allowing it to support files in multi-part bodies for PUT
+  and PATCH requests.
+
+Removed:
+
+- ``nap.utils.flatten_errors`` has been removed.
 
 Bug Fixes:
 

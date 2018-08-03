@@ -3,6 +3,7 @@ from inspect import classify_class_attrs
 
 from django.core.exceptions import ValidationError
 from django.db.models.fields import NOT_PROVIDED
+from django.forms.utils import ErrorDict, ErrorList
 
 from .fields import field
 from .utils import DictObject
@@ -85,7 +86,7 @@ class Mapper(metaclass=MetaMapper):
         Update an instance from supplied data.
         '''
 
-        self._errors = errors = {}
+        self._errors = errors = ErrorDict()
 
         for name in self._field_names:
             if self._fields[name].readonly:
@@ -97,7 +98,9 @@ class Mapper(metaclass=MetaMapper):
             try:
                 setattr(self, name, value)
             except ValidationError as e:
-                errors.setdefault(name, []).append(e)
+                if name not in errors:
+                    errors[name] = ErrorList()
+                errors[name].append(e)
 
         # Allow a final pass of cleaning
         self._clean(data, full=False)
@@ -114,7 +117,7 @@ class Mapper(metaclass=MetaMapper):
         All fields marked required=True MUST be provided.
         All fields omitted will have their default used, if provided.
         '''
-        self._errors = errors = {}
+        self._errors = errors = ErrorDict()
 
         for name in self._field_names:
             if self._fields[name].readonly:
@@ -128,7 +131,9 @@ class Mapper(metaclass=MetaMapper):
             except KeyError:
                 if required:
                     if default is NOT_PROVIDED:
-                        errors.setdefault(name, []).append(
+                        if name not in errors:
+                            errors[name] = ErrorList()
+                        errors[name].append(
                             ValidationError('This field is required')
                         )
                         continue
@@ -140,7 +145,9 @@ class Mapper(metaclass=MetaMapper):
             try:
                 setattr(self, name, value)
             except ValidationError as e:
-                errors.setdefault(name, []).append(e)
+                if name not in errors:
+                    errors[name] = ErrorList()
+                errors[name].append(e)
 
         # Allow a final pass of cleaning
         self._clean(data, full=True)

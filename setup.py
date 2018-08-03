@@ -5,7 +5,7 @@ with open('README.rst') as fin:
 
 setup(
     name='django-nap',
-    version='0.30.11',
+    version='0.40.0',
     description='A light REST tool for Django',
     long_description=readme,
     author='Curtis Maloney',
@@ -20,16 +20,15 @@ setup(
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         # 'Programming Language :: Python :: Implementation :: PyPy',
     ],
     requires = [
-        'Django (>=1.8)',
+        'Django (>=2.0)',
     ],
     install_requires = [
-        'Django>=1.8',
+        'Django>=2.0',
     ],
 )
