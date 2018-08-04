@@ -15,12 +15,18 @@ v0.40.0 (2018-??-??)
 
    As a result, Python 3.4+ is also required.
 
+Incompatible Changes:
+
+- ``nap.rest.views.BaseListView`` and ``name.rest.views.BaseObjectView`` have
+  been renamed to ``nap.rest.views.ListBaseView`` and
+  ``nap.rest.views.ObjectBaseView`` respectively.
+- ``nap.views.rest.MapperMixin.error_response`` now calls ``get_json_data`` on
+  the ``errors`` parameter.
+
 Enhancements:
 
 - Mappers now use ``django.forms.utils.ErrorDict`` and
   ``django.forms.utils.ErrorList`` for errors.
-- ``nap.views.rest.MapperMixin.error_response`` now calls ``get_json_data`` on
-  the errors passed to it.
 - ``nap.utils.JsonMixin.get_request_data`` now uses ``cgi.FieldStorage`` to
   parse request data, allowing it to support files in multi-part bodies for PUT
   and PATCH requests.

@@ -280,11 +280,11 @@ Lets add the following code to the todoapp/views.py file:
 
 
     class ListListView(ListMixin,
-                       views.BaseListView):
+                       views.ListBaseView):
         pass
 
 Given we want to get a list of all the List resources, we will use the
-``nap.rest.views.BaseListView`` as a starting point. The BaseListView combines
+``nap.rest.views.ListBaseView`` as a starting point. The ListBaseView combines
 ListMixin (which extends Django's MultipleObjectMixin) with View. From the
 Django docs: "MultipleObjectMixin can be used to display a list of objects."
 This sounds like what we need!
@@ -294,7 +294,7 @@ Adding GET functionality: list of List
 
 We do however want to use ``nap.rest.views.ListGetMixin`` which provides the
 get() method for lists. This means the HTTP verb GET can now be used with our
-view. We need to update our ``ListListView(views.BaseListView)`` class to
+view. We need to update our ``ListListView(views.ListBaseView)`` class to
 include the ``ListGetMixin`` so let's do that.
 
 Update your todoapp/views.py file to look like this:
@@ -314,7 +314,7 @@ Update your todoapp/views.py file to look like this:
 
     class ListListView(ListMixin,
                        views.ListGetMixin,
-                       views.BaseListView):
+                       views.ListBaseView):
         pass
 
 Adding POST functionality: list of List
@@ -344,7 +344,7 @@ this:
     class ListListView(ListMixin,
                        views.ListPostMixin,
                        views.ListGetMixin,
-                       views.BaseListView):
+                       views.ListBaseView):
         model = models.List
         mapper_class = mappers.ListMapper
 
@@ -427,9 +427,9 @@ Writing the views: object of List
 ---------------------------------
 
 We're now going to write the view that will return a single instance of a List
-object. Similar to how we used the ``nap.rest.views.BaseListView`` mixin when
-writing our list of List view, we're now going to use the BaseObjectView mixin.
-The BaseObjectView combines ObjectMixin (which extends Django's
+object. Similar to how we used the ``nap.rest.views.ListBaseView`` mixin when
+writing our list of List view, we're now going to use the ObjectBaseView mixin.
+The ObjectBaseView combines ObjectMixin (which extends Django's
 SingleObjectMixin) with View. From the Django docs: "SingleObjectMixin provides
 a mechanism for looking up an object associated with the current HTTP request."
 Again, this sounds like what we need!
@@ -440,7 +440,7 @@ Lets add the following code to the todoapp/views.py file:
 
 
     class ListObjectView(ListMixin,
-                         views.BaseObjectView):
+                         views.ObjectBaseView):
         pass
 
 
@@ -470,13 +470,13 @@ The todoapp/views.py file should now look like this:
     class ListListView(ListMixin,
                        views.ListPostMixin,
                        views.ListGetMixin,
-                       views.BaseListView):
+                       views.ListBaseView):
         pass
 
 
     class ListObjectView(ListMixin,
                          views.ObjectGetMixin,
-                         views.BaseObjectView):
+                         views.ObjectBaseView):
         pass
 
 
@@ -530,13 +530,13 @@ Add the following to todoapp/views.py:
     class ItemListView(ItemMixin,
                        views.ListPostMixin,
                        views.ListGetMixin,
-                       views.BaseListView):
+                       views.ListBaseView):
         pass
 
 
     class ItemObjectView(ItemMixin,
                          views.ObjectGetMixin,
-                         views.BaseObjectView):
+                         views.ObjectBaseView):
         pass
 
 
@@ -688,7 +688,7 @@ In your views.py add the following class:
     from nap import http # Don't forget this
 
 
-    class LoginView(views.BaseObjectView):
+    class LoginView(views.ObjectBaseView):
         mapper_class = mappers.UserMapper
 
         def get(self, request):
@@ -707,7 +707,7 @@ In your views.py add the following class:
             return self.error_response(form.errors)
 
 
-We have defined a BaseObjectView that will allow get() and post(). If logged
+We have defined a ObjectBaseView that will allow get() and post(). If logged
 in, GET will return a serialised representation of the User, and if not logged
 in will return an HTTP 403. If not logged in, POST will authenticate the User
 and either log them in, or return an error dictionary. POSTing to this view
@@ -733,7 +733,7 @@ add a `test_func` to only check if a user is authentencated if it's a POST.
                        ListMixin,
                        views.ListPostMixin,
                        views.ListGetMixin,
-                       views.BaseListView):
+                       views.ListBaseView):
 
         def test_func(self):
             if self.request.method == 'POST':
@@ -756,7 +756,7 @@ Update the ItemListView class in todoapp/views.py to look like this:
                        ItemMixin,
                        views.ListPostMixin,
                        views.ListGetMixin,
-                       views.BaseListView):
+                       views.ListBaseView):
         pass
 
 

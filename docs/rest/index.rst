@@ -131,7 +131,7 @@ List Classes
    .. method:: post_invalid(errors)
    .. method:: post_valid(\**kwargs)
 
-.. class:: BaseListView(ListMixin, View)
+.. class:: ListBaseView(ListMixin, View)
 
 
 Single Object Classes
@@ -169,7 +169,7 @@ Single Object Classes
 
    .. method:: delete_valid(\**kwargs)
 
-.. class:: BaseObjectView(ObjectMixin, View)
+.. class:: ObjectBaseView(ObjectMixin, View)
 
 Example
 -------
@@ -182,7 +182,7 @@ methods for the Poll model:
    from nap.mapper import ModelMapper
    from nap.rest.views import (
        ObjectGetMixin, ObjectPutMixin, ObjectPatchMixin, ObjectDeleteMixin,
-       BaseObjectView,
+       ObjectBaseView,
    )
 
    from .models import Poll
@@ -198,7 +198,7 @@ methods for the Poll model:
                         ObjectPutMixin,
                         ObjectPatchMixin,
                         ObjectDeleteMixin,
-                        BaseObjectView):
+                        ObjectBaseView):
        model = Poll
        mapper_class = PollMapper
 
@@ -210,7 +210,7 @@ Here's an example of updating two related objects in a single PATCH call.
 
 .. code-block:: python
 
-   class UserDetailView(ObjectGetMixin, BaseObjectView):
+   class UserDetailView(ObjectGetMixin, ObjectBaseView):
         model = User
         mapper_class = UserMapper
 
@@ -249,7 +249,7 @@ Here's an example of customising a GET call based on a querystring:
 
 .. code-block:: python
 
-   class QuestionListView(ListGetMixin, BaseListView):
+   class QuestionListView(ListGetMixin, ListBaseView):
         model = Question
         mapper_class = QuestionMapper
 

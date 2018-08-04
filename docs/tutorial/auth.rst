@@ -20,5 +20,5 @@ Choices:
                          LoginRequiredMixin,
                          views.ListGetMixin,
                          views.ListPostMixin,
-                         views.BaseListView):
+                         views.ListBaseView):
         pass

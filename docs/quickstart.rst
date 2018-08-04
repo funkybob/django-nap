@@ -41,20 +41,20 @@ This is very much like defining a ModelForm.
     class QuestionListView(QuestionMixin,
                            views.ListGetMixin,
                            views.ListPostMixin,
-                           views.BaseListView):
+                           views.ListBaseView):
         pass
 
     class QuestionObjectView(QuestionMixin,
                              views.ObjectGetMixin,
                              views.ObjectPutMixin,
-                             views.BaseObjectView):
+                             views.ObjectBaseView):
         pass
 
-The `BaseListView` provides the core of any object list view, deriving from
+The `ListBaseView` provides the core of any object list view, deriving from
 Django's `MultipleObjectMixin`.  Then we mix in the default handlers for
 ``GET`` and ``POST`` actions.
 
-Similarly, the `BaseObjectView` supports single object access, deriving from
+Similarly, the `ObjectBaseView` supports single object access, deriving from
 Django's `SingleObjectMixin`.
 
 Where the list view has ``POST`` to create a new record, the object view has

@@ -26,13 +26,13 @@ definitions for list and object views:
         mapper_class = mappers.QuestionMapper
 
 Next we'll define our ``QuestionListView``, based on this and the
-``BaseListView`` fron nap:
+``ListBaseView`` fron nap:
 
 .. code-block:: python
    :caption: polls/views.py
 
     class QuestionListView(QuestionMixin,
-                           views.BaseListView):
+                           views.ListBaseView):
         pass
 
 As it is, this view won't do anything, as it has no ``get``, ``post`` or other
@@ -46,7 +46,7 @@ To add the default GET behavior for a list, we mix in the ``ListGetMixin``:
 
     class QuestionListView(QuestionMixin,
                            views.ListGetMixin,
-                           views.BaseListView):
+                           views.ListBaseView):
         pass
 
 The `ListGetMixin` adds a simple `get` method, which will return a list of

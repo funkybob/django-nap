@@ -104,7 +104,7 @@ Login endpoint:
 
     from . import mappers
 
-    class LoginView(views.BaseObjectView):
+    class LoginView(views.ObjectBaseView):
         mapper_class = mappers.UserMapper
 
         @classonlymethod
@@ -136,4 +136,3 @@ You could even use the ``DELETE`` HTTP method for logout.
         def delete(self, request):
             auth.logout(request)
             return self.deleted_response()
-
