@@ -40,14 +40,14 @@ Invoke it from Javascript:
 
 .. code-block:: javascript
 
-   $.ajax({
-        type: 'POST',
-        url: '/rpc/',
-        data: {a: 5, b: 10}
-        headers: {
-            'X-RPC-Action': method,
-            'Content-Type': 'application/json'
-        },
-        success: function (data) { alert(data); }
-    });
+   fetch('/rpc/', {
+       method: 'POST',
+       body: JSON.stringify({a: 5, b: 10}),
+       headers: {
+          'X-RPC-Action': 'add',
+          'Content-Type': 'application/json'
+       },
+    })
+    .then(resp => resp.json())
+    .then(data => alert(`Result is: ${data}`);
 
