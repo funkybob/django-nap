@@ -49,5 +49,5 @@ Invoke it from Javascript:
        },
     })
     .then(resp => resp.json())
-    .then(data => alert(`Result is: ${data}`);
+    .then(data => alert(`Result is: ${data}`);  // "Result is: 15"
 
