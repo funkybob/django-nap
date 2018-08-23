@@ -40,7 +40,7 @@ class Writer:
             Inlined for speed
             '''
             # escape quotes in the value
-            val = val.replace(QUOTE, ESCQ)
+            val = str(val).replace(QUOTE, ESCQ)
             # if needed, wrap quotes around value
             if SEP in val or QUOTE in val:
                 return QUOTE + val + QUOTE
