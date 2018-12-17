@@ -139,7 +139,7 @@ Using _clean:
                 raise ValidationError("Only dead people accepted to the morgue.")
 
     m = DeadPersonMapper()
-    m._apple({'last_name': 'Doe', 'first_name': 'John', 'is_alive': True})
+    m._apply({'last_name': 'Doe', 'first_name': 'John', 'is_alive': True})
 
     # ValidationError
 
