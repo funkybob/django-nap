@@ -9,7 +9,7 @@ class NapView(View):
     '''
     Base view for Nap CBV.
 
-    Catches any http exceptions raised, and returns them.
+    Catches any http exceptions raised, and returns them instead.
     '''
 
     @classmethod
