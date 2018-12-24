@@ -15,12 +15,12 @@ class field(property):
             return partial(cls, **kwargs)
         return super().__new__(cls, *args, **kwargs)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, fget=None, fset=None, fdel=None, doc=None, **kwargs):
         self.required = kwargs.pop('required', False)
         self.default = kwargs.pop('default', NOT_PROVIDED)
-        self.readonly = kwargs.pop('readonly', False)
+        self.readonly = kwargs.pop('readonly', fset is None)
         self.null = kwargs.pop('null', False)
-        super().__init__(*args, **kwargs)
+        super().__init__(fget, fset, fdel, doc)
 
     def __get__(self, instance, cls=None):
         if instance is None:
