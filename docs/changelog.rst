@@ -30,6 +30,8 @@ Enhancements:
 - ``nap.utils.JsonMixin.get_request_data`` now uses ``cgi.FieldStorage`` to
   parse request data, allowing it to support files in multi-part bodies for PUT
   and PATCH requests.
+- ``nap.mapper.fields.field`` will now default to `readonly` = `True` unless a
+  setter is specified.
 
 Removed:
 
