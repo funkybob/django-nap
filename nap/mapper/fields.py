@@ -35,6 +35,7 @@ class field(property):
     def setter(self, func):
         kwargs = self.__dict__.copy()
         kwargs.pop('__doc__')
+        kwargs.pop('readonly')
         return self.__class__(self.fget, func, **kwargs)
 
 
@@ -54,6 +55,7 @@ class context_field(field):
 class Field(field):
     def __init__(self, attr, *args, **kwargs):
         self.attr = attr
+        kwargs.setdefault('readonly', False)
         super().__init__(*args, **kwargs)
 
     def __get__(self, instance, cls=None):
