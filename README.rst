@@ -34,6 +34,5 @@ Installing
 It is NOT necessary to add nap to your INSTALLED\_APPS.  It does not provide
 models, templates, template tags, or static files.
 
-Tests are currently run for Python 3.3-3.6.
+Tests are currently run for Python 3.4-3.6 and pypy3, and against Django versions 2.0 and up.
 
-Django versions from 1.8 to 1.11 are known to work.
