@@ -19,7 +19,7 @@ matrix:
       python: "3.4"
 
 install:
-  - pip install -q $DJANGO
-  - pip install -e .
+  - pip install -q requests $DJANGO
+  - pip install -q -e '.[rpc]'
 script:
   - python runtests.py

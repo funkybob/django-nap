@@ -29,6 +29,9 @@ setup(
     requires = [
         'Django (>=2.0)',
     ],
+    extras_require={
+        'rps': ['requets'],
+    },
     install_requires = [
         'Django>=2.0',
     ],
