@@ -5,7 +5,8 @@ python:
   - "3.5"
   - "3.6"
   - "3.7"
-  - "pypy3"
+  - "pypy3.5"
+  - "pypy3.6"
 env:
   - DJANGO="Django~=2.0"
   - DJANGO="Django~=2.1"
