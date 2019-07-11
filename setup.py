@@ -12,7 +12,8 @@ setup(
     author_email='curtis@tinbrain.net',
     url='http://github.com/funkybob/django-nap',
     keywords=['django', 'json', 'rest', 'api'],
-    packages = find_packages(exclude=('tests*',)),
+    packages=find_packages(where="src"),
+    package_dir={"": "src"},
     zip_safe=False,
     classifiers = [
         'Environment :: Web Environment',
