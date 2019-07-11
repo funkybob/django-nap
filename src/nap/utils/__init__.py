@@ -27,7 +27,6 @@ class JsonMixin:
         encoding = self.request.encoding or settings.DEFAULT_CHARSET
 
         content_type = self.request.content_type
-        content_params = self.request.content_params
 
         if content_type in self.CONTENT_TYPES:
             if not self.request.body:

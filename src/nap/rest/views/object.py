@@ -28,7 +28,7 @@ class ObjectPutMixin:
 
         try:
             self.mapper._apply(self.data)
-        except ValidationError as e:
+        except ValidationError:
             return self.put_invalid(self.mapper._errors)
 
         return self.put_valid()
@@ -51,7 +51,7 @@ class ObjectPatchMixin:
 
         try:
             self.mapper._patch(self.data)
-        except ValidationError as e:
+        except ValidationError:
             return self.patch_invalid(self.mapper._errors)
 
         return self.patch_valid()

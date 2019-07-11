@@ -39,7 +39,7 @@ class ListPostMixin:
 
         try:
             self.object = self.mapper._apply(self.data)
-        except ValidationError as e:
+        except ValidationError:
             return self.post_invalid(self.mapper._errors)
 
         return self.post_valid()
