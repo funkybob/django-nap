@@ -17,14 +17,16 @@ setup(
     zip_safe=False,
     classifiers = [
         'Environment :: Web Environment',
+        'Development Status :: 5 - Production/Stable',
         'Framework :: Django',
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
+        'Programming Language :: Python :: 3 :: Only',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
-        # 'Programming Language :: Python :: Implementation :: PyPy',
+        'Programming Language :: Python :: Implementation :: PyPy',
     ],
     requires = [
         'Django (>=2.0)',
