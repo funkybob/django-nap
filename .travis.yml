@@ -1,23 +1,31 @@
 sudo: false
 language: python
 python:
-  - "3.4"
-  - "3.5"
-  - "3.6"
-  - "3.7"
-  - "pypy3.5"
-  - "pypy3.6"
+  - 3.4
+  - 3.5
+  - 3.6
+  - 3.7
+  - 3.8
+  - pypy3.5
+  - pypy3  # This is currently 3.6, https://docs.travis-ci.com/user/languages/python/
 env:
   - DJANGO="Django~=2.0"
   - DJANGO="Django~=2.1"
   - DJANGO="Django~=2.2"
+  - DJANGO="Django~=3.0"
 
-matrix:
+jobs:
   exclude:
-    - env: DJANGO="Django~=2.2"
-      python: "3.4"
-    - env: DJANGO="Django~=2.1"
-      python: "3.4"
+    - python: 3.5
+      env: DJANGO="Django~=3.0"
+    - python: pypy3.5
+      env: DJANGO="Django~=3.0"
+    - python: 3.4
+      env: DJANGO="Django~=3.0"
+    - python: 3.4
+      env: DJANGO="Django~=2.2"
+    - python: 3.4
+      env: DJANGO="Django~=2.1"
 
 install:
   - pip install -q requests $DJANGO
