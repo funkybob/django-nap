@@ -14,7 +14,7 @@ the "bound" object, not the Mapper.
    :param default: The value to use if the source value is absent. May be a
                    callable that takes no arguments.
    :param readonly: Can the field be updated? Default: True
-   :param null: Is None a valid valie? Default: False
+   :param null: Is None a valid value? Default: False
 
 The decorator can be used bare, or with arguments:
 
@@ -49,7 +49,7 @@ For simple cases where the descriptor protocol is overkill, there is the
    :param required: Is this field required? Default: True
    :param default: The value to use if the source value is absent.
    :param readonly: Can the field be updated? Default: True
-   :param null: Is None a valid valie? Default: False
+   :param null: Is None a valid value? Default: False
 
 .. code-block:: python
 
@@ -82,7 +82,7 @@ the getter and setter methods as an extra argument.
    :param required: Is this field required? Default: True
    :param default: The value to use if the source value is absent.
    :param readonly: Can the field be updated? Default: True
-   :param null: Is None a valid valie? Default: False
+   :param null: Is None a valid value? Default: False
 
 The following is an example from the test suite:
 
