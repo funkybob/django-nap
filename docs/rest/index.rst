@@ -117,7 +117,7 @@ List Classes
 
    .. method:: ok_response(\**kwargs)
 
-   Calls ``self.list_response(status=self.ok_response)``
+   Calls ``self.multiple_response(status=self.ok_response)``
 
 
 .. class:: ListGetMixin
