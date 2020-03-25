@@ -114,7 +114,7 @@ Login endpoint:
 
         def get(self, request):
             '''Returns the current user's details'''
-            if request.user.is_authenticated():
+            if request.user.is_authenticated:
                 return self.single_response(object=request.user)
             return http.Forbidden()
 

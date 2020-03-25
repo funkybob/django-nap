@@ -692,12 +692,12 @@ In your views.py add the following class:
         mapper_class = mappers.UserMapper
 
         def get(self, request):
-            if request.user.is_authenticated():
+            if request.user.is_authenticated:
                 return self.single_response(object=request.user)
             return http.Forbidden()
 
         def post(self, request):
-            if request.user.is_authenticated():
+            if request.user.is_authenticated:
                 django_auth.logout(request)
                 return self.get(request)
             form = AuthenticationForm(request, self.get_request_data())
