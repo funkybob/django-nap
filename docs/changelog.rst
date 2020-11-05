@@ -61,7 +61,7 @@ Bug Fixes:
 - Fix fallback when looking for object/object_list/mapper in REST views.
 
 v0.30.10 (2017-08-24)
-====================
+=====================
 
 Enhancements:
 

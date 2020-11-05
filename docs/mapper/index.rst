@@ -25,7 +25,7 @@ via the ``property`` built-in. This gives you full control over a Mapper's
 properties. When constructing a Mapper you can pass an object for it to "bind"
 to. All attribute access to the Mapper fields will proxy to this bound object.
 
-Here's an example to illustrate some of these concepts:
+Here's an example to illustrate some of these concepts. Given the class `Person`:
 
 .. code-block:: python
 
@@ -37,6 +37,10 @@ Here's an example to illustrate some of these concepts:
             self.last_name = last_name
             self.is_alive = is_alive
 
+
+We might define a `Mapper` as follows:
+
+.. code-block:: python
 
     from nap import mapper
 
@@ -55,14 +59,18 @@ Here's an example to illustrate some of these concepts:
         last_name = mapper.Field('last_name')
         is_alive = mapper.Field('is_alive')
 
-    # Construct instances of the Person and a Mapper classes
-    person = Person('Jane', 'Doe', 22, True)
-    mapper = PersonMapper(person)
+From this, we can now bind a `Mapper` instance to a `Person` instance, and
+extract its data:
 
-See `Fields`_ for more details.
+.. code-block:: python
 
-Mapper functions
-================
+    >>> person = Person('Jane', 'Doe', 22, True)
+    >>> mapper = PersonMapper(person)
+
+See :doc:`fields` for more details.
+
+Mapper methods
+==============
 
 A Mapper supports several methods:
 
