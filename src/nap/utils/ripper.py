@@ -6,8 +6,7 @@ class Ripper:
     '''
     Extremely light-weight serialiser for very simple cases.
 
-    See http://musings.tinbrain.net/blog/2015/aug/14/serialiser-hurry/ for
-    details.
+    See https://blog.tinbrain.net/blog/serialiser-hurry.html for details.
     '''
     def __init__(self, *args, **kwargs):
         for arg in args:
