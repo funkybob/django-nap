@@ -76,7 +76,8 @@ Let's add our new view to the existing urls, but with a 'api/' prefix:
        ]))
    ]
 
-So we can now access our list of Questions at http://localhot:8000/api/question/ and should see something like this:
+So we can now access our list of Questions at
+http://localhost:8000/api/question/ and should see something like this:
 
 .. code-block:: json
 

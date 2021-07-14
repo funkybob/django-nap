@@ -156,9 +156,7 @@ the Meta:
         class Meta:
             model = models.Choice
             fields = '__all__'
-            readonly = {
-                'question': True,
-            }
+            readonly = ('question',)
 
 And for a `field`, we can pass an argument when declaring it:
 
