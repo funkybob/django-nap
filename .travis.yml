@@ -5,11 +5,13 @@ python:
   - 3.7
   - 3.8
   - 3.9
+  - 3.10
   - pypy3  # This is currently 3.6, https://docs.travis-ci.com/user/languages/python/#pypy-support
 env:
   - DJANGO="Django~=3.0"
   - DJANGO="Django~=3.1"
   - DJANGO="Django~=3.2"
+  - DJANGO="Django~=4.0"
 
 install:
   - pip install -q requests $DJANGO
