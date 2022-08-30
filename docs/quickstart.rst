@@ -1,7 +1,7 @@
 Quick Start
 ===========
 
-Nap REST views work by combining Mappers with composible Class-Based Views.
+Nap REST views work by combining Mappers with composable Class-Based Views.
 
 Let's see how you might got about providng an API for the Poll example from the
 Django tutorial.

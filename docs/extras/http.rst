@@ -108,7 +108,7 @@ HttpResponse.  This is a personal preference, in that typically you'd use:
 except_response
 ---------------
 
-In case you want to use these raiseable responses in your own views, Nap
+In case you want to use these raisable responses in your own views, Nap
 provides a `except_response` decorator.
 
 .. code-block:: python

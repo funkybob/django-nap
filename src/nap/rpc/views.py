@@ -16,7 +16,7 @@ def method(view):
 
 
 def is_rpc_method(m):
-    '''Helper for checking if something is marked as a pubishable method.'''
+    '''Helper for checking if something is marked as a punishable method.'''
     return getattr(m, RPC_MARKER, False)
 
 

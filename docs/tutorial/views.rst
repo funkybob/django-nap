@@ -26,7 +26,7 @@ definitions for list and object views:
         mapper_class = mappers.QuestionMapper
 
 Next we'll define our ``QuestionListView``, based on this and the
-``ListBaseView`` fron nap:
+``ListBaseView`` from nap:
 
 .. code-block:: python
    :caption: polls/views.py
