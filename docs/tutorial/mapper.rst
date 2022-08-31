@@ -721,7 +721,7 @@ leverage Django's build in authentication mixins to control access.
 
 We've decided we only want to allow logged in users to post new messages, so we
 mix in the `UserPassesTestMixin` to the ListListView class.  All we need is to
-add a `test_func` to only check if a user is authentencated if it's a POST.
+add a `test_func` to only check if a user is authenticated if it's a POST.
 
 .. code-block:: python
 

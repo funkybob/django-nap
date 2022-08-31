@@ -141,7 +141,7 @@ stored on the Mapper instance as ``_errors``.
 Readonly fields
 ---------------
 
-But wait!  We don't want to let people alter the Question a Choice is assignd
+But wait!  We don't want to let people alter the Question a Choice is assigned
 to!
 
 We need to mark that field as read only.
